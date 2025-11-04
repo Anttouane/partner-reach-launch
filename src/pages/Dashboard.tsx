@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
-import { Button } from "@/components/ui/button";
+import Header from "@/components/Header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { LogOut, User as UserIcon, Search, MessageSquare, TrendingUp } from "lucide-react";
+import { Search, MessageSquare, TrendingUp } from "lucide-react";
 
 const Dashboard = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -35,10 +35,6 @@ const Dashboard = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -52,26 +48,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/30">
-      {/* Header */}
-      <header className="border-b bg-card/50 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold">Partnery</h1>
-            <div className="flex gap-2 items-center">
-              <Button variant="ghost" size="sm">
-                <UserIcon className="h-4 w-4 mr-2" />
-                {user?.email}
-              </Button>
-              <Button variant="outline" size="sm" onClick={handleSignOut}>
-                <LogOut className="h-4 w-4 mr-2" />
-                Déconnexion
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
+      <Header user={user} />
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h2 className="text-3xl font-bold mb-2">
@@ -105,33 +82,7 @@ const Dashboard = () => {
           />
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Actions rapides</CardTitle>
-              <CardDescription>
-                {isCreator
-                  ? "Développez votre présence"
-                  : "Lancez votre prochaine campagne"}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <Button className="w-full justify-start" variant="outline">
-                <UserIcon className="h-4 w-4 mr-2" />
-                Compléter mon profil
-              </Button>
-              <Button className="w-full justify-start" variant="outline">
-                <Search className="h-4 w-4 mr-2" />
-                {isCreator ? "Explorer les marques" : "Rechercher des créateurs"}
-              </Button>
-              <Button className="w-full justify-start" variant="outline">
-                <MessageSquare className="h-4 w-4 mr-2" />
-                Voir mes messages
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
+        <Card>
             <CardHeader>
               <CardTitle>Activité récente</CardTitle>
               <CardDescription>Vos dernières interactions</CardDescription>
@@ -156,7 +107,6 @@ const Dashboard = () => {
               </div>
             </CardContent>
           </Card>
-        </div>
       </main>
     </div>
   );
