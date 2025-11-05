@@ -29,19 +29,13 @@ const Header = ({ user }: HeaderProps) => {
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/dashboard" className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             Partnery
           </Link>
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center gap-2">
-            <Link to="/dashboard">
-              <Button variant="ghost" size="sm">
-                <Home className="h-4 w-4 mr-2" />
-                Accueil
-              </Button>
-            </Link>
-            <Link to="/discover">
+            <Link to="/">
               <Button variant="ghost" size="sm">
                 <Search className="h-4 w-4 mr-2" />
                 Découvrir
@@ -79,6 +73,10 @@ const Header = ({ user }: HeaderProps) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => navigate("/dashboard")}>
+                <Home className="h-4 w-4 mr-2" />
+                Dashboard
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => navigate("/profile")}>
                 <UserIcon className="h-4 w-4 mr-2" />
                 Mon Profil
