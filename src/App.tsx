@@ -11,6 +11,8 @@ import Messages from "./pages/Messages";
 import CreatePitch from "./pages/CreatePitch";
 import CreateOpportunity from "./pages/CreateOpportunity";
 import SeedData from "./pages/SeedData";
+import PitchDetail from "./pages/PitchDetail";
+import OpportunityDetail from "./pages/OpportunityDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +31,8 @@ const App = () => (
           <Route path="/messages" element={<Messages />} />
           <Route path="/create-pitch" element={<CreatePitch />} />
           <Route path="/create-opportunity" element={<CreateOpportunity />} />
+          <Route path="/pitch/:id" element={<PitchDetail />} />
+          <Route path="/opportunity/:id" element={<OpportunityDetail />} />
           <Route path="/seed-data" element={<SeedData />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

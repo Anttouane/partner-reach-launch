@@ -160,8 +160,10 @@ const Discover = () => {
 };
 
 const PitchCard = ({ pitch }: { pitch: any }) => {
+  const navigate = useNavigate();
+  
   return (
-    <Card className="hover:shadow-lg transition-shadow">
+    <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate(`/pitch/${pitch.id}`)}>
       <CardHeader>
         <CardTitle className="text-lg">{pitch.title}</CardTitle>
         <CardDescription>
@@ -183,9 +185,12 @@ const PitchCard = ({ pitch }: { pitch: any }) => {
             Portée estimée : {pitch.estimated_reach.toLocaleString()}
           </div>
         )}
-        <Button className="w-full">
+        <Button className="w-full" onClick={(e) => {
+          e.stopPropagation();
+          navigate(`/pitch/${pitch.id}`);
+        }}>
           <MessageSquare className="h-4 w-4 mr-2" />
-          Contacter
+          Voir les détails
         </Button>
       </CardContent>
     </Card>
@@ -193,8 +198,10 @@ const PitchCard = ({ pitch }: { pitch: any }) => {
 };
 
 const OpportunityCard = ({ opportunity }: { opportunity: any }) => {
+  const navigate = useNavigate();
+  
   return (
-    <Card className="hover:shadow-lg transition-shadow">
+    <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate(`/opportunity/${opportunity.id}`)}>
       <CardHeader>
         <CardTitle className="text-lg">{opportunity.title}</CardTitle>
         <CardDescription>
@@ -213,9 +220,12 @@ const OpportunityCard = ({ opportunity }: { opportunity: any }) => {
             Budget : {opportunity.budget_range}
           </div>
         )}
-        <Button className="w-full">
+        <Button className="w-full" onClick={(e) => {
+          e.stopPropagation();
+          navigate(`/opportunity/${opportunity.id}`);
+        }}>
           <MessageSquare className="h-4 w-4 mr-2" />
-          Postuler
+          Voir les détails
         </Button>
       </CardContent>
     </Card>
