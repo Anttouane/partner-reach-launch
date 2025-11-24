@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowRight, Users, Sparkles, TrendingUp, Shield } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const Index = () => {
   return (
@@ -46,38 +46,65 @@ const Index = () => {
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/5 rounded-full blur-3xl -z-10" />
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 px-4">
+      {/* Marques Section */}
+      <section className="py-20 px-4 bg-gradient-to-b from-background to-secondary/20">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-5xl font-bold mb-4">
-              Pourquoi choisir Partnery ?
+              Marques partenaires
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Une plateforme pensée pour simplifier vos collaborations
+              Découvrez les marques qui recherchent des créateurs comme vous
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <FeatureCard
-              icon={<Users className="h-8 w-8" />}
-              title="Mise en relation directe"
-              description="Connectez-vous directement avec les marques qui vous correspondent"
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <BrandCard
+              logo="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400&h=300&fit=crop"
+              name="Luma Cosmetics"
+              description="Recherche des créateurs lifestyle pour promouvoir notre nouvelle gamme bio."
             />
-            <FeatureCard
-              icon={<Sparkles className="h-8 w-8" />}
-              title="Profils optimisés"
-              description="Mettez en valeur votre audience et votre style unique"
+            <BrandCard
+              logo="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400&h=300&fit=crop"
+              name="GreenBean Coffee"
+              description="Campagne d'influence autour de nos cafés durables."
             />
-            <FeatureCard
-              icon={<TrendingUp className="h-8 w-8" />}
-              title="Analytics détaillés"
-              description="Suivez vos performances et vos revenus en temps réel"
+            <BrandCard
+              logo="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=400&h=300&fit=crop"
+              name="Sportify Gear"
+              description="Partenariats avec des créateurs fitness et lifestyle pour nos équipements."
             />
-            <FeatureCard
-              icon={<Shield className="h-8 w-8" />}
-              title="Paiements sécurisés"
-              description="Transactions protégées avec commissions transparentes"
+          </div>
+        </div>
+      </section>
+
+      {/* Créateurs Section */}
+      <section className="py-20 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">
+              Créateurs de contenu
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Rencontrez les créateurs qui façonnent les tendances
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <CreatorCard
+              avatar="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop"
+              name="MayaFit"
+              description="Créatrice de contenu fitness et nutrition, 50k abonnés sur Instagram."
+            />
+            <CreatorCard
+              avatar="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop"
+              name="EcoChic"
+              description="Influenceuse lifestyle durable, passion pour les marques écoresponsables."
+            />
+            <CreatorCard
+              avatar="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop"
+              name="TechGuru"
+              description="Vidéos tech et gaming, 80k abonnés sur YouTube et TikTok."
             />
           </div>
         </div>
@@ -105,14 +132,50 @@ const Index = () => {
   );
 };
 
-const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) => {
+const BrandCard = ({ logo, name, description }: { logo: string; name: string; description: string }) => {
   return (
-    <div className="group p-6 rounded-2xl bg-card border border-border hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-      <div className="text-primary mb-4 group-hover:scale-110 transition-transform">
-        {icon}
+    <div className="group bg-card rounded-2xl overflow-hidden border border-border hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+      <div className="aspect-video overflow-hidden">
+        <img 
+          src={logo} 
+          alt={name}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
       </div>
-      <h3 className="text-xl font-semibold mb-2">{title}</h3>
-      <p className="text-muted-foreground">{description}</p>
+      <div className="p-6">
+        <h3 className="text-xl font-bold mb-3 text-foreground">{name}</h3>
+        <p className="text-muted-foreground leading-relaxed">{description}</p>
+        <Button 
+          className="mt-4 w-full group-hover:bg-secondary group-hover:text-secondary-foreground transition-colors" 
+          variant="outline"
+        >
+          Voir les opportunités
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+const CreatorCard = ({ avatar, name, description }: { avatar: string; name: string; description: string }) => {
+  return (
+    <div className="group bg-card rounded-2xl overflow-hidden border border-border hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+      <div className="aspect-square overflow-hidden">
+        <img 
+          src={avatar} 
+          alt={name}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+      </div>
+      <div className="p-6">
+        <h3 className="text-xl font-bold mb-3 text-foreground">{name}</h3>
+        <p className="text-muted-foreground leading-relaxed">{description}</p>
+        <Button 
+          className="mt-4 w-full group-hover:bg-secondary group-hover:text-secondary-foreground transition-colors" 
+          variant="outline"
+        >
+          Voir le profil
+        </Button>
+      </div>
     </div>
   );
 };
