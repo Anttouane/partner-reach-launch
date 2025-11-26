@@ -57,10 +57,11 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        "blue-dark": "hsl(var(--blue-dark))",
-        "blue-light": "hsl(var(--blue-light))",
-        salmon: "hsl(var(--salmon))",
-        beige: "hsl(var(--beige))",
+      },
+      boxShadow: {
+        soft: "var(--shadow-soft)",
+        medium: "var(--shadow-medium)",
+        glow: "var(--shadow-glow)",
       },
       borderRadius: {
         lg: "var(--radius)",
