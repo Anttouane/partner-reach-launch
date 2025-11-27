@@ -322,39 +322,102 @@ const Index = () => {
               <span className="text-sm font-semibold text-foreground">Exemples</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              Des collaborations inspirantes
+              Découvrez des exemples de collaborations
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Découvrez quelques exemples de partenariats réussis sur Partnery.
+              Voici quelques opportunités et pitchs disponibles sur Partnery
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Exemple 1 */}
-            <div className="bg-background rounded-3xl p-6 border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-soft">
-              <img src="https://via.placeholder.com/400x300" alt="Exemple 1" className="rounded-2xl mb-4" />
-              <h3 className="text-xl font-bold text-foreground mb-2">Marque de mode éthique</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Collaboration avec un influenceur lifestyle pour promouvoir une collection responsable.
-              </p>
-            </div>
+          {/* Exemples Marques */}
+          <div className="mb-16">
+            <h3 className="text-2xl font-bold text-center mb-8 text-foreground">Opportunités de marques</h3>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="bg-background rounded-3xl p-6 border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-soft">
+                <div className="w-full h-32 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl mb-4 flex items-center justify-center">
+                  <span className="text-5xl">💡</span>
+                </div>
+                <h4 className="text-xl font-bold text-foreground mb-2">Lumos Wear</h4>
+                <p className="text-sm text-muted-foreground">
+                  Recherche créateurs lifestyle pour lancer une nouvelle veste LED
+                </p>
+              </div>
 
-            {/* Exemple 2 */}
-            <div className="bg-background rounded-3xl p-6 border-2 border-secondary/20 hover:border-secondary/40 transition-all hover:shadow-soft">
-              <img src="https://via.placeholder.com/400x300" alt="Exemple 2" className="rounded-2xl mb-4" />
-              <h3 className="text-xl font-bold text-foreground mb-2">Startup tech innovante</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Partenariat avec un youtubeur spécialisé pour présenter une nouvelle application.
-              </p>
-            </div>
+              <div className="bg-background rounded-3xl p-6 border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-soft">
+                <div className="w-full h-32 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl mb-4 flex items-center justify-center">
+                  <span className="text-5xl">🌱</span>
+                </div>
+                <h4 className="text-xl font-bold text-foreground mb-2">EcoSip</h4>
+                <p className="text-sm text-muted-foreground">
+                  Partenariats micro-influenceurs pour campagne zéro plastique
+                </p>
+              </div>
 
-            {/* Exemple 3 */}
-            <div className="bg-background rounded-3xl p-6 border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-soft">
-              <img src="https://via.placeholder.com/400x300" alt="Exemple 3" className="rounded-2xl mb-4" />
-              <h3 className="text-xl font-bold text-foreground mb-2">Marque de cosmétiques naturels</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Campagne avec une blogueuse beauté pour tester et recommander des produits bio.
-              </p>
+              <div className="bg-background rounded-3xl p-6 border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-soft">
+                <div className="w-full h-32 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl mb-4 flex items-center justify-center">
+                  <span className="text-5xl">✨</span>
+                </div>
+                <h4 className="text-xl font-bold text-foreground mb-2">NovaSkincare</h4>
+                <p className="text-sm text-muted-foreground">
+                  Budget 500–1500€ pour UGC autour d'une routine peau sensible
+                </p>
+              </div>
+
+              <div className="bg-background rounded-3xl p-6 border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-soft">
+                <div className="w-full h-32 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl mb-4 flex items-center justify-center">
+                  <span className="text-5xl">🎧</span>
+                </div>
+                <h4 className="text-xl font-bold text-foreground mb-2">UrbanBeats Audio</h4>
+                <p className="text-sm text-muted-foreground">
+                  Cherche créateurs tech pour tester le casque UB-One
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Exemples Créateurs */}
+          <div>
+            <h3 className="text-2xl font-bold text-center mb-8 text-foreground">Pitchs de créateurs</h3>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="bg-background rounded-3xl p-6 border-2 border-secondary/20 hover:border-secondary/40 transition-all hover:shadow-soft">
+                <div className="w-full h-32 bg-gradient-to-br from-secondary/20 to-secondary/10 rounded-2xl mb-4 flex items-center justify-center">
+                  <span className="text-5xl">💪</span>
+                </div>
+                <h4 className="text-xl font-bold text-foreground mb-2">EmmaFit</h4>
+                <p className="text-sm text-muted-foreground">
+                  Créatrice fitness ouverte aux marques bien-être et équipement
+                </p>
+              </div>
+
+              <div className="bg-background rounded-3xl p-6 border-2 border-secondary/20 hover:border-secondary/40 transition-all hover:shadow-soft">
+                <div className="w-full h-32 bg-gradient-to-br from-secondary/20 to-secondary/10 rounded-2xl mb-4 flex items-center justify-center">
+                  <span className="text-5xl">📱</span>
+                </div>
+                <h4 className="text-xl font-bold text-foreground mb-2">TechByLeo</h4>
+                <p className="text-sm text-muted-foreground">
+                  Micro-influenceur tech spécialisé en vidéos courtes
+                </p>
+              </div>
+
+              <div className="bg-background rounded-3xl p-6 border-2 border-secondary/20 hover:border-secondary/40 transition-all hover:shadow-soft">
+                <div className="w-full h-32 bg-gradient-to-br from-secondary/20 to-secondary/10 rounded-2xl mb-4 flex items-center justify-center">
+                  <span className="text-5xl">🍽️</span>
+                </div>
+                <h4 className="text-xl font-bold text-foreground mb-2">SarahEats</h4>
+                <p className="text-sm text-muted-foreground">
+                  Créatrice food pour contenus recettes simples & healthy
+                </p>
+              </div>
+
+              <div className="bg-background rounded-3xl p-6 border-2 border-secondary/20 hover:border-secondary/40 transition-all hover:shadow-soft">
+                <div className="w-full h-32 bg-gradient-to-br from-secondary/20 to-secondary/10 rounded-2xl mb-4 flex items-center justify-center">
+                  <span className="text-5xl">✈️</span>
+                </div>
+                <h4 className="text-xl font-bold text-foreground mb-2">JulesRoadTrip</h4>
+                <p className="text-sm text-muted-foreground">
+                  Créateur voyage spécialisé drone & exploration urbaine
+                </p>
+              </div>
             </div>
           </div>
         </div>
