@@ -35,7 +35,7 @@ const Header = ({ user }: HeaderProps) => {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center gap-2">
-            <Link to="/">
+            <Link to="/discover">
               <Button variant="ghost" size="sm">
                 <Search className="h-4 w-4 mr-2" />
                 Découvrir

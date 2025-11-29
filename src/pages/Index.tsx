@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Sparkles, Users, Briefcase, Zap, Heart, Shield, TrendingUp, Target, Rocket, CheckCircle, ArrowRight, Star } from "lucide-react";
+import { motion } from "framer-motion";
 
 const Index = () => {
   return (
@@ -10,8 +11,7 @@ const Index = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-2">
-              <Sparkles className="h-8 w-8 text-primary" />
-              <span className="text-2xl font-bold text-foreground">Partnery</span>
+              <span className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Partnery</span>
             </Link>
             
             <nav className="hidden md:flex items-center space-x-8">
@@ -42,7 +42,12 @@ const Index = () => {
       <section className="pt-32 pb-24 px-4 bg-gradient-to-br from-background via-primary/5 to-secondary/5">
         <div className="container mx-auto max-w-6xl">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="space-y-8"
+            >
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20">
                 <Sparkles className="h-4 w-4 text-primary" />
                 <span className="text-sm font-semibold text-foreground">La plateforme de mise en relation</span>
@@ -87,10 +92,15 @@ const Index = () => {
                   <div className="text-sm text-muted-foreground">Collaborations</div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Illustration Hero */}
-            <div className="relative">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="relative"
+            >
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl blur-3xl" />
               <div className="relative bg-card border-2 border-primary/20 rounded-3xl p-8 shadow-glow">
                 <div className="space-y-6">
@@ -130,7 +140,7 @@ const Index = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -139,7 +149,13 @@ const Index = () => {
       {/* Section Valeur Ajoutée */}
       <section id="valeur" className="py-24 px-4 bg-card">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+          >
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4">
               <Target className="h-5 w-5 text-primary" />
               <span className="text-sm font-semibold text-foreground">Notre mission</span>
@@ -151,10 +167,16 @@ const Index = () => {
               Nous éliminons les intermédiaires et facilitons les connexions authentiques 
               entre marques et créateurs de contenu.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-background rounded-3xl p-8 border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-soft">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="bg-background rounded-3xl p-8 border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-soft"
+            >
               <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mb-6">
                 <Zap className="h-8 w-8 text-primary" />
               </div>
@@ -163,9 +185,15 @@ const Index = () => {
                 Trouvez des partenaires en quelques clics. Notre algorithme intelligent 
                 vous met en relation avec les bons profils instantanément.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="bg-background rounded-3xl p-8 border-2 border-secondary/20 hover:border-secondary/40 transition-all hover:shadow-soft">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="bg-background rounded-3xl p-8 border-2 border-secondary/20 hover:border-secondary/40 transition-all hover:shadow-soft"
+            >
               <div className="w-16 h-16 bg-secondary/20 rounded-2xl flex items-center justify-center mb-6">
                 <Shield className="h-8 w-8 text-secondary" />
               </div>
@@ -174,9 +202,15 @@ const Index = () => {
                 Profils vérifiés, paiements sécurisés et contrats standardisés. 
                 Collaborez en toute confiance.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="bg-background rounded-3xl p-8 border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-soft">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="bg-background rounded-3xl p-8 border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-soft"
+            >
               <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mb-6">
                 <Heart className="h-8 w-8 text-primary" />
               </div>
@@ -185,7 +219,7 @@ const Index = () => {
                 Transparence totale sur les tarifs. Les créateurs gardent plus, 
                 les marques paient moins.
               </p>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -193,7 +227,13 @@ const Index = () => {
       {/* Section Comment ça marche */}
       <section id="fonctionnement" className="py-24 px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+          >
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 rounded-full mb-4">
               <Zap className="h-5 w-5 text-secondary" />
               <span className="text-sm font-semibold text-foreground">Comment ça marche</span>
@@ -204,11 +244,17 @@ const Index = () => {
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Rejoignez Partnery et lancez-vous en quelques minutes.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-3 gap-12">
             {/* Etape 1 */}
-            <div className="text-center">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="text-center"
+            >
               <div className="w-24 h-24 rounded-full bg-primary/10 text-primary font-bold text-3xl flex items-center justify-center mx-auto mb-6 border-2 border-primary/20">
                 1
               </div>
@@ -216,10 +262,16 @@ const Index = () => {
               <p className="text-muted-foreground leading-relaxed">
                 Créez votre profil en quelques clics, que vous soyez une marque ou un créateur.
               </p>
-            </div>
+            </motion.div>
 
             {/* Etape 2 */}
-            <div className="text-center">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+              className="text-center"
+            >
               <div className="w-24 h-24 rounded-full bg-secondary/10 text-secondary font-bold text-3xl flex items-center justify-center mx-auto mb-6 border-2 border-secondary/20">
                 2
               </div>
@@ -227,10 +279,16 @@ const Index = () => {
               <p className="text-muted-foreground leading-relaxed">
                 Découvrez les profils qui correspondent à vos besoins grâce à notre algorithme.
               </p>
-            </div>
+            </motion.div>
 
             {/* Etape 3 */}
-            <div className="text-center">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="text-center"
+            >
               <div className="w-24 h-24 rounded-full bg-primary/10 text-primary font-bold text-3xl flex items-center justify-center mx-auto mb-6 border-2 border-primary/20">
                 3
               </div>
@@ -238,7 +296,7 @@ const Index = () => {
               <p className="text-muted-foreground leading-relaxed">
                 Entrez en contact, discutez de vos projets et lancez des partenariats uniques.
               </p>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -246,7 +304,13 @@ const Index = () => {
       {/* Section Bénéfices */}
       <section id="benefices" className="py-24 px-4 bg-card">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+          >
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4">
               <Star className="h-5 w-5 text-primary" />
               <span className="text-sm font-semibold text-foreground">Vos avantages</span>
@@ -257,11 +321,17 @@ const Index = () => {
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Gagnez en visibilité, développez votre réseau et boostez votre chiffre d'affaires.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-2 gap-12">
             {/* Bénéfices Marque */}
-            <div className="space-y-6">
+            <motion.div 
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="space-y-6"
+            >
               <h3 className="text-3xl font-bold text-foreground mb-4">Pour les marques</h3>
               <ul className="space-y-4">
                 <li className="flex items-start gap-4">
@@ -283,10 +353,16 @@ const Index = () => {
                   </p>
                 </li>
               </ul>
-            </div>
+            </motion.div>
 
             {/* Bénéfices Créateur */}
-            <div className="space-y-6">
+            <motion.div 
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="space-y-6"
+            >
               <h3 className="text-3xl font-bold text-foreground mb-4">Pour les créateurs</h3>
               <ul className="space-y-4">
                 <li className="flex items-start gap-4">
@@ -308,7 +384,7 @@ const Index = () => {
                   </p>
                 </li>
               </ul>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -316,7 +392,13 @@ const Index = () => {
       {/* Section Exemples */}
       <section id="exemples" className="py-24 px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+          >
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 rounded-full mb-4">
               <Briefcase className="h-5 w-5 text-secondary" />
               <span className="text-sm font-semibold text-foreground">Exemples</span>
@@ -327,51 +409,33 @@ const Index = () => {
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Voici quelques opportunités et pitchs disponibles sur Partnery
             </p>
-          </div>
+          </motion.div>
 
           {/* Exemples Marques */}
           <div className="mb-16">
             <h3 className="text-2xl font-bold text-center mb-8 text-foreground">Opportunités de marques</h3>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-background rounded-3xl p-6 border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-soft">
-                <div className="w-full h-32 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl mb-4 flex items-center justify-center">
-                  <span className="text-5xl">💡</span>
-                </div>
-                <h4 className="text-xl font-bold text-foreground mb-2">Lumos Wear</h4>
-                <p className="text-sm text-muted-foreground">
-                  Recherche créateurs lifestyle pour lancer une nouvelle veste LED
-                </p>
-              </div>
-
-              <div className="bg-background rounded-3xl p-6 border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-soft">
-                <div className="w-full h-32 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl mb-4 flex items-center justify-center">
-                  <span className="text-5xl">🌱</span>
-                </div>
-                <h4 className="text-xl font-bold text-foreground mb-2">EcoSip</h4>
-                <p className="text-sm text-muted-foreground">
-                  Partenariats micro-influenceurs pour campagne zéro plastique
-                </p>
-              </div>
-
-              <div className="bg-background rounded-3xl p-6 border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-soft">
-                <div className="w-full h-32 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl mb-4 flex items-center justify-center">
-                  <span className="text-5xl">✨</span>
-                </div>
-                <h4 className="text-xl font-bold text-foreground mb-2">NovaSkincare</h4>
-                <p className="text-sm text-muted-foreground">
-                  Budget 500–1500€ pour UGC autour d'une routine peau sensible
-                </p>
-              </div>
-
-              <div className="bg-background rounded-3xl p-6 border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-soft">
-                <div className="w-full h-32 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl mb-4 flex items-center justify-center">
-                  <span className="text-5xl">🎧</span>
-                </div>
-                <h4 className="text-xl font-bold text-foreground mb-2">UrbanBeats Audio</h4>
-                <p className="text-sm text-muted-foreground">
-                  Cherche créateurs tech pour tester le casque UB-One
-                </p>
-              </div>
+              {[
+                { emoji: "💡", title: "Lumos Wear", desc: "Recherche créateurs lifestyle pour lancer une nouvelle veste LED" },
+                { emoji: "🌱", title: "EcoSip", desc: "Partenariats micro-influenceurs pour campagne zéro plastique" },
+                { emoji: "✨", title: "NovaSkincare", desc: "Budget 500–1500€ pour UGC autour d'une routine peau sensible" },
+                { emoji: "🎧", title: "UrbanBeats Audio", desc: "Cherche créateurs tech pour tester le casque UB-One" }
+              ].map((brand, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="bg-background rounded-3xl p-6 border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-soft"
+                >
+                  <div className="w-full h-32 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl mb-4 flex items-center justify-center">
+                    <span className="text-5xl">{brand.emoji}</span>
+                  </div>
+                  <h4 className="text-xl font-bold text-foreground mb-2">{brand.title}</h4>
+                  <p className="text-sm text-muted-foreground">{brand.desc}</p>
+                </motion.div>
+              ))}
             </div>
           </div>
 
@@ -379,45 +443,27 @@ const Index = () => {
           <div>
             <h3 className="text-2xl font-bold text-center mb-8 text-foreground">Pitchs de créateurs</h3>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-background rounded-3xl p-6 border-2 border-secondary/20 hover:border-secondary/40 transition-all hover:shadow-soft">
-                <div className="w-full h-32 bg-gradient-to-br from-secondary/20 to-secondary/10 rounded-2xl mb-4 flex items-center justify-center">
-                  <span className="text-5xl">💪</span>
-                </div>
-                <h4 className="text-xl font-bold text-foreground mb-2">EmmaFit</h4>
-                <p className="text-sm text-muted-foreground">
-                  Créatrice fitness ouverte aux marques bien-être et équipement
-                </p>
-              </div>
-
-              <div className="bg-background rounded-3xl p-6 border-2 border-secondary/20 hover:border-secondary/40 transition-all hover:shadow-soft">
-                <div className="w-full h-32 bg-gradient-to-br from-secondary/20 to-secondary/10 rounded-2xl mb-4 flex items-center justify-center">
-                  <span className="text-5xl">📱</span>
-                </div>
-                <h4 className="text-xl font-bold text-foreground mb-2">TechByLeo</h4>
-                <p className="text-sm text-muted-foreground">
-                  Micro-influenceur tech spécialisé en vidéos courtes
-                </p>
-              </div>
-
-              <div className="bg-background rounded-3xl p-6 border-2 border-secondary/20 hover:border-secondary/40 transition-all hover:shadow-soft">
-                <div className="w-full h-32 bg-gradient-to-br from-secondary/20 to-secondary/10 rounded-2xl mb-4 flex items-center justify-center">
-                  <span className="text-5xl">🍽️</span>
-                </div>
-                <h4 className="text-xl font-bold text-foreground mb-2">SarahEats</h4>
-                <p className="text-sm text-muted-foreground">
-                  Créatrice food pour contenus recettes simples & healthy
-                </p>
-              </div>
-
-              <div className="bg-background rounded-3xl p-6 border-2 border-secondary/20 hover:border-secondary/40 transition-all hover:shadow-soft">
-                <div className="w-full h-32 bg-gradient-to-br from-secondary/20 to-secondary/10 rounded-2xl mb-4 flex items-center justify-center">
-                  <span className="text-5xl">✈️</span>
-                </div>
-                <h4 className="text-xl font-bold text-foreground mb-2">JulesRoadTrip</h4>
-                <p className="text-sm text-muted-foreground">
-                  Créateur voyage spécialisé drone & exploration urbaine
-                </p>
-              </div>
+              {[
+                { emoji: "💪", title: "EmmaFit", desc: "Créatrice fitness ouverte aux marques bien-être et équipement" },
+                { emoji: "📱", title: "TechByLeo", desc: "Micro-influenceur tech spécialisé en vidéos courtes" },
+                { emoji: "🍽️", title: "SarahEats", desc: "Créatrice food pour contenus recettes simples & healthy" },
+                { emoji: "✈️", title: "JulesRoadTrip", desc: "Créateur voyage spécialisé drone & exploration urbaine" }
+              ].map((creator, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="bg-background rounded-3xl p-6 border-2 border-secondary/20 hover:border-secondary/40 transition-all hover:shadow-soft"
+                >
+                  <div className="w-full h-32 bg-gradient-to-br from-secondary/20 to-secondary/10 rounded-2xl mb-4 flex items-center justify-center">
+                    <span className="text-5xl">{creator.emoji}</span>
+                  </div>
+                  <h4 className="text-xl font-bold text-foreground mb-2">{creator.title}</h4>
+                  <p className="text-sm text-muted-foreground">{creator.desc}</p>
+                </motion.div>
+              ))}
             </div>
           </div>
         </div>
@@ -426,7 +472,13 @@ const Index = () => {
       {/* Section Preuve Sociale */}
       <section className="py-24 px-4 bg-card">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+          >
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4">
               <TrendingUp className="h-5 w-5 text-primary" />
               <span className="text-sm font-semibold text-foreground">Chiffres clés</span>
@@ -437,26 +489,26 @@ const Index = () => {
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Des résultats concrets pour nos utilisateurs.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {/* Chiffre 1 */}
-            <div className="text-center">
-              <div className="text-5xl font-bold text-primary mb-2">1000+</div>
-              <p className="text-muted-foreground">Collaborations réussies</p>
-            </div>
-
-            {/* Chiffre 2 */}
-            <div className="text-center">
-              <div className="text-5xl font-bold text-secondary mb-2">500+</div>
-              <p className="text-muted-foreground">Créateurs de contenu</p>
-            </div>
-
-            {/* Chiffre 3 */}
-            <div className="text-center">
-              <div className="text-5xl font-bold text-foreground mb-2">200+</div>
-              <p className="text-muted-foreground">Marques partenaires</p>
-            </div>
+            {[
+              { value: "1000+", label: "Collaborations réussies", color: "text-primary" },
+              { value: "500+", label: "Créateurs de contenu", color: "text-secondary" },
+              { value: "200+", label: "Marques partenaires", color: "text-foreground" }
+            ].map((stat, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="text-center"
+              >
+                <div className={`text-5xl font-bold ${stat.color} mb-2`}>{stat.value}</div>
+                <p className="text-muted-foreground">{stat.label}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -464,7 +516,13 @@ const Index = () => {
       {/* Section Pourquoi Partnery ? */}
       <section className="py-24 px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+          >
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4">
               <Rocket className="h-5 w-5 text-primary" />
               <span className="text-sm font-semibold text-foreground">Pourquoi nous ?</span>
@@ -475,61 +533,49 @@ const Index = () => {
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Une solution complète, simple et efficace pour développer votre activité.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-2 gap-12">
-            {/* Avantage 1 */}
-            <div className="flex items-start gap-6">
-              <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center">
-                <Zap className="h-8 w-8 text-primary" />
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-2xl font-bold text-foreground">Gain de temps</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Trouvez rapidement les partenaires adaptés à vos besoins.
-                </p>
-              </div>
-            </div>
-
-            {/* Avantage 2 */}
-            <div className="flex items-start gap-6">
-              <div className="w-16 h-16 bg-secondary/20 rounded-2xl flex items-center justify-center">
-                <Shield className="h-8 w-8 text-secondary" />
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-2xl font-bold text-foreground">Sécurité</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Collaborez en toute confiance grâce à nos outils de protection.
-                </p>
-              </div>
-            </div>
-
-            {/* Avantage 3 */}
-            <div className="flex items-start gap-6">
-              <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center">
-                <Heart className="h-8 w-8 text-primary" />
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-2xl font-bold text-foreground">Simplicité</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Gérez facilement vos partenariats de A à Z.
-                </p>
-              </div>
-            </div>
-
-            {/* Avantage 4 */}
-            <div className="flex items-start gap-6">
-              <div className="w-16 h-16 bg-secondary/20 rounded-2xl flex items-center justify-center">
-                <Users className="h-8 w-8 text-secondary" />
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-2xl font-bold text-foreground">Communauté</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Rejoignez un réseau de professionnels passionnés.
-                </p>
-              </div>
-            </div>
+            {[
+              { icon: Zap, title: "Gain de temps", desc: "Trouvez rapidement les partenaires adaptés à vos besoins.", color: "primary" },
+              { icon: Shield, title: "Sécurité", desc: "Collaborez en toute confiance grâce à nos outils de protection.", color: "secondary" },
+              { icon: Heart, title: "Simplicité", desc: "Gérez facilement vos partenariats de A à Z.", color: "primary" },
+              { icon: Users, title: "Communauté", desc: "Rejoignez un réseau de professionnels passionnés.", color: "secondary" }
+            ].map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="flex items-start gap-6"
+              >
+                <div className={`w-16 h-16 bg-${item.color}/20 rounded-2xl flex items-center justify-center`}>
+                  <item.icon className={`h-8 w-8 text-${item.color}`} />
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-bold text-foreground">{item.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
+                </div>
+              </motion.div>
+            ))}
           </div>
+
+          {/* CTA Final */}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mt-16"
+          >
+            <Link to="/auth">
+              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-medium text-lg px-12 py-7">
+                Commencer maintenant
+                <ArrowRight className="ml-2 h-6 w-6" />
+              </Button>
+            </Link>
+          </motion.div>
         </div>
       </section>
 
@@ -538,10 +584,7 @@ const Index = () => {
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div className="space-y-4">
-              <div className="flex items-center space-x-2">
-                <Sparkles className="h-6 w-6 text-primary" />
-                <span className="text-xl font-bold">Partnery</span>
-              </div>
+              <div className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Partnery</div>
               <p className="text-white/70 text-sm leading-relaxed">
                 La plateforme qui connecte marques et créateurs pour des collaborations réussies.
               </p>
