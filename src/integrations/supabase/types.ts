@@ -112,25 +112,38 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          opportunity_id: string | null
           participant_1: string
           participant_2: string
+          pitch_id: string | null
           updated_at: string
         }
         Insert: {
           created_at?: string
           id?: string
+          opportunity_id?: string | null
           participant_1: string
           participant_2: string
+          pitch_id?: string | null
           updated_at?: string
         }
         Update: {
           created_at?: string
           id?: string
+          opportunity_id?: string | null
           participant_1?: string
           participant_2?: string
+          pitch_id?: string | null
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "conversations_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "brand_opportunities"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "conversations_participant_1_fkey"
             columns: ["participant_1"]
@@ -143,6 +156,13 @@ export type Database = {
             columns: ["participant_2"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversations_pitch_id_fkey"
+            columns: ["pitch_id"]
+            isOneToOne: false
+            referencedRelation: "pitches"
             referencedColumns: ["id"]
           },
         ]

@@ -94,7 +94,7 @@ const Discover = () => {
   const isCreator = userType === "creator";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/30">
+    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/30">
       <Header user={user} />
 
       <main className="container mx-auto px-4 py-8">

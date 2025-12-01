@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MessageSquare, Send } from "lucide-react";
 import { toast } from "sonner";
@@ -17,6 +18,8 @@ interface Conversation {
   participant_1: string;
   participant_2: string;
   updated_at: string;
+  opportunity_id: string | null;
+  pitch_id: string | null;
   otherUser: {
     id: string;
     full_name: string | null;
@@ -27,6 +30,8 @@ interface Conversation {
     content: string;
     created_at: string;
   };
+  opportunityTitle?: string;
+  pitchTitle?: string;
 }
 
 interface Message {
@@ -80,7 +85,9 @@ const Messages = () => {
           id,
           participant_1,
           participant_2,
-          updated_at
+          updated_at,
+          opportunity_id,
+          pitch_id
         `)
         .or(`participant_1.eq.${user.id},participant_2.eq.${user.id}`)
         .order("updated_at", { ascending: false });
@@ -111,10 +118,34 @@ const Messages = () => {
             .limit(1)
             .maybeSingle();
 
+          // Fetch opportunity or pitch title if applicable
+          let opportunityTitle: string | undefined;
+          let pitchTitle: string | undefined;
+
+          if (convo.opportunity_id) {
+            const { data: opp } = await supabase
+              .from("brand_opportunities")
+              .select("title")
+              .eq("id", convo.opportunity_id)
+              .maybeSingle();
+            opportunityTitle = opp?.title;
+          }
+
+          if (convo.pitch_id) {
+            const { data: pitch } = await supabase
+              .from("pitches")
+              .select("title")
+              .eq("id", convo.pitch_id)
+              .maybeSingle();
+            pitchTitle = pitch?.title;
+          }
+
           return {
             ...convo,
             otherUser: profile || { id: otherUserId, full_name: "Utilisateur", avatar_url: null, user_type: "creator" },
             lastMessage: lastMsg || undefined,
+            opportunityTitle,
+            pitchTitle,
           };
         })
       );
@@ -225,7 +256,7 @@ const Messages = () => {
   const selectedConvo = conversations.find((c) => c.id === selectedConversation);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/30">
+    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/30">
       <Header user={user} />
 
       <main className="container mx-auto px-4 py-8">
@@ -298,11 +329,18 @@ const Messages = () => {
                         {selectedConvo.otherUser.full_name?.charAt(0) || "U"}
                       </AvatarFallback>
                     </Avatar>
-                    <div>
+                    <div className="flex-1">
                       <p className="font-medium">{selectedConvo.otherUser.full_name || "Utilisateur"}</p>
                       <p className="text-xs text-muted-foreground capitalize">
                         {selectedConvo.otherUser.user_type === "creator" ? "Créateur" : "Marque"}
                       </p>
+                      {(selectedConvo.opportunityTitle || selectedConvo.pitchTitle) && (
+                        <div className="mt-1">
+                          <Badge variant="secondary" className="text-xs">
+                            A répondu à: {selectedConvo.opportunityTitle || selectedConvo.pitchTitle}
+                          </Badge>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

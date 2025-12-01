@@ -132,6 +132,7 @@ const PitchDetail = () => {
           .insert({
             participant_1: user.id,
             participant_2: pitch.creator_id,
+            pitch_id: pitch.id,
           })
           .select()
           .single();
@@ -168,7 +169,7 @@ const PitchDetail = () => {
 
   if (!pitch || !creator) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-secondary/30">
+      <div className="min-h-screen bg-gradient-to-br from-background to-secondary/30">
         <Header user={user} />
         <main className="container mx-auto px-4 py-8">
           <Card>
@@ -185,7 +186,7 @@ const PitchDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/30">
+    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/30">
       <Header user={user} />
 
       <main className="container mx-auto px-4 py-8">

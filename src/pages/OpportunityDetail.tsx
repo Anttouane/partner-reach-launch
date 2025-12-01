@@ -131,6 +131,7 @@ const OpportunityDetail = () => {
           .insert({
             participant_1: user.id,
             participant_2: opportunity.brand_id,
+            opportunity_id: opportunity.id,
           })
           .select()
           .single();
@@ -167,7 +168,7 @@ const OpportunityDetail = () => {
 
   if (!opportunity || !brand) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-secondary/30">
+      <div className="min-h-screen bg-gradient-to-br from-background to-secondary/30">
         <Header user={user} />
         <main className="container mx-auto px-4 py-8">
           <Card>
@@ -184,7 +185,7 @@ const OpportunityDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/30">
+    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/30">
       <Header user={user} />
 
       <main className="container mx-auto px-4 py-8">
