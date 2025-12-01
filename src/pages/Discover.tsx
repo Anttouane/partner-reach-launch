@@ -7,7 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Users, Briefcase, MessageSquare, TrendingUp } from "lucide-react";
+import { Loader2, Users, Briefcase, MessageSquare, TrendingUp, Filter, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Discover = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -15,6 +17,13 @@ const Discover = () => {
   const [pitches, setPitches] = useState<any[]>([]);
   const [opportunities, setOpportunities] = useState<any[]>([]);
   const [profiles, setProfiles] = useState<any[]>([]);
+  const [filteredPitches, setFilteredPitches] = useState<any[]>([]);
+  const [filteredOpportunities, setFilteredOpportunities] = useState<any[]>([]);
+  const [filteredProfiles, setFilteredProfiles] = useState<any[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [campaignTypeFilter, setCampaignTypeFilter] = useState("");
+  const [contentTypeFilter, setContentTypeFilter] = useState("");
+  const [industryFilter, setIndustryFilter] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -82,6 +91,54 @@ const Discover = () => {
     }
   };
 
+  const userType = user?.user_metadata?.user_type || "creator";
+  const isCreator = userType === "creator";
+
+  useEffect(() => {
+    let filtered = opportunities;
+    if (searchTerm) {
+      filtered = filtered.filter(
+        (opp) =>
+          opp.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          opp.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    if (campaignTypeFilter) {
+      filtered = filtered.filter((opp) => opp.campaign_type === campaignTypeFilter);
+    }
+    setFilteredOpportunities(filtered);
+  }, [opportunities, searchTerm, campaignTypeFilter]);
+
+  useEffect(() => {
+    let filtered = pitches;
+    if (searchTerm) {
+      filtered = filtered.filter(
+        (pitch) =>
+          pitch.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          pitch.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    if (contentTypeFilter) {
+      filtered = filtered.filter((pitch) => pitch.content_type === contentTypeFilter);
+    }
+    setFilteredPitches(filtered);
+  }, [pitches, searchTerm, contentTypeFilter]);
+
+  useEffect(() => {
+    let filtered = profiles;
+    if (searchTerm) {
+      filtered = filtered.filter(
+        (profile) =>
+          profile.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          profile.bio?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    if (industryFilter && !isCreator) {
+      filtered = filtered.filter((profile) => profile.brand_profiles?.industry === industryFilter);
+    }
+    setFilteredProfiles(filtered);
+  }, [profiles, searchTerm, industryFilter, isCreator]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -89,9 +146,6 @@ const Discover = () => {
       </div>
     );
   }
-
-  const userType = user?.user_metadata?.user_type || "creator";
-  const isCreator = userType === "creator";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/30">
@@ -101,6 +155,27 @@ const Discover = () => {
         <h1 className="text-3xl font-bold mb-6">
           {isCreator ? "Découvrir les opportunités" : "Découvrir les créateurs"}
         </h1>
+
+        <div className="mb-6 space-y-4">
+          <div className="flex items-center gap-2">
+            <Filter className="h-5 w-5 text-muted-foreground" />
+            <Input
+              placeholder="Rechercher..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="max-w-sm"
+            />
+            {searchTerm && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSearchTerm("")}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+        </div>
 
         <Tabs defaultValue={isCreator ? "opportunities" : "pitches"}>
           <TabsList className="mb-6">
@@ -115,10 +190,43 @@ const Discover = () => {
           </TabsList>
 
           <TabsContent value={isCreator ? "opportunities" : "pitches"}>
+            {isCreator && (
+              <div className="mb-4">
+                <Select value={campaignTypeFilter} onValueChange={setCampaignTypeFilter}>
+                  <SelectTrigger className="max-w-xs">
+                    <SelectValue placeholder="Type de campagne" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Tous les types</SelectItem>
+                    <SelectItem value="sponsorship">Sponsoring</SelectItem>
+                    <SelectItem value="collaboration">Collaboration</SelectItem>
+                    <SelectItem value="review">Test produit</SelectItem>
+                    <SelectItem value="ambassador">Ambassadeur</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+            {!isCreator && (
+              <div className="mb-4">
+                <Select value={contentTypeFilter} onValueChange={setContentTypeFilter}>
+                  <SelectTrigger className="max-w-xs">
+                    <SelectValue placeholder="Type de contenu" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Tous les types</SelectItem>
+                    <SelectItem value="video">Vidéo</SelectItem>
+                    <SelectItem value="photo">Photo</SelectItem>
+                    <SelectItem value="story">Story</SelectItem>
+                    <SelectItem value="reel">Reel</SelectItem>
+                    <SelectItem value="post">Post</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {isCreator ? (
-                opportunities.length > 0 ? (
-                  opportunities.map((opp) => (
+                filteredOpportunities.length > 0 ? (
+                  filteredOpportunities.map((opp) => (
                     <OpportunityCard key={opp.id} opportunity={opp} />
                   ))
                 ) : (
@@ -127,8 +235,8 @@ const Discover = () => {
                   </p>
                 )
               ) : (
-                pitches.length > 0 ? (
-                  pitches.map((pitch) => (
+                filteredPitches.length > 0 ? (
+                  filteredPitches.map((pitch) => (
                     <PitchCard key={pitch.id} pitch={pitch} />
                   ))
                 ) : (
@@ -141,9 +249,28 @@ const Discover = () => {
           </TabsContent>
 
           <TabsContent value="profiles">
+            {!isCreator && (
+              <div className="mb-4">
+                <Select value={industryFilter} onValueChange={setIndustryFilter}>
+                  <SelectTrigger className="max-w-xs">
+                    <SelectValue placeholder="Secteur" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Tous les secteurs</SelectItem>
+                    <SelectItem value="tech">Technologie</SelectItem>
+                    <SelectItem value="fashion">Mode</SelectItem>
+                    <SelectItem value="beauty">Beauté</SelectItem>
+                    <SelectItem value="food">Alimentation</SelectItem>
+                    <SelectItem value="sport">Sport</SelectItem>
+                    <SelectItem value="travel">Voyage</SelectItem>
+                    <SelectItem value="lifestyle">Lifestyle</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {profiles.length > 0 ? (
-                profiles.map((profile) => (
+              {filteredProfiles.length > 0 ? (
+                filteredProfiles.map((profile) => (
                   <ProfileCard key={profile.id} profile={profile} isCreator={!isCreator} />
                 ))
               ) : (
@@ -214,11 +341,6 @@ const OpportunityCard = ({ opportunity }: { opportunity: any }) => {
         </p>
         {opportunity.campaign_type && (
           <Badge>{opportunity.campaign_type}</Badge>
-        )}
-        {opportunity.budget_range && (
-          <div className="text-sm font-medium">
-            Budget : {opportunity.budget_range}
-          </div>
         )}
         <Button className="w-full" onClick={(e) => {
           e.stopPropagation();
