@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MessageSquare, Users, TrendingUp, DollarSign, Loader2 } from "lucide-react";
+import { MessageSquare, Users, TrendingUp, Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 interface Pitch {
@@ -229,8 +229,8 @@ const PitchDetail = () => {
                   </div>
                 )}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
-                  {pitch.estimated_reach && (
+                {pitch.estimated_reach && (
+                  <div className="pt-4 border-t">
                     <div className="flex items-center gap-2">
                       <TrendingUp className="h-5 w-5 text-primary" />
                       <div>
@@ -238,17 +238,8 @@ const PitchDetail = () => {
                         <p className="font-semibold">{pitch.estimated_reach.toLocaleString()}</p>
                       </div>
                     </div>
-                  )}
-                  {pitch.budget_range && (
-                    <div className="flex items-center gap-2">
-                      <DollarSign className="h-5 w-5 text-primary" />
-                      <div>
-                        <p className="text-sm text-muted-foreground">Budget</p>
-                        <p className="font-semibold">{pitch.budget_range}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
