@@ -9,10 +9,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Settings, Euro, TrendingUp, CreditCard, Loader2 } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Settings, Euro, TrendingUp, CreditCard, Loader2, Users, Shield, Percent } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { useAdmin } from "@/hooks/useAdmin";
 
 interface Payment {
   id: string;
@@ -29,12 +31,23 @@ interface Payment {
   payee?: { full_name: string | null };
 }
 
+interface UserProfile {
+  id: string;
+  full_name: string | null;
+  user_type: string;
+  commission_rate?: number;
+}
+
 const AdminPayments = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [authLoading, setAuthLoading] = useState(true);
   const [payments, setPayments] = useState<Payment[]>([]);
-  const [commissionRate, setCommissionRate] = useState("10");
+  const [users, setUsers] = useState<UserProfile[]>([]);
+  const [globalCommissionRate, setGlobalCommissionRate] = useState("10");
   const [savingRate, setSavingRate] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
+  const [userCommissionRate, setUserCommissionRate] = useState("");
+  const [savingUserRate, setSavingUserRate] = useState(false);
   const [stats, setStats] = useState({
     totalRevenue: 0,
     totalCommissions: 0,
@@ -42,6 +55,7 @@ const AdminPayments = () => {
     pendingPayments: 0,
   });
   const navigate = useNavigate();
+  const { isAdmin, loading: adminLoading } = useAdmin();
 
   useEffect(() => {
     const checkUser = async () => {
@@ -51,17 +65,25 @@ const AdminPayments = () => {
         return;
       }
       setUser(session.user);
-      setLoading(false);
+      setAuthLoading(false);
     };
 
     checkUser();
   }, [navigate]);
 
+  // Redirect if not admin
   useEffect(() => {
-    if (!user) return;
+    if (!adminLoading && !authLoading && !isAdmin) {
+      toast.error("Accès refusé. Vous n'avez pas les droits administrateur.");
+      navigate("/dashboard");
+    }
+  }, [isAdmin, adminLoading, authLoading, navigate]);
+
+  useEffect(() => {
+    if (!user || !isAdmin) return;
 
     const fetchData = async () => {
-      // Fetch commission rate
+      // Fetch global commission rate
       const { data: settings } = await supabase
         .from("platform_settings")
         .select("setting_value")
@@ -69,7 +91,31 @@ const AdminPayments = () => {
         .single();
 
       if (settings) {
-        setCommissionRate(settings.setting_value);
+        setGlobalCommissionRate(settings.setting_value);
+      }
+
+      // Fetch all users with their commission rates
+      const { data: profilesData } = await supabase
+        .from("profiles")
+        .select("id, full_name, user_type")
+        .order("full_name");
+
+      if (profilesData) {
+        // Fetch user-specific commission rates
+        const { data: commissionsData } = await supabase
+          .from("user_commissions")
+          .select("user_id, commission_rate");
+
+        const commissionMap = new Map(
+          commissionsData?.map((c) => [c.user_id, Number(c.commission_rate)]) || []
+        );
+
+        const usersWithCommissions = profilesData.map((p) => ({
+          ...p,
+          commission_rate: commissionMap.get(p.id),
+        }));
+
+        setUsers(usersWithCommissions);
       }
 
       // Fetch payments
@@ -84,7 +130,6 @@ const AdminPayments = () => {
       }
 
       if (paymentsData) {
-        // Fetch user names for each payment
         const paymentsWithNames = await Promise.all(
           paymentsData.map(async (payment) => {
             const { data: payer } = await supabase
@@ -109,7 +154,6 @@ const AdminPayments = () => {
 
         setPayments(paymentsWithNames);
 
-        // Calculate stats
         const completed = paymentsWithNames.filter((p) => p.status === "completed");
         const pending = paymentsWithNames.filter((p) => p.status === "pending");
         
@@ -123,27 +167,102 @@ const AdminPayments = () => {
     };
 
     fetchData();
-  }, [user]);
+  }, [user, isAdmin]);
 
-  const handleUpdateCommissionRate = async () => {
-    const rate = parseFloat(commissionRate);
+  const handleUpdateGlobalRate = async () => {
+    const rate = parseFloat(globalCommissionRate);
     if (isNaN(rate) || rate < 0 || rate > 100) {
-      toast.error("Le taux de commission doit être entre 0 et 100");
+      toast.error("Le taux doit être entre 0 et 100");
       return;
     }
 
     setSavingRate(true);
     const { error } = await supabase
       .from("platform_settings")
-      .update({ setting_value: commissionRate })
+      .update({ setting_value: globalCommissionRate })
       .eq("setting_key", "commission_rate");
 
     if (error) {
-      toast.error("Erreur lors de la mise à jour du taux");
+      toast.error("Erreur lors de la mise à jour");
     } else {
-      toast.success("Taux de commission mis à jour");
+      toast.success("Taux global mis à jour");
     }
     setSavingRate(false);
+  };
+
+  const handleOpenUserCommission = (userProfile: UserProfile) => {
+    setSelectedUser(userProfile);
+    setUserCommissionRate(userProfile.commission_rate?.toString() || globalCommissionRate);
+  };
+
+  const handleSaveUserCommission = async () => {
+    if (!selectedUser) return;
+
+    const rate = parseFloat(userCommissionRate);
+    if (isNaN(rate) || rate < 0 || rate > 100) {
+      toast.error("Le taux doit être entre 0 et 100");
+      return;
+    }
+
+    setSavingUserRate(true);
+
+    // Check if user already has a custom rate
+    const { data: existing } = await supabase
+      .from("user_commissions")
+      .select("id")
+      .eq("user_id", selectedUser.id)
+      .maybeSingle();
+
+    let error;
+    if (existing) {
+      const result = await supabase
+        .from("user_commissions")
+        .update({ commission_rate: rate })
+        .eq("user_id", selectedUser.id);
+      error = result.error;
+    } else {
+      const result = await supabase
+        .from("user_commissions")
+        .insert({ user_id: selectedUser.id, commission_rate: rate });
+      error = result.error;
+    }
+
+    if (error) {
+      toast.error("Erreur lors de la mise à jour");
+    } else {
+      toast.success(`Commission de ${selectedUser.full_name || "l'utilisateur"} mise à jour`);
+      // Update local state
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.id === selectedUser.id ? { ...u, commission_rate: rate } : u
+        )
+      );
+      setSelectedUser(null);
+    }
+    setSavingUserRate(false);
+  };
+
+  const handleResetUserCommission = async () => {
+    if (!selectedUser) return;
+
+    setSavingUserRate(true);
+    const { error } = await supabase
+      .from("user_commissions")
+      .delete()
+      .eq("user_id", selectedUser.id);
+
+    if (error) {
+      toast.error("Erreur lors de la réinitialisation");
+    } else {
+      toast.success("Commission réinitialisée au taux global");
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.id === selectedUser.id ? { ...u, commission_rate: undefined } : u
+        )
+      );
+      setSelectedUser(null);
+    }
+    setSavingUserRate(false);
   };
 
   const getStatusBadge = (status: string) => {
@@ -161,12 +280,16 @@ const AdminPayments = () => {
     }
   };
 
-  if (loading) {
+  if (authLoading || adminLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Chargement...</div>
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
+  }
+
+  if (!isAdmin) {
+    return null;
   }
 
   return (
@@ -175,8 +298,11 @@ const AdminPayments = () => {
 
       <main className="container mx-auto px-4 py-8">
         <div className="flex items-center gap-3 mb-8">
-          <Settings className="h-8 w-8 text-primary" />
-          <h1 className="text-3xl font-bold">Gestion des Paiements</h1>
+          <Shield className="h-8 w-8 text-primary" />
+          <div>
+            <h1 className="text-3xl font-bold">Administration</h1>
+            <p className="text-muted-foreground">Gestion des paiements et commissions</p>
+          </div>
         </div>
 
         {/* Stats Cards */}
@@ -238,18 +364,21 @@ const AdminPayments = () => {
           </Card>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          {/* Commission Rate Settings */}
+        <div className="grid lg:grid-cols-3 gap-6 mb-8">
+          {/* Global Commission Settings */}
           <Card>
             <CardHeader>
-              <CardTitle>Taux de Commission</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Settings className="h-5 w-5" />
+                Commission Globale
+              </CardTitle>
               <CardDescription>
-                Définissez le pourcentage prélevé sur chaque transaction
+                Taux par défaut pour tous les utilisateurs
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="commission">Commission (%)</Label>
+                <Label htmlFor="commission">Taux (%)</Label>
                 <div className="flex gap-2">
                   <Input
                     id="commission"
@@ -257,72 +386,171 @@ const AdminPayments = () => {
                     min="0"
                     max="100"
                     step="0.1"
-                    value={commissionRate}
-                    onChange={(e) => setCommissionRate(e.target.value)}
+                    value={globalCommissionRate}
+                    onChange={(e) => setGlobalCommissionRate(e.target.value)}
                   />
-                  <Button onClick={handleUpdateCommissionRate} disabled={savingRate}>
+                  <Button onClick={handleUpdateGlobalRate} disabled={savingRate}>
                     {savingRate ? <Loader2 className="h-4 w-4 animate-spin" /> : "Sauvegarder"}
                   </Button>
                 </div>
               </div>
-              <p className="text-sm text-muted-foreground">
-                Ce taux sera appliqué à tous les nouveaux paiements.
-              </p>
             </CardContent>
           </Card>
 
-          {/* Payments Table */}
-          <Card className="md:col-span-2">
+          {/* User-specific commissions */}
+          <Card className="lg:col-span-2">
             <CardHeader>
-              <CardTitle>Historique des Paiements</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="h-5 w-5" />
+                Commissions par Utilisateur
+              </CardTitle>
               <CardDescription>
-                Liste de tous les paiements effectués sur la plateforme
+                Définir des taux personnalisés par utilisateur
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {payments.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  <CreditCard className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <p>Aucun paiement pour le moment</p>
-                </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Payeur</TableHead>
-                        <TableHead>Bénéficiaire</TableHead>
-                        <TableHead className="text-right">Montant</TableHead>
-                        <TableHead className="text-right">Commission</TableHead>
-                        <TableHead>Statut</TableHead>
+              <div className="max-h-[300px] overflow-y-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Nom</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead className="text-right">Commission</TableHead>
+                      <TableHead></TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {users.map((u) => (
+                      <TableRow key={u.id}>
+                        <TableCell className="font-medium">{u.full_name || "Sans nom"}</TableCell>
+                        <TableCell>
+                          <Badge variant="outline">
+                            {u.user_type === "creator" ? "Créateur" : "Marque"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {u.commission_rate !== undefined ? (
+                            <span className="text-primary font-medium">{u.commission_rate}%</span>
+                          ) : (
+                            <span className="text-muted-foreground">{globalCommissionRate}% (global)</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleOpenUserCommission(u)}
+                          >
+                            <Percent className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
                       </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {payments.map((payment) => (
-                        <TableRow key={payment.id}>
-                          <TableCell className="text-sm">
-                            {format(new Date(payment.created_at), "dd/MM/yyyy HH:mm", { locale: fr })}
-                          </TableCell>
-                          <TableCell>{payment.payer?.full_name || "Inconnu"}</TableCell>
-                          <TableCell>{payment.payee?.full_name || "Inconnu"}</TableCell>
-                          <TableCell className="text-right font-medium">
-                            {(payment.amount / 100).toFixed(2)} €
-                          </TableCell>
-                          <TableCell className="text-right text-green-600">
-                            +{(payment.commission_amount / 100).toFixed(2)} €
-                          </TableCell>
-                          <TableCell>{getStatusBadge(payment.status)}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              )}
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             </CardContent>
           </Card>
         </div>
+
+        {/* Payments History */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Historique des Paiements</CardTitle>
+            <CardDescription>
+              Liste de tous les paiements effectués sur la plateforme
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {payments.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                <CreditCard className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <p>Aucun paiement pour le moment</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Payeur</TableHead>
+                      <TableHead>Bénéficiaire</TableHead>
+                      <TableHead className="text-right">Montant</TableHead>
+                      <TableHead className="text-right">Commission</TableHead>
+                      <TableHead className="text-right">Taux</TableHead>
+                      <TableHead>Statut</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {payments.map((payment) => (
+                      <TableRow key={payment.id}>
+                        <TableCell className="text-sm">
+                          {format(new Date(payment.created_at), "dd/MM/yyyy HH:mm", { locale: fr })}
+                        </TableCell>
+                        <TableCell>{payment.payer?.full_name || "Inconnu"}</TableCell>
+                        <TableCell>{payment.payee?.full_name || "Inconnu"}</TableCell>
+                        <TableCell className="text-right font-medium">
+                          {(payment.amount / 100).toFixed(2)} €
+                        </TableCell>
+                        <TableCell className="text-right text-green-600">
+                          +{(payment.commission_amount / 100).toFixed(2)} €
+                        </TableCell>
+                        <TableCell className="text-right text-muted-foreground">
+                          {payment.commission_rate}%
+                        </TableCell>
+                        <TableCell>{getStatusBadge(payment.status)}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </main>
+
+      {/* User Commission Dialog */}
+      <Dialog open={!!selectedUser} onOpenChange={() => setSelectedUser(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Commission de {selectedUser?.full_name || "l'utilisateur"}</DialogTitle>
+            <DialogDescription>
+              Définir un taux de commission personnalisé pour cet utilisateur
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 pt-4">
+            <div className="space-y-2">
+              <Label>Taux de commission (%)</Label>
+              <Input
+                type="number"
+                min="0"
+                max="100"
+                step="0.1"
+                value={userCommissionRate}
+                onChange={(e) => setUserCommissionRate(e.target.value)}
+              />
+              <p className="text-sm text-muted-foreground">
+                Taux global actuel: {globalCommissionRate}%
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Button onClick={handleSaveUserCommission} disabled={savingUserRate} className="flex-1">
+                {savingUserRate ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+                Sauvegarder
+              </Button>
+              {selectedUser?.commission_rate !== undefined && (
+                <Button
+                  variant="outline"
+                  onClick={handleResetUserCommission}
+                  disabled={savingUserRate}
+                >
+                  Réinitialiser
+                </Button>
+              )}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
