@@ -1,1 +1,10 @@
 project_id = "ymvubgjzyixdlnzahgds"
+
+[functions.seed-demo-data]
+verify_jwt = false
+
+[functions.create-payment]
+verify_jwt = true
+
+[functions.stripe-webhook]
+verify_jwt = false
