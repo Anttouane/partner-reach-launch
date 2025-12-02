@@ -8,10 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MessageSquare, Send } from "lucide-react";
+import { MessageSquare, Send, CreditCard } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { PaymentDialog } from "@/components/PaymentDialog";
 
 interface Conversation {
   id: string;
@@ -50,6 +51,7 @@ const Messages = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [sending, setSending] = useState(false);
+  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -342,6 +344,15 @@ const Messages = () => {
                         </div>
                       )}
                     </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setPaymentDialogOpen(true)}
+                      className="ml-auto"
+                    >
+                      <CreditCard className="h-4 w-4 mr-2" />
+                      Payer
+                    </Button>
                   </div>
                 </div>
 
@@ -412,6 +423,17 @@ const Messages = () => {
             )}
           </Card>
         </div>
+
+        {/* Payment Dialog */}
+        {selectedConvo && (
+          <PaymentDialog
+            open={paymentDialogOpen}
+            onOpenChange={setPaymentDialogOpen}
+            payeeId={selectedConvo.otherUser.id}
+            payeeName={selectedConvo.otherUser.full_name || "Utilisateur"}
+            conversationId={selectedConvo.id}
+          />
+        )}
       </main>
     </div>
   );

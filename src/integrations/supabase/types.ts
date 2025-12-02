@@ -253,6 +253,65 @@ export type Database = {
           },
         ]
       }
+      payments: {
+        Row: {
+          amount: number
+          commission_amount: number
+          commission_rate: number
+          conversation_id: string | null
+          created_at: string
+          currency: string
+          description: string | null
+          id: string
+          net_amount: number
+          payee_id: string
+          payer_id: string
+          status: string
+          stripe_payment_intent_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          commission_amount: number
+          commission_rate?: number
+          conversation_id?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          net_amount: number
+          payee_id: string
+          payer_id: string
+          status?: string
+          stripe_payment_intent_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          commission_amount?: number
+          commission_rate?: number
+          conversation_id?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          net_amount?: number
+          payee_id?: string
+          payer_id?: string
+          status?: string
+          stripe_payment_intent_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pitches: {
         Row: {
           budget_range: string | null
@@ -302,6 +361,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      platform_settings: {
+        Row: {
+          created_at: string
+          id: string
+          setting_key: string
+          setting_value: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          setting_key: string
+          setting_value: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          setting_key?: string
+          setting_value?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
