@@ -35,14 +35,26 @@ serve(async (req) => {
       throw new Error("Amount and payee_id are required");
     }
 
-    // Get commission rate from settings
-    const { data: settings } = await supabaseClient
-      .from("platform_settings")
-      .select("setting_value")
-      .eq("setting_key", "commission_rate")
-      .single();
+    // Get user-specific commission rate first, fallback to global
+    const { data: userCommission } = await supabaseClient
+      .from("user_commissions")
+      .select("commission_rate")
+      .eq("user_id", payee_id)
+      .maybeSingle();
 
-    const commissionRate = settings ? parseFloat(settings.setting_value) : 10;
+    let commissionRate = 10;
+    if (userCommission) {
+      commissionRate = parseFloat(userCommission.commission_rate);
+    } else {
+      const { data: settings } = await supabaseClient
+        .from("platform_settings")
+        .select("setting_value")
+        .eq("setting_key", "commission_rate")
+        .single();
+      if (settings) {
+        commissionRate = parseFloat(settings.setting_value);
+      }
+    }
     const amountInCents = Math.round(amount * 100);
     const commissionAmount = Math.round(amountInCents * (commissionRate / 100));
     const netAmount = amountInCents - commissionAmount;
