@@ -7,9 +7,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Users, Briefcase, MessageSquare, TrendingUp, Filter, X } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Loader2, Users, Briefcase, MessageSquare, TrendingUp, Filter, X, Instagram, Youtube, Twitter, Linkedin, Globe } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+}
 
 const Discover = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -17,13 +24,14 @@ const Discover = () => {
   const [pitches, setPitches] = useState<any[]>([]);
   const [opportunities, setOpportunities] = useState<any[]>([]);
   const [profiles, setProfiles] = useState<any[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [filteredPitches, setFilteredPitches] = useState<any[]>([]);
   const [filteredOpportunities, setFilteredOpportunities] = useState<any[]>([]);
   const [filteredProfiles, setFilteredProfiles] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [campaignTypeFilter, setCampaignTypeFilter] = useState("");
   const [contentTypeFilter, setContentTypeFilter] = useState("");
-  const [industryFilter, setIndustryFilter] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,12 +42,24 @@ const Discover = () => {
         return;
       }
       setUser(session.user);
+      await loadCategories();
       await loadData(session.user);
       setLoading(false);
     };
 
     checkUser();
   }, [navigate]);
+
+  const loadCategories = async () => {
+    const { data } = await supabase
+      .from("categories")
+      .select("*")
+      .order("name");
+    
+    if (data) {
+      setCategories(data);
+    }
+  };
 
   const loadData = async (currentUser: User) => {
     const userType = currentUser.user_metadata?.user_type || "creator";
@@ -50,7 +70,7 @@ const Discover = () => {
         .from("pitches")
         .select(`
           *,
-          profiles:creator_id (full_name, bio)
+          profiles:creator_id (full_name, bio, avatar_url, category_id)
         `)
         .eq("status", "active")
         .order("created_at", { ascending: false });
@@ -60,7 +80,7 @@ const Discover = () => {
       // Load creator profiles
       const { data: profilesData } = await supabase
         .from("profiles")
-        .select("*, creator_profiles(*)")
+        .select("*, creator_profiles(*), categories:category_id(name)")
         .eq("user_type", "creator")
         .order("created_at", { ascending: false })
         .limit(20);
@@ -72,7 +92,7 @@ const Discover = () => {
         .from("brand_opportunities")
         .select(`
           *,
-          profiles:brand_id (full_name, bio)
+          profiles:brand_id (full_name, bio, avatar_url, category_id)
         `)
         .eq("status", "active")
         .order("created_at", { ascending: false });
@@ -82,7 +102,7 @@ const Discover = () => {
       // Load brand profiles
       const { data: profilesData } = await supabase
         .from("profiles")
-        .select("*, brand_profiles(*)")
+        .select("*, brand_profiles(*), categories:category_id(name)")
         .eq("user_type", "brand")
         .order("created_at", { ascending: false })
         .limit(20);
@@ -133,11 +153,18 @@ const Discover = () => {
           profile.bio?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-    if (industryFilter && !isCreator) {
-      filtered = filtered.filter((profile) => profile.brand_profiles?.industry === industryFilter);
+    if (categoryFilter) {
+      filtered = filtered.filter((profile) => profile.category_id === categoryFilter);
     }
     setFilteredProfiles(filtered);
-  }, [profiles, searchTerm, industryFilter, isCreator]);
+  }, [profiles, searchTerm, categoryFilter]);
+
+  const clearFilters = () => {
+    setSearchTerm("");
+    setCampaignTypeFilter("");
+    setContentTypeFilter("");
+    setCategoryFilter("");
+  };
 
   if (loading) {
     return (
@@ -157,21 +184,31 @@ const Discover = () => {
         </h1>
 
         <div className="mb-6 space-y-4">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Filter className="h-5 w-5 text-muted-foreground" />
             <Input
               placeholder="Rechercher..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="max-w-sm"
+              className="max-w-xs"
             />
-            {searchTerm && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setSearchTerm("")}
-              >
-                <X className="h-4 w-4" />
+            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Catégorie" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">Toutes catégories</SelectItem>
+                {categories.map((cat) => (
+                  <SelectItem key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {(searchTerm || categoryFilter || campaignTypeFilter || contentTypeFilter) && (
+              <Button variant="ghost" size="sm" onClick={clearFilters}>
+                <X className="h-4 w-4 mr-1" />
+                Effacer
               </Button>
             )}
           </div>
@@ -249,25 +286,6 @@ const Discover = () => {
           </TabsContent>
 
           <TabsContent value="profiles">
-            {!isCreator && (
-              <div className="mb-4">
-                <Select value={industryFilter} onValueChange={setIndustryFilter}>
-                  <SelectTrigger className="max-w-xs">
-                    <SelectValue placeholder="Secteur" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">Tous les secteurs</SelectItem>
-                    <SelectItem value="tech">Technologie</SelectItem>
-                    <SelectItem value="fashion">Mode</SelectItem>
-                    <SelectItem value="beauty">Beauté</SelectItem>
-                    <SelectItem value="food">Alimentation</SelectItem>
-                    <SelectItem value="sport">Sport</SelectItem>
-                    <SelectItem value="travel">Voyage</SelectItem>
-                    <SelectItem value="lifestyle">Lifestyle</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProfiles.length > 0 ? (
                 filteredProfiles.map((profile) => (
@@ -292,10 +310,18 @@ const PitchCard = ({ pitch }: { pitch: any }) => {
   return (
     <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate(`/pitch/${pitch.id}`)}>
       <CardHeader>
-        <CardTitle className="text-lg">{pitch.title}</CardTitle>
-        <CardDescription>
-          Par {pitch.profiles?.full_name || "Créateur"}
-        </CardDescription>
+        <div className="flex items-center gap-3 mb-2">
+          <Avatar className="h-10 w-10">
+            <AvatarImage src={pitch.profiles?.avatar_url} />
+            <AvatarFallback>{pitch.profiles?.full_name?.charAt(0) || "C"}</AvatarFallback>
+          </Avatar>
+          <div>
+            <CardTitle className="text-lg">{pitch.title}</CardTitle>
+            <CardDescription>
+              Par {pitch.profiles?.full_name || "Créateur"}
+            </CardDescription>
+          </div>
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <p className="text-sm text-muted-foreground line-clamp-3">
@@ -330,10 +356,18 @@ const OpportunityCard = ({ opportunity }: { opportunity: any }) => {
   return (
     <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate(`/opportunity/${opportunity.id}`)}>
       <CardHeader>
-        <CardTitle className="text-lg">{opportunity.title}</CardTitle>
-        <CardDescription>
-          Par {opportunity.profiles?.full_name || "Marque"}
-        </CardDescription>
+        <div className="flex items-center gap-3 mb-2">
+          <Avatar className="h-10 w-10">
+            <AvatarImage src={opportunity.profiles?.avatar_url} />
+            <AvatarFallback>{opportunity.profiles?.full_name?.charAt(0) || "M"}</AvatarFallback>
+          </Avatar>
+          <div>
+            <CardTitle className="text-lg">{opportunity.title}</CardTitle>
+            <CardDescription>
+              Par {opportunity.profiles?.full_name || "Marque"}
+            </CardDescription>
+          </div>
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <p className="text-sm text-muted-foreground line-clamp-3">
@@ -357,15 +391,50 @@ const OpportunityCard = ({ opportunity }: { opportunity: any }) => {
 const ProfileCard = ({ profile, isCreator }: { profile: any; isCreator: boolean }) => {
   const details = isCreator ? profile.creator_profiles : profile.brand_profiles;
   
+  const SocialLink = ({ url, icon: Icon }: { url: string | null; icon: any }) => {
+    if (!url) return null;
+    return (
+      <a 
+        href={url} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="text-muted-foreground hover:text-primary transition-colors"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <Icon className="h-4 w-4" />
+      </a>
+    );
+  };
+  
   return (
     <Card className="hover:shadow-lg transition-shadow">
       <CardHeader>
-        <CardTitle className="text-lg">{profile.full_name || "Sans nom"}</CardTitle>
-        <CardDescription className="line-clamp-2">
+        <div className="flex items-center gap-3">
+          <Avatar className="h-12 w-12">
+            <AvatarImage src={profile.avatar_url} />
+            <AvatarFallback>{profile.full_name?.charAt(0) || "U"}</AvatarFallback>
+          </Avatar>
+          <div className="flex-1">
+            <CardTitle className="text-lg">{profile.full_name || "Sans nom"}</CardTitle>
+            {profile.categories && (
+              <Badge variant="outline" className="mt-1">{profile.categories.name}</Badge>
+            )}
+          </div>
+        </div>
+        <CardDescription className="line-clamp-2 mt-2">
           {profile.bio || "Aucune bio"}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Social Links */}
+        <div className="flex items-center gap-3">
+          <SocialLink url={profile.instagram_url} icon={Instagram} />
+          <SocialLink url={profile.youtube_url} icon={Youtube} />
+          <SocialLink url={profile.twitter_url} icon={Twitter} />
+          <SocialLink url={profile.linkedin_url} icon={Linkedin} />
+          <SocialLink url={profile.website_url} icon={Globe} />
+        </div>
+
         {isCreator && details && (
           <>
             {details.audience_size && (

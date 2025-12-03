@@ -15,6 +15,7 @@ import SeedData from "./pages/SeedData";
 import PitchDetail from "./pages/PitchDetail";
 import OpportunityDetail from "./pages/OpportunityDetail";
 import AdminPayments from "./pages/AdminPayments";
+import AdminCategories from "./pages/AdminCategories";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +38,7 @@ const App = () => (
           <Route path="/pitch/:id" element={<PitchDetail />} />
           <Route path="/opportunity/:id" element={<OpportunityDetail />} />
           <Route path="/admin/payments" element={<AdminPayments />} />
+          <Route path="/admin/categories" element={<AdminCategories />} />
           <Route path="/seed-data" element={<SeedData />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
