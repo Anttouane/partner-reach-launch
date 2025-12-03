@@ -108,6 +108,27 @@ export type Database = {
           },
         ]
       }
+      categories: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
+        }
+        Relationships: []
+      }
       conversations: {
         Row: {
           created_at: string
@@ -390,31 +411,60 @@ export type Database = {
         Row: {
           avatar_url: string | null
           bio: string | null
+          category_id: string | null
           created_at: string
           full_name: string | null
           id: string
+          instagram_url: string | null
+          linkedin_url: string | null
+          tiktok_url: string | null
+          twitter_url: string | null
           updated_at: string
           user_type: Database["public"]["Enums"]["user_type"]
+          website_url: string | null
+          youtube_url: string | null
         }
         Insert: {
           avatar_url?: string | null
           bio?: string | null
+          category_id?: string | null
           created_at?: string
           full_name?: string | null
           id: string
+          instagram_url?: string | null
+          linkedin_url?: string | null
+          tiktok_url?: string | null
+          twitter_url?: string | null
           updated_at?: string
           user_type?: Database["public"]["Enums"]["user_type"]
+          website_url?: string | null
+          youtube_url?: string | null
         }
         Update: {
           avatar_url?: string | null
           bio?: string | null
+          category_id?: string | null
           created_at?: string
           full_name?: string | null
           id?: string
+          instagram_url?: string | null
+          linkedin_url?: string | null
+          tiktok_url?: string | null
+          twitter_url?: string | null
           updated_at?: string
           user_type?: Database["public"]["Enums"]["user_type"]
+          website_url?: string | null
+          youtube_url?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_commissions: {
         Row: {
