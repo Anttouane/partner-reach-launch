@@ -16,6 +16,7 @@ import PitchDetail from "./pages/PitchDetail";
 import OpportunityDetail from "./pages/OpportunityDetail";
 import AdminPayments from "./pages/AdminPayments";
 import AdminCategories from "./pages/AdminCategories";
+import Wallet from "./pages/Wallet";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/messages" element={<Messages />} />
+          <Route path="/wallet" element={<Wallet />} />
           <Route path="/create-pitch" element={<CreatePitch />} />
           <Route path="/create-opportunity" element={<CreateOpportunity />} />
           <Route path="/pitch/:id" element={<PitchDetail />} />

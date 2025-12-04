@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User as UserIcon, LogOut, Home, Search, MessageSquare, PlusCircle, Sparkles } from "lucide-react";
+import { User as UserIcon, LogOut, Home, Search, MessageSquare, PlusCircle, Sparkles, Wallet } from "lucide-react";
 
 interface HeaderProps {
   user: User | null;
@@ -81,6 +81,12 @@ const Header = ({ user }: HeaderProps) => {
                 <UserIcon className="h-4 w-4 mr-2" />
                 Mon Profil
               </DropdownMenuItem>
+              {isCreator && (
+                <DropdownMenuItem onClick={() => navigate("/wallet")}>
+                  <Wallet className="h-4 w-4 mr-2" />
+                  Portefeuille
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem onClick={handleSignOut}>
                 <LogOut className="h-4 w-4 mr-2" />
                 Déconnexion

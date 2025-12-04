@@ -192,12 +192,12 @@ const Discover = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="max-w-xs"
             />
-            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+            <Select value={categoryFilter || "all"} onValueChange={(val) => setCategoryFilter(val === "all" ? "" : val)}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Catégorie" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Toutes catégories</SelectItem>
+                <SelectItem value="all">Toutes catégories</SelectItem>
                 {categories.map((cat) => (
                   <SelectItem key={cat.id} value={cat.id}>
                     {cat.name}
@@ -229,12 +229,12 @@ const Discover = () => {
           <TabsContent value={isCreator ? "opportunities" : "pitches"}>
             {isCreator && (
               <div className="mb-4">
-                <Select value={campaignTypeFilter} onValueChange={setCampaignTypeFilter}>
+                <Select value={campaignTypeFilter || "all"} onValueChange={(val) => setCampaignTypeFilter(val === "all" ? "" : val)}>
                   <SelectTrigger className="max-w-xs">
                     <SelectValue placeholder="Type de campagne" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Tous les types</SelectItem>
+                    <SelectItem value="all">Tous les types</SelectItem>
                     <SelectItem value="sponsorship">Sponsoring</SelectItem>
                     <SelectItem value="collaboration">Collaboration</SelectItem>
                     <SelectItem value="review">Test produit</SelectItem>
@@ -245,12 +245,12 @@ const Discover = () => {
             )}
             {!isCreator && (
               <div className="mb-4">
-                <Select value={contentTypeFilter} onValueChange={setContentTypeFilter}>
+                <Select value={contentTypeFilter || "all"} onValueChange={(val) => setContentTypeFilter(val === "all" ? "" : val)}>
                   <SelectTrigger className="max-w-xs">
                     <SelectValue placeholder="Type de contenu" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Tous les types</SelectItem>
+                    <SelectItem value="all">Tous les types</SelectItem>
                     <SelectItem value="video">Vidéo</SelectItem>
                     <SelectItem value="photo">Photo</SelectItem>
                     <SelectItem value="story">Story</SelectItem>
