@@ -39,6 +39,9 @@ interface Payment {
   created_at: string;
   description: string | null;
   payer_id: string;
+  payer?: {
+    full_name: string | null;
+  };
 }
 
 interface Withdrawal {
@@ -94,7 +97,23 @@ const Wallet = () => {
       .eq("payee_id", userId)
       .order("created_at", { ascending: false });
 
-    setPayments(paymentsData || []);
+    // Fetch payer profiles for each payment
+    if (paymentsData && paymentsData.length > 0) {
+      const payerIds = [...new Set(paymentsData.map(p => p.payer_id))];
+      const { data: payerProfiles } = await supabase
+        .from("profiles")
+        .select("id, full_name")
+        .in("id", payerIds);
+      
+      const payerMap = new Map(payerProfiles?.map(p => [p.id, p.full_name]) || []);
+      const paymentsWithPayer = paymentsData.map(p => ({
+        ...p,
+        payer: { full_name: payerMap.get(p.payer_id) || null }
+      }));
+      setPayments(paymentsWithPayer);
+    } else {
+      setPayments([]);
+    }
 
     // Load withdrawals
     const { data: withdrawalsData } = await supabase
@@ -310,6 +329,7 @@ const Wallet = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Date</TableHead>
+                    <TableHead>De</TableHead>
                     <TableHead>Description</TableHead>
                     <TableHead>Montant brut</TableHead>
                     <TableHead>Commission</TableHead>
@@ -322,6 +342,9 @@ const Wallet = () => {
                     <TableRow key={payment.id}>
                       <TableCell>
                         {format(new Date(payment.created_at), "d MMM yyyy", { locale: fr })}
+                      </TableCell>
+                      <TableCell className="font-medium">
+                        {payment.payer?.full_name || "Marque"}
                       </TableCell>
                       <TableCell>{payment.description || "Paiement"}</TableCell>
                       <TableCell>{(payment.amount / 100).toFixed(2)} €</TableCell>
