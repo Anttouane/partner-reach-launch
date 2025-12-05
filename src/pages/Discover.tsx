@@ -252,14 +252,14 @@ const Discover = () => {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {isCreator ? (
                 filteredOpportunities.length > 0 ? (
-                  filteredOpportunities.map((opp) => <OpportunityCard key={opp.id} opportunity={opp} />)
+                  filteredOpportunities.map((opp, index) => <OpportunityCard key={opp.id} opportunity={opp} index={index} />)
                 ) : (
                   <p className="text-muted-foreground col-span-full text-center py-8">
                     Aucune opportunité disponible pour le moment
                   </p>
                 )
               ) : filteredPitches.length > 0 ? (
-                filteredPitches.map((pitch) => <PitchCard key={pitch.id} pitch={pitch} />)
+                filteredPitches.map((pitch, index) => <PitchCard key={pitch.id} pitch={pitch} index={index} />)
               ) : (
                 <p className="text-muted-foreground col-span-full text-center py-8">
                   Aucun pitch disponible pour le moment

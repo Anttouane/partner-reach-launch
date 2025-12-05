@@ -110,3 +110,52 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .card-interactive {
+    @apply transition-all duration-300 ease-out hover:shadow-medium hover:-translate-y-1 hover:border-primary/20;
+  }
+
+  .card-glow {
+    @apply relative overflow-hidden;
+  }
+
+  .card-glow::before {
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    content: "";
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.05), hsl(var(--secondary) / 0.05));
+  }
+
+  .card-glow:hover::before {
+    @apply opacity-100;
+  }
+
+  .stat-card {
+    @apply relative overflow-hidden transition-all duration-300 hover:shadow-soft;
+  }
+
+  .stat-card::after {
+    @apply absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 rounded-full opacity-10;
+    content: "";
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+  }
+
+  .skeleton-shimmer {
+    @apply relative overflow-hidden bg-muted;
+    background: linear-gradient(90deg, hsl(var(--muted)) 25%, hsl(var(--muted-foreground) / 0.1) 50%, hsl(var(--muted)) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+
+  .badge-gradient {
+    background: var(--gradient-primary);
+    @apply text-primary-foreground border-0;
+  }
+
+  .text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
