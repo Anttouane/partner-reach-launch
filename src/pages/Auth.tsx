@@ -101,96 +101,102 @@ const Auth = () => {
                 <TabsTrigger value="signup">Inscription</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="signin" className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email-signin">Email</Label>
-                  <Input
-                    id="email-signin"
-                    type="email"
-                    placeholder="votre@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password-signin">Mot de passe</Label>
-                  <Input
-                    id="password-signin"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-                <Button
-                  className="w-full"
-                  onClick={handleSignIn}
-                  disabled={loading}
-                >
-                  {loading ? "Connexion..." : "Se connecter"}
-                </Button>
+              <TabsContent value="signin">
+                <form onSubmit={(e) => { e.preventDefault(); handleSignIn(); }} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="email-signin">Email</Label>
+                    <Input
+                      id="email-signin"
+                      type="email"
+                      placeholder="votre@email.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="password-signin">Mot de passe</Label>
+                    <Input
+                      id="password-signin"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={loading}
+                  >
+                    {loading ? "Connexion..." : "Se connecter"}
+                  </Button>
+                </form>
               </TabsContent>
 
-              <TabsContent value="signup" className="space-y-4">
-                <div className="space-y-4 mb-4">
-                  <Label>Type de compte</Label>
-                  <div className="grid grid-cols-2 gap-4">
-                    <button
-                      onClick={() => setUserType("creator")}
-                      className={`p-4 rounded-lg border-2 transition-all ${
-                        userType === "creator"
-                          ? "border-primary bg-primary/5"
-                          : "border-border hover:border-primary/50"
-                      }`}
-                    >
-                      <Sparkles className="h-6 w-6 mx-auto mb-2 text-primary" />
-                      <div className="font-medium">Créateur</div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        Influenceur
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => setUserType("brand")}
-                      className={`p-4 rounded-lg border-2 transition-all ${
-                        userType === "brand"
-                          ? "border-primary bg-primary/5"
-                          : "border-border hover:border-primary/50"
-                      }`}
-                    >
-                      <Building2 className="h-6 w-6 mx-auto mb-2 text-primary" />
-                      <div className="font-medium">Marque</div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        Entreprise
-                      </div>
-                    </button>
+              <TabsContent value="signup">
+                <form onSubmit={(e) => { e.preventDefault(); handleSignUp(); }} className="space-y-4">
+                  <div className="space-y-4 mb-4">
+                    <Label>Type de compte</Label>
+                    <div className="grid grid-cols-2 gap-4">
+                      <button
+                        type="button"
+                        onClick={() => setUserType("creator")}
+                        className={`p-4 rounded-lg border-2 transition-all ${
+                          userType === "creator"
+                            ? "border-primary bg-primary/5"
+                            : "border-border hover:border-primary/50"
+                        }`}
+                      >
+                        <Sparkles className="h-6 w-6 mx-auto mb-2 text-primary" />
+                        <div className="font-medium">Créateur</div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          Influenceur
+                        </div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setUserType("brand")}
+                        className={`p-4 rounded-lg border-2 transition-all ${
+                          userType === "brand"
+                            ? "border-primary bg-primary/5"
+                            : "border-border hover:border-primary/50"
+                        }`}
+                      >
+                        <Building2 className="h-6 w-6 mx-auto mb-2 text-primary" />
+                        <div className="font-medium">Marque</div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          Entreprise
+                        </div>
+                      </button>
+                    </div>
                   </div>
-                </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="email-signup">Email</Label>
-                  <Input
-                    id="email-signup"
-                    type="email"
-                    placeholder="votre@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password-signup">Mot de passe</Label>
-                  <Input
-                    id="password-signup"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-                <Button
-                  className="w-full"
-                  onClick={handleSignUp}
-                  disabled={loading}
-                >
-                  {loading ? "Création..." : "Créer mon compte"}
-                </Button>
+                  <div className="space-y-2">
+                    <Label htmlFor="email-signup">Email</Label>
+                    <Input
+                      id="email-signup"
+                      type="email"
+                      placeholder="votre@email.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="password-signup">Mot de passe</Label>
+                    <Input
+                      id="password-signup"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={loading}
+                  >
+                    {loading ? "Création..." : "Créer mon compte"}
+                  </Button>
+                </form>
               </TabsContent>
             </Tabs>
           </CardContent>
