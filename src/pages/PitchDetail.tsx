@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MessageSquare, Users, TrendingUp, Loader2, Trash2 } from "lucide-react";
+import { MessageSquare, Users, TrendingUp, Loader2, Trash2, Pencil } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import {
   AlertDialog,
@@ -20,6 +20,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import PitchForm from "@/components/forms/PitchForm";
 interface Pitch {
   id: string;
   title: string;
@@ -52,6 +61,7 @@ const PitchDetail = () => {
   const [deleting, setDeleting] = useState(false);
   const [pitch, setPitch] = useState<Pitch | null>(null);
   const [creator, setCreator] = useState<CreatorProfile | null>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -200,6 +210,48 @@ const PitchDetail = () => {
     }
   };
 
+  const handleEdit = async (formData: {
+    title: string;
+    description: string;
+    content_type: string;
+    estimated_reach: string;
+    budget_range: string;
+    tags: string;
+  }) => {
+    if (!pitch) return;
+
+    try {
+      const { error } = await supabase
+        .from("pitches")
+        .update({
+          title: formData.title,
+          description: formData.description,
+          content_type: formData.content_type || null,
+          estimated_reach: formData.estimated_reach ? parseInt(formData.estimated_reach) : null,
+          budget_range: formData.budget_range || null,
+          tags: formData.tags ? formData.tags.split(",").map(t => t.trim()) : null,
+        })
+        .eq("id", pitch.id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Succès",
+        description: "Pitch modifié avec succès",
+      });
+
+      setEditDialogOpen(false);
+      loadPitchData();
+    } catch (error) {
+      console.error("Error updating pitch:", error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de modifier le pitch",
+        variant: "destructive",
+      });
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -237,34 +289,65 @@ const PitchDetail = () => {
           </Button>
           
           {user?.id === pitch.creator_id && (
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive" size="sm" disabled={deleting}>
-                  {deleting ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <>
-                      <Trash2 className="h-4 w-4 mr-2" />
+            <div className="flex gap-2">
+              <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <Pencil className="h-4 w-4 mr-2" />
+                    Modifier
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>Modifier le pitch</DialogTitle>
+                    <DialogDescription>
+                      Modifiez les informations de votre pitch
+                    </DialogDescription>
+                  </DialogHeader>
+                  <PitchForm
+                    isEdit
+                    initialData={{
+                      title: pitch.title,
+                      description: pitch.description,
+                      content_type: pitch.content_type || "",
+                      estimated_reach: pitch.estimated_reach?.toString() || "",
+                      budget_range: pitch.budget_range || "",
+                      tags: pitch.tags?.join(", ") || "",
+                    }}
+                    onSubmit={handleEdit}
+                  />
+                </DialogContent>
+              </Dialog>
+
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive" size="sm" disabled={deleting}>
+                    {deleting ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <>
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Supprimer
+                      </>
+                    )}
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Supprimer ce pitch ?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Cette action est irréversible. Le pitch sera définitivement supprimé.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Annuler</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
                       Supprimer
-                    </>
-                  )}
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Supprimer ce pitch ?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Cette action est irréversible. Le pitch sera définitivement supprimé.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Annuler</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                    Supprimer
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
           )}
         </div>
 

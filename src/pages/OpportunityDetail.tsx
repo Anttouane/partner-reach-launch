@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MessageSquare, Building2, Users, Calendar, Loader2, Trash2 } from "lucide-react";
+import { MessageSquare, Building2, Users, Calendar, Loader2, Trash2, Pencil } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import {
   AlertDialog,
@@ -20,6 +20,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import OpportunityForm from "@/components/forms/OpportunityForm";
 
 interface Opportunity {
   id: string;
@@ -52,6 +61,7 @@ const OpportunityDetail = () => {
   const [deleting, setDeleting] = useState(false);
   const [opportunity, setOpportunity] = useState<Opportunity | null>(null);
   const [brand, setBrand] = useState<BrandProfile | null>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -200,6 +210,48 @@ const OpportunityDetail = () => {
     }
   };
 
+  const handleEdit = async (formData: {
+    title: string;
+    description: string;
+    campaign_type: string;
+    budget_range: string;
+    target_audience: string;
+    requirements: string;
+  }) => {
+    if (!opportunity) return;
+
+    try {
+      const { error } = await supabase
+        .from("brand_opportunities")
+        .update({
+          title: formData.title,
+          description: formData.description,
+          campaign_type: formData.campaign_type || null,
+          budget_range: formData.budget_range || null,
+          target_audience: formData.target_audience || null,
+          requirements: formData.requirements ? formData.requirements.split(",").map(r => r.trim()) : null,
+        })
+        .eq("id", opportunity.id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Succès",
+        description: "Opportunité modifiée avec succès",
+      });
+
+      setEditDialogOpen(false);
+      loadOpportunityData();
+    } catch (error) {
+      console.error("Error updating opportunity:", error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de modifier l'opportunité",
+        variant: "destructive",
+      });
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -237,34 +289,65 @@ const OpportunityDetail = () => {
           </Button>
           
           {user?.id === opportunity.brand_id && (
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive" size="sm" disabled={deleting}>
-                  {deleting ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <>
-                      <Trash2 className="h-4 w-4 mr-2" />
+            <div className="flex gap-2">
+              <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <Pencil className="h-4 w-4 mr-2" />
+                    Modifier
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>Modifier l'opportunité</DialogTitle>
+                    <DialogDescription>
+                      Modifiez les informations de votre opportunité
+                    </DialogDescription>
+                  </DialogHeader>
+                  <OpportunityForm
+                    isEdit
+                    initialData={{
+                      title: opportunity.title,
+                      description: opportunity.description,
+                      campaign_type: opportunity.campaign_type || "",
+                      budget_range: opportunity.budget_range || "",
+                      target_audience: opportunity.target_audience || "",
+                      requirements: opportunity.requirements?.join(", ") || "",
+                    }}
+                    onSubmit={handleEdit}
+                  />
+                </DialogContent>
+              </Dialog>
+
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive" size="sm" disabled={deleting}>
+                    {deleting ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <>
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Supprimer
+                      </>
+                    )}
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Supprimer cette opportunité ?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Cette action est irréversible. L'opportunité sera définitivement supprimée.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Annuler</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
                       Supprimer
-                    </>
-                  )}
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Supprimer cette opportunité ?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Cette action est irréversible. L'opportunité sera définitivement supprimée.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Annuler</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                    Supprimer
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
           )}
         </div>
 
