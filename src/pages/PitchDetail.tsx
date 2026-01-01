@@ -7,9 +7,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MessageSquare, Users, TrendingUp, Loader2 } from "lucide-react";
+import { MessageSquare, Users, TrendingUp, Loader2, Trash2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 interface Pitch {
   id: string;
   title: string;
@@ -39,6 +49,7 @@ const PitchDetail = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [contacting, setContacting] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [pitch, setPitch] = useState<Pitch | null>(null);
   const [creator, setCreator] = useState<CreatorProfile | null>(null);
   const navigate = useNavigate();
@@ -159,6 +170,36 @@ const PitchDetail = () => {
     }
   };
 
+  const handleDelete = async () => {
+    if (!pitch) return;
+
+    setDeleting(true);
+    try {
+      const { error } = await supabase
+        .from("pitches")
+        .delete()
+        .eq("id", pitch.id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Succès",
+        description: "Pitch supprimé avec succès",
+      });
+
+      navigate("/discover");
+    } catch (error) {
+      console.error("Error deleting pitch:", error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de supprimer le pitch",
+        variant: "destructive",
+      });
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -190,9 +231,42 @@ const PitchDetail = () => {
       <Header user={user} />
 
       <main className="container mx-auto px-4 py-8">
-        <Button variant="ghost" onClick={() => navigate(-1)} className="mb-4">
-          ← Retour
-        </Button>
+        <div className="flex items-center justify-between mb-4">
+          <Button variant="ghost" onClick={() => navigate(-1)}>
+            ← Retour
+          </Button>
+          
+          {user?.id === pitch.creator_id && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="sm" disabled={deleting}>
+                  {deleting ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <>
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Supprimer
+                    </>
+                  )}
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Supprimer ce pitch ?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Cette action est irréversible. Le pitch sera définitivement supprimé.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Annuler</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                    Supprimer
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Pitch Details */}

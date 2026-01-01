@@ -7,8 +7,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MessageSquare, Building2, Users, Calendar, Loader2 } from "lucide-react";
+import { MessageSquare, Building2, Users, Calendar, Loader2, Trash2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface Opportunity {
   id: string;
@@ -38,6 +49,7 @@ const OpportunityDetail = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [contacting, setContacting] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [opportunity, setOpportunity] = useState<Opportunity | null>(null);
   const [brand, setBrand] = useState<BrandProfile | null>(null);
   const navigate = useNavigate();
@@ -158,6 +170,36 @@ const OpportunityDetail = () => {
     }
   };
 
+  const handleDelete = async () => {
+    if (!opportunity) return;
+
+    setDeleting(true);
+    try {
+      const { error } = await supabase
+        .from("brand_opportunities")
+        .delete()
+        .eq("id", opportunity.id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Succès",
+        description: "Opportunité supprimée avec succès",
+      });
+
+      navigate("/discover");
+    } catch (error) {
+      console.error("Error deleting opportunity:", error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de supprimer l'opportunité",
+        variant: "destructive",
+      });
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -189,9 +231,42 @@ const OpportunityDetail = () => {
       <Header user={user} />
 
       <main className="container mx-auto px-4 py-8">
-        <Button variant="ghost" onClick={() => navigate(-1)} className="mb-4">
-          ← Retour
-        </Button>
+        <div className="flex items-center justify-between mb-4">
+          <Button variant="ghost" onClick={() => navigate(-1)}>
+            ← Retour
+          </Button>
+          
+          {user?.id === opportunity.brand_id && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="sm" disabled={deleting}>
+                  {deleting ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <>
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Supprimer
+                    </>
+                  )}
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Supprimer cette opportunité ?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Cette action est irréversible. L'opportunité sera définitivement supprimée.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Annuler</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                    Supprimer
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Opportunity Details */}
