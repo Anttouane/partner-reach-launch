@@ -12,11 +12,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Camera, Instagram, Youtube, Twitter, Linkedin, Globe } from "lucide-react";
+import PortfolioSection from "@/components/portfolio/PortfolioSection";
 
 interface Category {
   id: string;
   name: string;
   slug: string;
+}
+
+interface PortfolioItem {
+  id: string;
+  image_url: string;
+  title?: string;
+  description?: string;
+  created_at: string;
 }
 
 const Profile = () => {
@@ -27,6 +36,7 @@ const Profile = () => {
   const [profile, setProfile] = useState<any>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
     full_name: "",
@@ -64,6 +74,7 @@ const Profile = () => {
       setUser(session.user);
       await loadCategories();
       await loadProfile(session.user.id);
+      await loadPortfolio(session.user.id);
       setLoading(false);
     };
 
@@ -78,6 +89,18 @@ const Profile = () => {
     
     if (data) {
       setCategories(data);
+    }
+  };
+
+  const loadPortfolio = async (userId: string) => {
+    const { data } = await supabase
+      .from("portfolio_items")
+      .select("*")
+      .eq("creator_id", userId)
+      .order("created_at", { ascending: false });
+    
+    if (data) {
+      setPortfolioItems(data);
     }
   };
 
@@ -444,6 +467,15 @@ const Profile = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Portfolio Section - only for creators */}
+        {isCreator && user && (
+          <PortfolioSection 
+            userId={user.id}
+            items={portfolioItems}
+            onItemsChange={setPortfolioItems}
+          />
+        )}
 
         {/* Type-specific fields */}
         <Card className="mb-6">
