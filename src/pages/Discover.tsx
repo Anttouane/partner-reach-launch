@@ -63,7 +63,7 @@ const Discover = () => {
           .order("created_at", { ascending: false }),
         supabase
           .from("profiles")
-          .select("*, creator_profiles(*), categories:category_id(name)")
+          .select("*, creator_profiles(*), categories:category_id(name), portfolio_items(id, image_url, title)")
           .eq("user_type", "creator")
           .order("created_at", { ascending: false })
           .limit(20),

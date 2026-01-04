@@ -4,7 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MessageSquare, Users, TrendingUp, Sparkles } from "lucide-react";
 import SocialLinks from "./SocialLinks";
+import PortfolioPreview from "@/components/portfolio/PortfolioPreview";
 import { motion } from "framer-motion";
+
+interface PortfolioItem {
+  id: string;
+  image_url: string;
+  title?: string;
+}
 
 interface ProfileCardProps {
   profile: {
@@ -26,6 +33,7 @@ interface ProfileCardProps {
       company_name?: string;
       industry?: string;
     };
+    portfolio_items?: PortfolioItem[];
   };
   isCreator: boolean;
   index?: number;
@@ -129,6 +137,11 @@ const ProfileCard = ({ profile, isCreator, index = 0 }: ProfileCardProps) => {
                 </Badge>
               )}
             </div>
+          )}
+
+          {/* Portfolio Preview for creators */}
+          {isCreator && profile.portfolio_items && profile.portfolio_items.length > 0 && (
+            <PortfolioPreview items={profile.portfolio_items} />
           )}
 
           {/* Social Links */}
