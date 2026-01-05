@@ -8,6 +8,8 @@ import { SkeletonStatCard } from "@/components/ui/skeleton-card";
 import { Search, MessageSquare, TrendingUp, Wallet, Eye, Calendar, ArrowRight, Sparkles, Building2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import RevenueChart from "@/components/dashboard/RevenueChart";
+import PerformanceStats from "@/components/dashboard/PerformanceStats";
 
 interface DashboardStats {
   opportunities: number;
@@ -17,11 +19,32 @@ interface DashboardStats {
   profileViews: number;
 }
 
+interface Payment {
+  net_amount: number;
+  created_at: string;
+}
+
+interface CreatorStats {
+  totalPitches: number;
+  acceptedPitches: number;
+  totalCollaborations: number;
+  averageRating: number;
+  responseRate: number;
+}
+
 const Dashboard = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [creatorStats, setCreatorStats] = useState<CreatorStats>({
+    totalPitches: 0,
+    acceptedPitches: 0,
+    totalCollaborations: 0,
+    averageRating: 0,
+    responseRate: 0,
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -75,6 +98,54 @@ const Dashboard = () => {
         pitches: pitchesRes.count || 0,
         profileViews: Math.floor(Math.random() * 50) + 10, // Placeholder
       });
+
+      // Store payments for chart (only for creators)
+      if (userType === "creator") {
+        // Get all payments for chart
+        const { data: allPayments } = await supabase
+          .from("payments")
+          .select("net_amount, created_at")
+          .eq("payee_id", currentUser.id)
+          .eq("status", "completed")
+          .order("created_at", { ascending: true });
+        
+        setPayments(allPayments || []);
+
+        // Calculate creator stats
+        const { data: userPitches } = await supabase
+          .from("pitches")
+          .select("id, status")
+          .eq("creator_id", currentUser.id);
+
+        const totalUserPitches = userPitches?.length || 0;
+        const acceptedUserPitches = userPitches?.filter(p => p.status === "accepted").length || 0;
+
+        // Count collaborations (completed payments)
+        const totalCollabs = paymentsRes.data?.length || 0;
+
+        // Calculate response rate from messages
+        const { data: receivedMessages, count: receivedCount } = await supabase
+          .from("messages")
+          .select("id", { count: "exact" })
+          .neq("sender_id", currentUser.id);
+
+        const { data: sentMessages, count: sentCount } = await supabase
+          .from("messages")
+          .select("id", { count: "exact" })
+          .eq("sender_id", currentUser.id);
+
+        const responseRate = receivedCount && receivedCount > 0 
+          ? Math.min(((sentCount || 0) / receivedCount) * 100, 100) 
+          : 85; // Default if no messages
+
+        setCreatorStats({
+          totalPitches: totalUserPitches,
+          acceptedPitches: acceptedUserPitches,
+          totalCollaborations: totalCollabs,
+          averageRating: 4.5, // Placeholder - would need a reviews table
+          responseRate: responseRate,
+        });
+      }
 
       // Load recent activity
       const { data: recentPayments } = await supabase
@@ -216,6 +287,23 @@ const Dashboard = () => {
             />
           </motion.div>
         </motion.div>
+
+        {/* Creator Analytics Section */}
+        {isCreator && (
+          <motion.div 
+            className="grid lg:grid-cols-2 gap-6 mb-8"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.div variants={itemVariants}>
+              <RevenueChart payments={payments} />
+            </motion.div>
+            <motion.div variants={itemVariants}>
+              <PerformanceStats {...creatorStats} />
+            </motion.div>
+          </motion.div>
+        )}
 
         <motion.div 
           className="grid lg:grid-cols-2 gap-6"
