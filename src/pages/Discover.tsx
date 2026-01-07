@@ -8,6 +8,8 @@ import { Loader2, Users, Briefcase, Filter, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Label } from "@/components/ui/label";
 import PitchCard from "@/components/discover/PitchCard";
 import OpportunityCard from "@/components/discover/OpportunityCard";
 import ProfileCard from "@/components/discover/ProfileCard";
@@ -29,6 +31,7 @@ const Discover = () => {
   const [campaignTypeFilter, setCampaignTypeFilter] = useState("");
   const [contentTypeFilter, setContentTypeFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
+  const [minEngagement, setMinEngagement] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -134,17 +137,24 @@ const Discover = () => {
     if (categoryFilter) {
       filtered = filtered.filter((profile) => profile.category_id === categoryFilter);
     }
+    if (minEngagement > 0) {
+      filtered = filtered.filter((profile) => {
+        const engagement = profile.creator_profiles?.engagement_rate || 0;
+        return Number(engagement) >= minEngagement;
+      });
+    }
     return filtered;
-  }, [profiles, searchTerm, categoryFilter]);
+  }, [profiles, searchTerm, categoryFilter, minEngagement]);
 
   const clearFilters = useCallback(() => {
     setSearchTerm("");
     setCampaignTypeFilter("");
     setContentTypeFilter("");
     setCategoryFilter("");
+    setMinEngagement(0);
   }, []);
 
-  const hasActiveFilters = searchTerm || categoryFilter || campaignTypeFilter || contentTypeFilter;
+  const hasActiveFilters = searchTerm || categoryFilter || campaignTypeFilter || contentTypeFilter || minEngagement > 0;
 
   if (loading) {
     return (
@@ -269,6 +279,29 @@ const Discover = () => {
           </TabsContent>
 
           <TabsContent value="profiles">
+            {!isCreator && (
+              <div className="mb-6 p-4 bg-card rounded-lg border">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                  <div className="flex-1">
+                    <Label className="text-sm font-medium mb-2 block">
+                      Taux d'engagement minimum: {minEngagement}%
+                    </Label>
+                    <Slider
+                      value={[minEngagement]}
+                      onValueChange={(val) => setMinEngagement(val[0])}
+                      max={15}
+                      step={0.5}
+                      className="w-full max-w-sm"
+                    />
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    <span className="block">0-2%: Faible</span>
+                    <span className="block">2-5%: Moyen</span>
+                    <span className="block">5%+: Élevé</span>
+                  </div>
+                </div>
+              </div>
+            )}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProfiles.length > 0 ? (
                 filteredProfiles.map((profile) => (
