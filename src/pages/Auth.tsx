@@ -7,15 +7,50 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Sparkles, Building2 } from "lucide-react";
+import { Sparkles, Building2, ArrowLeft } from "lucide-react";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userType, setUserType] = useState<"creator" | "brand">("creator");
   const [loading, setLoading] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const handleForgotPassword = async () => {
+    if (!email) {
+      toast({
+        title: "Email requis",
+        description: "Veuillez entrer votre adresse email.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Email envoyé !",
+        description: "Vérifiez votre boîte mail pour réinitialiser votre mot de passe.",
+      });
+      setShowForgotPassword(false);
+    } catch (error: any) {
+      toast({
+        title: "Erreur",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSignUp = async () => {
     try {
@@ -95,42 +130,83 @@ const Auth = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="signin">
-              <TabsList className="grid w-full grid-cols-2 mb-6">
-                <TabsTrigger value="signin">Connexion</TabsTrigger>
-                <TabsTrigger value="signup">Inscription</TabsTrigger>
-              </TabsList>
+            {showForgotPassword ? (
+              <div className="space-y-4">
+                <button
+                  type="button"
+                  onClick={() => setShowForgotPassword(false)}
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  Retour à la connexion
+                </button>
+                <div className="space-y-2">
+                  <Label htmlFor="email-forgot">Email</Label>
+                  <Input
+                    id="email-forgot"
+                    type="email"
+                    placeholder="votre@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Entrez votre email et nous vous enverrons un lien pour réinitialiser votre mot de passe.
+                </p>
+                <Button
+                  onClick={handleForgotPassword}
+                  className="w-full"
+                  disabled={loading}
+                >
+                  {loading ? "Envoi..." : "Envoyer le lien"}
+                </Button>
+              </div>
+            ) : (
+              <Tabs defaultValue="signin">
+                <TabsList className="grid w-full grid-cols-2 mb-6">
+                  <TabsTrigger value="signin">Connexion</TabsTrigger>
+                  <TabsTrigger value="signup">Inscription</TabsTrigger>
+                </TabsList>
 
-              <TabsContent value="signin">
-                <form onSubmit={(e) => { e.preventDefault(); handleSignIn(); }} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="email-signin">Email</Label>
-                    <Input
-                      id="email-signin"
-                      type="email"
-                      placeholder="votre@email.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="password-signin">Mot de passe</Label>
-                    <Input
-                      id="password-signin"
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={loading}
-                  >
-                    {loading ? "Connexion..." : "Se connecter"}
-                  </Button>
-                </form>
-              </TabsContent>
+                <TabsContent value="signin">
+                  <form onSubmit={(e) => { e.preventDefault(); handleSignIn(); }} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="email-signin">Email</Label>
+                      <Input
+                        id="email-signin"
+                        type="email"
+                        placeholder="votre@email.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <Label htmlFor="password-signin">Mot de passe</Label>
+                        <button
+                          type="button"
+                          onClick={() => setShowForgotPassword(true)}
+                          className="text-xs text-primary hover:underline"
+                        >
+                          Mot de passe oublié ?
+                        </button>
+                      </div>
+                      <Input
+                        id="password-signin"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
+                    </div>
+                    <Button
+                      type="submit"
+                      className="w-full"
+                      disabled={loading}
+                    >
+                      {loading ? "Connexion..." : "Se connecter"}
+                    </Button>
+                  </form>
+                </TabsContent>
 
               <TabsContent value="signup">
                 <form onSubmit={(e) => { e.preventDefault(); handleSignUp(); }} className="space-y-4">
@@ -197,8 +273,9 @@ const Auth = () => {
                     {loading ? "Création..." : "Créer mon compte"}
                   </Button>
                 </form>
-              </TabsContent>
-            </Tabs>
+                </TabsContent>
+              </Tabs>
+            )}
           </CardContent>
         </Card>
       </div>
