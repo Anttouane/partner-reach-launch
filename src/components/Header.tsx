@@ -6,9 +6,11 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User as UserIcon, LogOut, Home, Search, MessageSquare, PlusCircle, Sparkles, Wallet } from "lucide-react";
+import { User as UserIcon, LogOut, Home, Search, MessageSquare, PlusCircle, Sparkles, Wallet, Settings } from "lucide-react";
+import { useAdmin } from "@/hooks/useAdmin";
 
 interface HeaderProps {
   user: User | null;
@@ -16,6 +18,7 @@ interface HeaderProps {
 
 const Header = ({ user }: HeaderProps) => {
   const navigate = useNavigate();
+  const { isAdmin } = useAdmin();
   const userType = user?.user_metadata?.user_type || "creator";
   const isCreator = userType === "creator";
 
@@ -86,6 +89,19 @@ const Header = ({ user }: HeaderProps) => {
                   <Wallet className="h-4 w-4 mr-2" />
                   Portefeuille
                 </DropdownMenuItem>
+              )}
+              {isAdmin && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate("/admin/payments")}>
+                    <Settings className="h-4 w-4 mr-2" />
+                    Admin - Paiements
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/admin/categories")}>
+                    <Settings className="h-4 w-4 mr-2" />
+                    Admin - Catégories
+                  </DropdownMenuItem>
+                </>
               )}
               <DropdownMenuItem onClick={handleSignOut}>
                 <LogOut className="h-4 w-4 mr-2" />
