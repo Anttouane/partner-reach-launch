@@ -129,6 +129,222 @@ export type Database = {
         }
         Relationships: []
       }
+      contract_changes: {
+        Row: {
+          change_type: string
+          contract_id: string
+          created_at: string
+          field_name: string
+          id: string
+          new_value: string | null
+          old_value: string | null
+          user_id: string
+          version: number
+        }
+        Insert: {
+          change_type?: string
+          contract_id: string
+          created_at?: string
+          field_name: string
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          user_id: string
+          version: number
+        }
+        Update: {
+          change_type?: string
+          contract_id?: string
+          created_at?: string
+          field_name?: string
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          user_id?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contract_changes_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "contracts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contract_comments: {
+        Row: {
+          content: string
+          contract_id: string
+          created_at: string
+          id: string
+          resolved: boolean | null
+          resolved_at: string | null
+          resolved_by: string | null
+          section: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          contract_id: string
+          created_at?: string
+          id?: string
+          resolved?: boolean | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          section: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          contract_id?: string
+          created_at?: string
+          id?: string
+          resolved?: boolean | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          section?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contract_comments_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "contracts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contracts: {
+        Row: {
+          brand_address: string | null
+          brand_company: string | null
+          brand_id: string
+          brand_name: string | null
+          brand_obligations: string | null
+          brand_signature_ip: string | null
+          brand_signed_at: string | null
+          campaign_description: string | null
+          campaign_title: string
+          content_types: string[] | null
+          conversation_id: string | null
+          created_at: string
+          creator_address: string | null
+          creator_id: string
+          creator_name: string | null
+          creator_net_amount: number
+          creator_obligations: string | null
+          creator_signature_ip: string | null
+          creator_signed_at: string | null
+          deadline: string | null
+          deliverables: string[] | null
+          dispute_resolution: string | null
+          exclusivity_period: number | null
+          id: string
+          locked_at: string | null
+          payment_terms: string | null
+          platform_commission_amount: number
+          platform_commission_rate: number
+          platforms: string[] | null
+          status: Database["public"]["Enums"]["contract_status"]
+          stripe_fee_estimate: number | null
+          total_amount: number
+          updated_at: string
+          usage_rights: string | null
+          validation_deadline_days: number | null
+          version: number
+        }
+        Insert: {
+          brand_address?: string | null
+          brand_company?: string | null
+          brand_id: string
+          brand_name?: string | null
+          brand_obligations?: string | null
+          brand_signature_ip?: string | null
+          brand_signed_at?: string | null
+          campaign_description?: string | null
+          campaign_title: string
+          content_types?: string[] | null
+          conversation_id?: string | null
+          created_at?: string
+          creator_address?: string | null
+          creator_id: string
+          creator_name?: string | null
+          creator_net_amount?: number
+          creator_obligations?: string | null
+          creator_signature_ip?: string | null
+          creator_signed_at?: string | null
+          deadline?: string | null
+          deliverables?: string[] | null
+          dispute_resolution?: string | null
+          exclusivity_period?: number | null
+          id?: string
+          locked_at?: string | null
+          payment_terms?: string | null
+          platform_commission_amount?: number
+          platform_commission_rate?: number
+          platforms?: string[] | null
+          status?: Database["public"]["Enums"]["contract_status"]
+          stripe_fee_estimate?: number | null
+          total_amount?: number
+          updated_at?: string
+          usage_rights?: string | null
+          validation_deadline_days?: number | null
+          version?: number
+        }
+        Update: {
+          brand_address?: string | null
+          brand_company?: string | null
+          brand_id?: string
+          brand_name?: string | null
+          brand_obligations?: string | null
+          brand_signature_ip?: string | null
+          brand_signed_at?: string | null
+          campaign_description?: string | null
+          campaign_title?: string
+          content_types?: string[] | null
+          conversation_id?: string | null
+          created_at?: string
+          creator_address?: string | null
+          creator_id?: string
+          creator_name?: string | null
+          creator_net_amount?: number
+          creator_obligations?: string | null
+          creator_signature_ip?: string | null
+          creator_signed_at?: string | null
+          deadline?: string | null
+          deliverables?: string[] | null
+          dispute_resolution?: string | null
+          exclusivity_period?: number | null
+          id?: string
+          locked_at?: string | null
+          payment_terms?: string | null
+          platform_commission_amount?: number
+          platform_commission_rate?: number
+          platforms?: string[] | null
+          status?: Database["public"]["Enums"]["contract_status"]
+          stripe_fee_estimate?: number | null
+          total_amount?: number
+          updated_at?: string
+          usage_rights?: string | null
+          validation_deadline_days?: number | null
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contracts_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       conversations: {
         Row: {
           created_at: string
@@ -600,6 +816,15 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      contract_status:
+        | "draft"
+        | "revision_requested"
+        | "ready_to_sign"
+        | "signed"
+        | "active"
+        | "completed"
+        | "disputed"
+        | "cancelled"
       user_type: "creator" | "brand"
     }
     CompositeTypes: {
@@ -729,6 +954,16 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      contract_status: [
+        "draft",
+        "revision_requested",
+        "ready_to_sign",
+        "signed",
+        "active",
+        "completed",
+        "disputed",
+        "cancelled",
+      ],
       user_type: ["creator", "brand"],
     },
   },

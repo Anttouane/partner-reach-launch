@@ -8,11 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MessageSquare, Send, CreditCard } from "lucide-react";
+import { MessageSquare, Send, CreditCard, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { PaymentDialog } from "@/components/PaymentDialog";
+import { CreateContractDialog } from "@/components/contracts/CreateContractDialog";
+import { ContractList } from "@/components/contracts/ContractList";
 
 interface Conversation {
   id: string;
@@ -52,6 +54,8 @@ const Messages = () => {
   const [newMessage, setNewMessage] = useState("");
   const [sending, setSending] = useState(false);
   const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  const [contractDialogOpen, setContractDialogOpen] = useState(false);
+  const [userProfile, setUserProfile] = useState<{ user_type: string } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -71,6 +75,15 @@ const Messages = () => {
         return;
       }
       setUser(session.user);
+      
+      // Get user profile to determine type
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("user_type")
+        .eq("id", session.user.id)
+        .single();
+      
+      setUserProfile(profile);
       setLoading(false);
     };
 
@@ -344,15 +357,26 @@ const Messages = () => {
                         </div>
                       )}
                     </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setPaymentDialogOpen(true)}
-                      className="ml-auto"
-                    >
-                      <CreditCard className="h-4 w-4 mr-2" />
-                      Payer
-                    </Button>
+                    <div className="flex gap-2 ml-auto">
+                      {userProfile?.user_type === 'brand' && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setContractDialogOpen(true)}
+                        >
+                          <FileText className="h-4 w-4 mr-2" />
+                          Contrat
+                        </Button>
+                      )}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setPaymentDialogOpen(true)}
+                      >
+                        <CreditCard className="h-4 w-4 mr-2" />
+                        Payer
+                      </Button>
+                    </div>
                   </div>
                 </div>
 
@@ -432,6 +456,20 @@ const Messages = () => {
             payeeId={selectedConvo.otherUser.id}
             payeeName={selectedConvo.otherUser.full_name || "Utilisateur"}
             conversationId={selectedConvo.id}
+          />
+        )}
+
+        {/* Contract Dialog */}
+        {selectedConvo && user && (
+          <CreateContractDialog
+            open={contractDialogOpen}
+            onOpenChange={setContractDialogOpen}
+            conversationId={selectedConvo.id}
+            brandId={user.id}
+            creatorId={selectedConvo.otherUser.id}
+            brandName={user.user_metadata?.full_name}
+            creatorName={selectedConvo.otherUser.full_name || undefined}
+            contextTitle={selectedConvo.opportunityTitle || selectedConvo.pitchTitle}
           />
         )}
       </main>

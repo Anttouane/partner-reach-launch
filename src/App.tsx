@@ -18,6 +18,7 @@ import OpportunityDetail from "./pages/OpportunityDetail";
 import AdminPayments from "./pages/AdminPayments";
 import AdminCategories from "./pages/AdminCategories";
 import Wallet from "./pages/Wallet";
+import ContractDetail from "./pages/ContractDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,6 +42,7 @@ const App = () => (
           <Route path="/create-opportunity" element={<CreateOpportunity />} />
           <Route path="/pitch/:id" element={<PitchDetail />} />
           <Route path="/opportunity/:id" element={<OpportunityDetail />} />
+          <Route path="/contract/:id" element={<ContractDetail />} />
           <Route path="/admin/payments" element={<AdminPayments />} />
           <Route path="/admin/categories" element={<AdminCategories />} />
           <Route path="/seed-data" element={<SeedData />} />
