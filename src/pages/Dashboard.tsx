@@ -280,7 +280,7 @@ const Dashboard = () => {
             <StatCard
               icon={isCreator ? <Wallet className="h-6 w-6" /> : <TrendingUp className="h-6 w-6" />}
               title={isCreator ? "Revenus" : "Campagnes actives"}
-              value={isCreator ? `${stats?.earnings.toLocaleString() || 0} €` : stats?.opportunities.toString() || "0"}
+              value={isCreator ? `${((stats?.earnings || 0) / 100).toLocaleString('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} €` : stats?.opportunities.toString() || "0"}
               description={isCreator ? "Total gagné" : "En cours"}
               color="accent"
               onClick={isCreator ? () => navigate("/wallet") : undefined}

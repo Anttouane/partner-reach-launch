@@ -26,12 +26,12 @@ const RevenueChart = ({ payments }: RevenueChartProps) => {
       monthlyData[key] = 0;
     }
 
-    // Sum payments by month
+    // Sum payments by month (convert cents to euros)
     payments.forEach(payment => {
       const date = new Date(payment.created_at);
       const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
       if (key in monthlyData) {
-        monthlyData[key] += payment.net_amount;
+        monthlyData[key] += payment.net_amount / 100; // Convert cents to euros
       }
     });
 
@@ -41,7 +41,7 @@ const RevenueChart = ({ payments }: RevenueChartProps) => {
       const [, month] = key.split('-');
       return {
         month: months[parseInt(month) - 1],
-        revenue: revenue,
+        revenue: Math.round(revenue),
       };
     });
 
