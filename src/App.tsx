@@ -17,6 +17,7 @@ import PitchDetail from "./pages/PitchDetail";
 import OpportunityDetail from "./pages/OpportunityDetail";
 import AdminPayments from "./pages/AdminPayments";
 import AdminCategories from "./pages/AdminCategories";
+import AdminDisputes from "./pages/AdminDisputes";
 import Wallet from "./pages/Wallet";
 import ContractDetail from "./pages/ContractDetail";
 import NotFound from "./pages/NotFound";
@@ -45,6 +46,7 @@ const App = () => (
           <Route path="/contract/:id" element={<ContractDetail />} />
           <Route path="/admin/payments" element={<AdminPayments />} />
           <Route path="/admin/categories" element={<AdminCategories />} />
+          <Route path="/admin/disputes" element={<AdminDisputes />} />
           <Route path="/seed-data" element={<SeedData />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

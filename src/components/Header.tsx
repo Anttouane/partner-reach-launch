@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User as UserIcon, LogOut, Home, Search, MessageSquare, PlusCircle, Sparkles, Wallet, Settings } from "lucide-react";
+import { User as UserIcon, LogOut, Home, Search, MessageSquare, PlusCircle, Sparkles, Wallet, Settings, AlertTriangle } from "lucide-react";
 import { useAdmin } from "@/hooks/useAdmin";
 
 interface HeaderProps {
@@ -100,6 +100,10 @@ const Header = ({ user }: HeaderProps) => {
                   <DropdownMenuItem onClick={() => navigate("/admin/categories")}>
                     <Settings className="h-4 w-4 mr-2" />
                     Admin - Catégories
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/admin/disputes")}>
+                    <AlertTriangle className="h-4 w-4 mr-2" />
+                    Admin - Litiges
                   </DropdownMenuItem>
                 </>
               )}
