@@ -126,8 +126,32 @@ Deno.serve(async (req) => {
       }
     ]
 
-    // Demo brands data
-    const brands = [
+    // Demo brand with full history
+    const demoBrand = {
+      email: 'marque.demo@partnery.fr',
+      password: 'Demo2025!',
+      metadata: {
+        full_name: 'TechStyle France',
+        user_type: 'brand',
+      },
+      profile: {
+        company_name: 'TechStyle France',
+        description: 'Marque française de vêtements et accessoires tech-lifestyle. Nous créons des produits innovants pour les digital natives.',
+        industry: 'Mode & Tech',
+        website: 'https://techstyle.fr'
+      },
+      opportunity: {
+        title: 'Campagne Automne 2025 - Influenceurs Mode & Tech',
+        description: 'Recherche de créateurs pour notre nouvelle collection automne. Nous cherchons des profils authentiques avec une audience engagée dans les domaines mode, lifestyle et tech.',
+        campaign_type: 'Campagne Saisonnière',
+        budget_range: '3000-8000€',
+        target_audience: '18-35 ans, urbains, tech-savvy',
+        requirements: ['Minimum 50K followers', 'Contenu créatif et original', 'Engagement rate >4%']
+      }
+    }
+
+    // Other demo brands (simpler)
+    const otherBrands = [
       {
         email: 'nike@demo.com',
         password: 'Demo123!',
@@ -137,17 +161,17 @@ Deno.serve(async (req) => {
         },
         profile: {
           company_name: 'Nike',
-          description: 'Marque mondiale de sport et lifestyle. Nous recherchons des créateurs authentiques pour représenter nos valeurs.',
+          description: 'Marque mondiale de sport et lifestyle.',
           industry: 'Sport & Lifestyle',
           website: 'https://nike.com'
         },
         opportunity: {
           title: 'Recherche Ambassadeurs Running 2025',
-          description: 'Nike recherche des runners passionnés pour promouvoir notre nouvelle collection de chaussures. Nous cherchons des créateurs avec une communauté engagée dans le sport et le fitness.',
+          description: 'Nike recherche des runners passionnés pour promouvoir notre nouvelle collection.',
           campaign_type: 'Ambassadeur',
           budget_range: '5000-10000€',
           target_audience: 'Sportifs 18-45 ans',
-          requirements: ['Minimum 50K followers', 'Contenu régulier sport/fitness', 'Engagement rate >4%']
+          requirements: ['Minimum 50K followers', 'Contenu sport/fitness', 'Engagement rate >4%']
         }
       },
       {
@@ -159,43 +183,23 @@ Deno.serve(async (req) => {
         },
         profile: {
           company_name: 'L\'Oréal Paris',
-          description: 'Leader mondial de la beauté. Nous collaborons avec des créateurs de contenu pour des campagnes innovantes.',
+          description: 'Leader mondial de la beauté.',
           industry: 'Beauté & Cosmétiques',
           website: 'https://loreal.com'
         },
         opportunity: {
           title: 'Lancement Nouvelle Gamme Skincare',
-          description: 'Collaboration pour le lancement de notre nouvelle ligne de soins visage. Recherche de créateurs beauté pour reviews authentiques et tutoriels.',
+          description: 'Collaboration pour le lancement de notre nouvelle ligne de soins.',
           campaign_type: 'Lancement Produit',
           budget_range: '3000-7000€',
           target_audience: 'Femmes 25-45 ans',
-          requirements: ['Expertise beauté/skincare', 'Contenu de qualité', 'Audience féminine majoritaire']
-        }
-      },
-      {
-        email: 'deliveroo@demo.com',
-        password: 'Demo123!',
-        metadata: {
-          full_name: 'Deliveroo',
-          user_type: 'brand',
-        },
-        profile: {
-          company_name: 'Deliveroo',
-          description: 'Service de livraison de repas leader. Nous recherchons des food creators pour showcaser nos restaurants partenaires.',
-          industry: 'Food & Delivery',
-          website: 'https://deliveroo.fr'
-        },
-        opportunity: {
-          title: 'Campagne Food Lovers - Restaurants Partenaires',
-          description: 'Recherche de food bloggers pour une campagne autour de nos meilleurs restaurants. Contenu créatif attendu: unboxing, dégustation, stories interactives.',
-          campaign_type: 'Contenu Sponsorisé',
-          budget_range: '2000-4000€',
-          target_audience: 'Foodies 20-40 ans',
-          requirements: ['Contenu food de qualité', 'Bon storytelling', 'Audience urbaine']
+          requirements: ['Expertise beauté/skincare', 'Contenu de qualité', 'Audience féminine']
         }
       }
     ]
 
+    const createdCreatorIds: string[] = []
+    
     // Create creators
     for (const creator of creators) {
       const { data: userData, error: userError } = await supabaseAdmin.auth.admin.createUser({
@@ -209,6 +213,8 @@ Deno.serve(async (req) => {
         console.error(`Error creating user ${creator.email}:`, userError)
         continue
       }
+
+      createdCreatorIds.push(userData.user.id)
 
       // Update profile
       await supabaseAdmin
@@ -233,8 +239,187 @@ Deno.serve(async (req) => {
         })
     }
 
-    // Create brands
-    for (const brand of brands) {
+    // Create main demo brand with history
+    const { data: brandUserData, error: brandUserError } = await supabaseAdmin.auth.admin.createUser({
+      email: demoBrand.email,
+      password: demoBrand.password,
+      email_confirm: true,
+      user_metadata: demoBrand.metadata
+    })
+
+    if (brandUserError) {
+      throw new Error(`Error creating demo brand: ${brandUserError.message}`)
+    }
+
+    const demoBrandId = brandUserData.user.id
+
+    // Create brand profile
+    await supabaseAdmin
+      .from('brand_profiles')
+      .insert({
+        id: demoBrandId,
+        ...demoBrand.profile
+      })
+
+    // Create opportunity
+    await supabaseAdmin
+      .from('brand_opportunities')
+      .insert({
+        brand_id: demoBrandId,
+        ...demoBrand.opportunity
+      })
+
+    // Create payment history for demo brand (payments made to creators)
+    const paymentHistory = [
+      { months_ago: 6, amount: 350000, creator_index: 0, description: 'Campagne Mode Printemps - Sophie Martin' },
+      { months_ago: 5, amount: 280000, creator_index: 1, description: 'Review Tech Produit - Lucas Dubois' },
+      { months_ago: 5, amount: 420000, creator_index: 2, description: 'Recettes Lifestyle - Emma Leroy' },
+      { months_ago: 4, amount: 650000, creator_index: 3, description: 'Ambassadeur Fitness Q2 - Thomas Bernard' },
+      { months_ago: 4, amount: 180000, creator_index: 0, description: 'Stories Mode - Sophie Martin' },
+      { months_ago: 3, amount: 520000, creator_index: 2, description: 'Campagne Food Summer - Emma Leroy' },
+      { months_ago: 3, amount: 380000, creator_index: 1, description: 'Unboxing Série Tech - Lucas Dubois' },
+      { months_ago: 2, amount: 750000, creator_index: 3, description: 'Programme Fitness Complet - Thomas Bernard' },
+      { months_ago: 2, amount: 290000, creator_index: 0, description: 'Collection Automne - Sophie Martin' },
+      { months_ago: 1, amount: 450000, creator_index: 2, description: 'Recettes Festives - Emma Leroy' },
+      { months_ago: 1, amount: 320000, creator_index: 1, description: 'Review Gaming - Lucas Dubois' },
+      { months_ago: 0, amount: 580000, creator_index: 3, description: 'Challenge Fitness Hiver - Thomas Bernard' },
+    ]
+
+    const now = new Date()
+    for (const payment of paymentHistory) {
+      if (createdCreatorIds[payment.creator_index]) {
+        const paymentDate = new Date(now)
+        paymentDate.setMonth(paymentDate.getMonth() - payment.months_ago)
+        paymentDate.setDate(Math.floor(Math.random() * 20) + 5)
+
+        const commissionRate = 5
+        const commissionAmount = Math.round(payment.amount * (commissionRate / 100))
+        const netAmount = payment.amount - commissionAmount
+
+        await supabaseAdmin
+          .from('payments')
+          .insert({
+            payer_id: demoBrandId,
+            payee_id: createdCreatorIds[payment.creator_index],
+            amount: payment.amount,
+            commission_amount: commissionAmount,
+            commission_rate: commissionRate,
+            net_amount: netAmount,
+            status: 'completed',
+            description: payment.description,
+            created_at: paymentDate.toISOString(),
+            updated_at: paymentDate.toISOString()
+          })
+      }
+    }
+
+    // Create completed contracts for demo brand
+    const contractHistory = [
+      { 
+        months_ago: 5, 
+        creator_index: 0, 
+        campaign_title: 'Campagne Mode Printemps 2024',
+        total_amount: 350000,
+        status: 'completed'
+      },
+      { 
+        months_ago: 4, 
+        creator_index: 2, 
+        campaign_title: 'Collaboration Food & Lifestyle',
+        total_amount: 420000,
+        status: 'completed'
+      },
+      { 
+        months_ago: 3, 
+        creator_index: 3, 
+        campaign_title: 'Partenariat Fitness Q2-Q3',
+        total_amount: 1400000,
+        status: 'completed'
+      },
+      { 
+        months_ago: 1, 
+        creator_index: 1, 
+        campaign_title: 'Série Reviews Tech',
+        total_amount: 700000,
+        status: 'completed'
+      },
+      { 
+        months_ago: 0, 
+        creator_index: 2, 
+        campaign_title: 'Campagne Hiver 2025',
+        total_amount: 580000,
+        status: 'active'
+      },
+    ]
+
+    for (const contract of contractHistory) {
+      if (createdCreatorIds[contract.creator_index]) {
+        const contractDate = new Date(now)
+        contractDate.setMonth(contractDate.getMonth() - contract.months_ago)
+
+        const commissionRate = 5
+        const commissionAmount = Math.round(contract.total_amount * (commissionRate / 100))
+        const netAmount = contract.total_amount - commissionAmount
+
+        const creatorNames = ['Sophie Martin', 'Lucas Dubois', 'Emma Leroy', 'Thomas Bernard']
+
+        await supabaseAdmin
+          .from('contracts')
+          .insert({
+            brand_id: demoBrandId,
+            creator_id: createdCreatorIds[contract.creator_index],
+            campaign_title: contract.campaign_title,
+            campaign_description: `Partenariat avec ${creatorNames[contract.creator_index]} pour ${contract.campaign_title}`,
+            total_amount: contract.total_amount,
+            platform_commission_rate: commissionRate,
+            platform_commission_amount: commissionAmount,
+            creator_net_amount: netAmount,
+            status: contract.status,
+            brand_name: 'TechStyle France',
+            brand_company: 'TechStyle France SAS',
+            creator_name: creatorNames[contract.creator_index],
+            deliverables: ['Posts Instagram', 'Stories', 'Reels'],
+            platforms: ['Instagram', 'TikTok'],
+            brand_signed_at: contractDate.toISOString(),
+            creator_signed_at: contractDate.toISOString(),
+            created_at: contractDate.toISOString(),
+            updated_at: contractDate.toISOString()
+          })
+      }
+    }
+
+    // Create conversations between demo brand and creators
+    for (let i = 0; i < Math.min(3, createdCreatorIds.length); i++) {
+      const { data: convData } = await supabaseAdmin
+        .from('conversations')
+        .insert({
+          participant_1: demoBrandId,
+          participant_2: createdCreatorIds[i]
+        })
+        .select()
+        .single()
+
+      if (convData) {
+        const messages = [
+          { sender: demoBrandId, content: 'Bonjour ! Votre profil nous intéresse beaucoup pour notre prochaine campagne.' },
+          { sender: createdCreatorIds[i], content: 'Merci beaucoup ! Je serais ravi(e) d\'en discuter. Quels sont vos objectifs ?' },
+          { sender: demoBrandId, content: 'Nous cherchons à promouvoir notre nouvelle collection auprès d\'une audience engagée.' },
+        ]
+
+        for (const msg of messages) {
+          await supabaseAdmin
+            .from('messages')
+            .insert({
+              conversation_id: convData.id,
+              sender_id: msg.sender,
+              content: msg.content
+            })
+        }
+      }
+    }
+
+    // Create other brands (simpler, no history)
+    for (const brand of otherBrands) {
       const { data: userData, error: userError } = await supabaseAdmin.auth.admin.createUser({
         email: brand.email,
         password: brand.password,
@@ -247,7 +432,6 @@ Deno.serve(async (req) => {
         continue
       }
 
-      // Create brand profile
       await supabaseAdmin
         .from('brand_profiles')
         .insert({
@@ -255,7 +439,6 @@ Deno.serve(async (req) => {
           ...brand.profile
         })
 
-      // Create opportunity
       await supabaseAdmin
         .from('brand_opportunities')
         .insert({
@@ -264,13 +447,26 @@ Deno.serve(async (req) => {
         })
     }
 
+    // Calculate totals for demo brand
+    const totalSpent = paymentHistory.reduce((sum, p) => sum + p.amount, 0)
+    const totalPartnerships = contractHistory.length
+
     return new Response(
       JSON.stringify({ 
         success: true, 
         message: 'Demo data created successfully',
         credentials: {
+          demoBrand: {
+            email: demoBrand.email,
+            password: demoBrand.password,
+            stats: {
+              totalSpent: `${(totalSpent / 100).toLocaleString('fr-FR')}€`,
+              totalPartnerships,
+              activeContracts: contractHistory.filter(c => c.status === 'active').length
+            }
+          },
           creators: creators.map(c => ({ email: c.email, password: c.password })),
-          brands: brands.map(b => ({ email: b.email, password: b.password }))
+          otherBrands: otherBrands.map(b => ({ email: b.email, password: b.password }))
         }
       }),
       { 

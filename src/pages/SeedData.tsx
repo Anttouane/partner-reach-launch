@@ -69,7 +69,13 @@ const SeedData = () => {
                   <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
                     <li>4 profils de créateurs (Sophie, Lucas, Emma, Thomas)</li>
                     <li>4 pitches de collaboration</li>
-                    <li>3 profils de marques (Nike, L'Oréal, Deliveroo)</li>
+                    <li>1 compte marque démo complet (TechStyle France) avec :</li>
+                    <ul className="list-disc list-inside ml-4 text-xs">
+                      <li>12 paiements réalisés (~51 700€ de dépenses)</li>
+                      <li>5 contrats (4 terminés, 1 actif)</li>
+                      <li>3 conversations avec créateurs</li>
+                    </ul>
+                    <li>2 autres marques simples (Nike, L'Oréal)</li>
                     <li>3 opportunités de campagne</li>
                   </ul>
                 </div>
@@ -101,10 +107,25 @@ const SeedData = () => {
                 </div>
 
                 <div className="space-y-4">
+                  {credentials?.demoBrand && (
+                    <div className="border-2 border-primary rounded-lg p-4">
+                      <h3 className="font-semibold mb-2 text-primary">🏢 Compte Marque Démo (complet) :</h3>
+                      <div className="bg-muted p-3 rounded-lg space-y-1">
+                        <p><strong>Email:</strong> {credentials.demoBrand.email}</p>
+                        <p><strong>Mot de passe:</strong> {credentials.demoBrand.password}</p>
+                        <div className="mt-2 pt-2 border-t text-xs text-muted-foreground">
+                          <p>💰 Dépenses totales: {credentials.demoBrand.stats.totalSpent}</p>
+                          <p>📄 Partenariats: {credentials.demoBrand.stats.totalPartnerships}</p>
+                          <p>✅ Contrats actifs: {credentials.demoBrand.stats.activeContracts}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   <div>
                     <h3 className="font-semibold mb-2">Comptes Créateurs :</h3>
                     <div className="space-y-2 text-sm">
-                      {credentials?.creators.map((c: any, i: number) => (
+                      {credentials?.creators?.map((c: any, i: number) => (
                         <div key={i} className="bg-muted p-3 rounded-lg">
                           <p><strong>Email:</strong> {c.email}</p>
                           <p><strong>Mot de passe:</strong> {c.password}</p>
@@ -114,9 +135,9 @@ const SeedData = () => {
                   </div>
 
                   <div>
-                    <h3 className="font-semibold mb-2">Comptes Marques :</h3>
+                    <h3 className="font-semibold mb-2">Autres Marques :</h3>
                     <div className="space-y-2 text-sm">
-                      {credentials?.brands.map((b: any, i: number) => (
+                      {credentials?.otherBrands?.map((b: any, i: number) => (
                         <div key={i} className="bg-muted p-3 rounded-lg">
                           <p><strong>Email:</strong> {b.email}</p>
                           <p><strong>Mot de passe:</strong> {b.password}</p>
