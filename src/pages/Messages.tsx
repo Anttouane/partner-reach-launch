@@ -368,14 +368,16 @@ const Messages = () => {
                           Contrat
                         </Button>
                       )}
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setPaymentDialogOpen(true)}
-                      >
-                        <CreditCard className="h-4 w-4 mr-2" />
-                        Payer
-                      </Button>
+                      {userProfile?.user_type === 'brand' && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setPaymentDialogOpen(true)}
+                        >
+                          <CreditCard className="h-4 w-4 mr-2" />
+                          Payer
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>
