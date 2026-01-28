@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import RevenueChart from "@/components/dashboard/RevenueChart";
 import PerformanceStats from "@/components/dashboard/PerformanceStats";
+import { ContractList } from "@/components/contracts/ContractList";
 
 interface DashboardStats {
   opportunities: number;
@@ -304,6 +305,33 @@ const Dashboard = () => {
             </motion.div>
           </motion.div>
         )}
+
+        {/* Contracts Section */}
+        <motion.div
+          className="mb-8"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div variants={itemVariants}>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle>Mes Contrats</CardTitle>
+                  <CardDescription>
+                    {isCreator ? "Vos partenariats en cours" : "Vos collaborations avec les créateurs"}
+                  </CardDescription>
+                </div>
+                <Button variant="outline" size="sm" onClick={() => navigate("/messages")}>
+                  Voir tout
+                </Button>
+              </CardHeader>
+              <CardContent>
+                {user && <ContractList userId={user.id} limit={5} />}
+              </CardContent>
+            </Card>
+          </motion.div>
+        </motion.div>
 
         <motion.div 
           className="grid lg:grid-cols-2 gap-6"
