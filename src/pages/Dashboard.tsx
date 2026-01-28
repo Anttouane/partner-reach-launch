@@ -5,11 +5,13 @@ import { User } from "@supabase/supabase-js";
 import Header from "@/components/Header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SkeletonStatCard } from "@/components/ui/skeleton-card";
-import { Search, MessageSquare, TrendingUp, Wallet, Eye, Calendar, ArrowRight, Sparkles, Building2 } from "lucide-react";
+import { Search, MessageSquare, TrendingUp, Wallet, Eye, Calendar, ArrowRight, Sparkles, Building2, CreditCard } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import RevenueChart from "@/components/dashboard/RevenueChart";
 import PerformanceStats from "@/components/dashboard/PerformanceStats";
+import SpendingChart from "@/components/dashboard/SpendingChart";
+import BrandPerformanceStats from "@/components/dashboard/BrandPerformanceStats";
 import { ContractList } from "@/components/contracts/ContractList";
 
 interface DashboardStats {
@@ -18,10 +20,16 @@ interface DashboardStats {
   earnings: number;
   pitches: number;
   profileViews: number;
+  totalSpent: number;
 }
 
 interface Payment {
   net_amount: number;
+  created_at: string;
+}
+
+interface BrandPayment {
+  amount: number;
   created_at: string;
 }
 
@@ -33,18 +41,34 @@ interface CreatorStats {
   responseRate: number;
 }
 
+interface BrandStats {
+  totalContracts: number;
+  activeContracts: number;
+  completedContracts: number;
+  totalSpent: number;
+  totalCreatorsWorkedWith: number;
+}
+
 const Dashboard = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
   const [payments, setPayments] = useState<Payment[]>([]);
+  const [brandPayments, setBrandPayments] = useState<BrandPayment[]>([]);
   const [creatorStats, setCreatorStats] = useState<CreatorStats>({
     totalPitches: 0,
     acceptedPitches: 0,
     totalCollaborations: 0,
     averageRating: 0,
     responseRate: 0,
+  });
+  const [brandStats, setBrandStats] = useState<BrandStats>({
+    totalContracts: 0,
+    activeContracts: 0,
+    completedContracts: 0,
+    totalSpent: 0,
+    totalCreatorsWorkedWith: 0,
   });
   const navigate = useNavigate();
 
@@ -78,7 +102,7 @@ const Dashboard = () => {
     
     try {
       // Load stats in parallel
-      const [opportunitiesRes, messagesRes, paymentsRes, pitchesRes] = await Promise.all([
+      const [opportunitiesRes, messagesRes, paymentsRes, pitchesRes, brandPaymentsRes] = await Promise.all([
         supabase.from("brand_opportunities").select("id", { count: "exact" }),
         supabase.from("messages")
           .select("id", { count: "exact" })
@@ -88,19 +112,24 @@ const Dashboard = () => {
           .eq("payee_id", currentUser.id)
           .eq("status", "completed"),
         supabase.from("pitches").select("id", { count: "exact" }),
+        supabase.from("payments")
+          .select("amount")
+          .eq("payer_id", currentUser.id)
+          .eq("status", "completed"),
       ]);
 
       const totalEarnings = paymentsRes.data?.reduce((sum, p) => sum + (p.net_amount || 0), 0) || 0;
+      const totalSpent = brandPaymentsRes.data?.reduce((sum, p) => sum + (p.amount || 0), 0) || 0;
 
       setStats({
         opportunities: opportunitiesRes.count || 0,
         unreadMessages: messagesRes.count || 0,
         earnings: totalEarnings,
         pitches: pitchesRes.count || 0,
-        profileViews: Math.floor(Math.random() * 50) + 10, // Placeholder
+        profileViews: Math.floor(Math.random() * 50) + 10,
+        totalSpent: totalSpent,
       });
 
-      // Store payments for chart (only for creators)
       if (userType === "creator") {
         // Get all payments for chart
         const { data: allPayments } = await supabase
@@ -120,31 +149,61 @@ const Dashboard = () => {
 
         const totalUserPitches = userPitches?.length || 0;
         const acceptedUserPitches = userPitches?.filter(p => p.status === "accepted").length || 0;
-
-        // Count collaborations (completed payments)
         const totalCollabs = paymentsRes.data?.length || 0;
 
-        // Calculate response rate from messages
-        const { data: receivedMessages, count: receivedCount } = await supabase
+        const { count: receivedCount } = await supabase
           .from("messages")
           .select("id", { count: "exact" })
           .neq("sender_id", currentUser.id);
 
-        const { data: sentMessages, count: sentCount } = await supabase
+        const { count: sentCount } = await supabase
           .from("messages")
           .select("id", { count: "exact" })
           .eq("sender_id", currentUser.id);
 
         const responseRate = receivedCount && receivedCount > 0 
           ? Math.min(((sentCount || 0) / receivedCount) * 100, 100) 
-          : 85; // Default if no messages
+          : 85;
 
         setCreatorStats({
           totalPitches: totalUserPitches,
           acceptedPitches: acceptedUserPitches,
           totalCollaborations: totalCollabs,
-          averageRating: 4.5, // Placeholder - would need a reviews table
+          averageRating: 4.5,
           responseRate: responseRate,
+        });
+      } else {
+        // Brand-specific data
+        const { data: allBrandPayments } = await supabase
+          .from("payments")
+          .select("amount, created_at, payee_id")
+          .eq("payer_id", currentUser.id)
+          .eq("status", "completed")
+          .order("created_at", { ascending: true });
+        
+        setBrandPayments(allBrandPayments || []);
+
+        // Get contracts stats
+        const { data: contracts } = await supabase
+          .from("contracts")
+          .select("id, status, creator_id")
+          .eq("brand_id", currentUser.id);
+
+        const totalContracts = contracts?.length || 0;
+        const activeContracts = contracts?.filter(c => c.status === "active" || c.status === "signed").length || 0;
+        const completedContracts = contracts?.filter(c => c.status === "completed").length || 0;
+        
+        // Count unique creators
+        const uniqueCreators = new Set(contracts?.map(c => c.creator_id) || []);
+        const uniquePayees = new Set(allBrandPayments?.map(p => p.payee_id) || []);
+        const allUniqueCreators = new Set([...uniqueCreators, ...uniquePayees]);
+
+        setBrandStats({
+          totalContracts,
+          activeContracts,
+          completedContracts,
+          totalSpent,
+          totalCreatorsWorkedWith: allUniqueCreators.size,
         });
       }
 
@@ -279,10 +338,12 @@ const Dashboard = () => {
           </motion.div>
           <motion.div variants={itemVariants}>
             <StatCard
-              icon={isCreator ? <Wallet className="h-6 w-6" /> : <TrendingUp className="h-6 w-6" />}
-              title={isCreator ? "Revenus" : "Campagnes actives"}
-              value={isCreator ? `${((stats?.earnings || 0) / 100).toLocaleString('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} €` : stats?.opportunities.toString() || "0"}
-              description={isCreator ? "Total gagné" : "En cours"}
+              icon={isCreator ? <Wallet className="h-6 w-6" /> : <CreditCard className="h-6 w-6" />}
+              title={isCreator ? "Revenus" : "Dépenses totales"}
+              value={isCreator 
+                ? `${((stats?.earnings || 0) / 100).toLocaleString('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} €` 
+                : `${((stats?.totalSpent || 0) / 100).toLocaleString('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} €`}
+              description={isCreator ? "Total gagné" : "Budget partenariats"}
               color="accent"
               onClick={isCreator ? () => navigate("/wallet") : undefined}
             />
@@ -302,6 +363,23 @@ const Dashboard = () => {
             </motion.div>
             <motion.div variants={itemVariants}>
               <PerformanceStats {...creatorStats} />
+            </motion.div>
+          </motion.div>
+        )}
+
+        {/* Brand Analytics Section */}
+        {!isCreator && (
+          <motion.div 
+            className="grid lg:grid-cols-2 gap-6 mb-8"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.div variants={itemVariants}>
+              <SpendingChart payments={brandPayments} />
+            </motion.div>
+            <motion.div variants={itemVariants}>
+              <BrandPerformanceStats {...brandStats} />
             </motion.div>
           </motion.div>
         )}

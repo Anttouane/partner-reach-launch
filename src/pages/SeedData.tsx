@@ -8,9 +8,11 @@ import Header from "@/components/Header";
 const SeedData = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isBrandLoading, setIsBrandLoading] = useState(false);
+  const [isBrandDataLoading, setIsBrandDataLoading] = useState(false);
   const [isSeeded, setIsSeeded] = useState(false);
   const [credentials, setCredentials] = useState<any>(null);
   const [brandCreated, setBrandCreated] = useState(false);
+  const [brandDataSeeded, setBrandDataSeeded] = useState(false);
   const { toast } = useToast();
 
   const handleCreateDemoBrand = async () => {
@@ -43,6 +45,39 @@ const SeedData = () => {
       });
     } finally {
       setIsBrandLoading(false);
+    }
+  };
+
+  const handleSeedBrandData = async () => {
+    setIsBrandDataLoading(true);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/seed-brand-data`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        setBrandDataSeeded(true);
+        toast({
+          title: "Données démo ajoutées !",
+          description: `${data.stats.totalPayments} paiements, ${data.stats.totalContracts} contrats créés`,
+        });
+      } else {
+        throw new Error(data.error || 'Une erreur est survenue');
+      }
+    } catch (error: any) {
+      toast({
+        title: "Erreur",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsBrandDataLoading(false);
     }
   };
 
@@ -128,6 +163,38 @@ const SeedData = () => {
                 </>
               )}
             </Button>
+
+            <div className="border-t pt-4 mt-4">
+              <p className="text-sm text-muted-foreground mb-3">
+                Après avoir créé le compte, ajoutez les données démo (paiements, contrats, conversations) :
+              </p>
+              
+              {brandDataSeeded && (
+                <div className="flex items-center gap-2 text-green-600 mb-3">
+                  <CheckCircle2 className="h-5 w-5" />
+                  <span>Données démo ajoutées ! (12 paiements, 5 contrats, 3 conversations)</span>
+                </div>
+              )}
+
+              <Button 
+                onClick={handleSeedBrandData} 
+                disabled={isBrandDataLoading}
+                variant="secondary"
+                className="w-full"
+              >
+                {isBrandDataLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Création des données...
+                  </>
+                ) : (
+                  <>
+                    <Database className="mr-2 h-4 w-4" />
+                    {brandDataSeeded ? "Réinitialiser les données démo" : "Ajouter paiements, contrats, conversations"}
+                  </>
+                )}
+              </Button>
+            </div>
           </CardContent>
         </Card>
 
