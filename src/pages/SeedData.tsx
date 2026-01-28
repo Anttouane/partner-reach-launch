@@ -2,14 +2,49 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Database, CheckCircle2 } from "lucide-react";
+import { Loader2, Database, CheckCircle2, Building2, RefreshCw } from "lucide-react";
 import Header from "@/components/Header";
 
 const SeedData = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isBrandLoading, setIsBrandLoading] = useState(false);
   const [isSeeded, setIsSeeded] = useState(false);
   const [credentials, setCredentials] = useState<any>(null);
+  const [brandCreated, setBrandCreated] = useState(false);
   const { toast } = useToast();
+
+  const handleCreateDemoBrand = async () => {
+    setIsBrandLoading(true);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-demo-brand`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        setBrandCreated(true);
+        toast({
+          title: "Compte marque démo créé !",
+          description: "Email: marque.demo@partnery.fr / Mot de passe: Demo2025!",
+        });
+      } else {
+        throw new Error(data.error || 'Une erreur est survenue');
+      }
+    } catch (error: any) {
+      toast({
+        title: "Erreur",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsBrandLoading(false);
+    }
+  };
 
   const handleSeedData = async () => {
     setIsLoading(true);
@@ -50,15 +85,61 @@ const SeedData = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header user={null} />
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 space-y-6">
+        {/* Quick Brand Account Creation */}
+        <Card className="max-w-2xl mx-auto border-primary">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Building2 className="h-6 w-6 text-primary" />
+              Compte Marque Démo
+            </CardTitle>
+            <CardDescription>
+              Créez ou réinitialisez rapidement le compte marque de démonstration
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="bg-muted p-4 rounded-lg">
+              <p className="font-semibold mb-1">Identifiants :</p>
+              <p className="text-sm">📧 Email: <code className="bg-background px-1 rounded">marque.demo@partnery.fr</code></p>
+              <p className="text-sm">🔑 Mot de passe: <code className="bg-background px-1 rounded">Demo2025!</code></p>
+            </div>
+            
+            {brandCreated && (
+              <div className="flex items-center gap-2 text-green-600">
+                <CheckCircle2 className="h-5 w-5" />
+                <span>Compte créé/réinitialisé avec succès !</span>
+              </div>
+            )}
+
+            <Button 
+              onClick={handleCreateDemoBrand} 
+              disabled={isBrandLoading}
+              className="w-full"
+            >
+              {isBrandLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Création en cours...
+                </>
+              ) : (
+                <>
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  {brandCreated ? "Réinitialiser le compte" : "Créer le compte marque démo"}
+                </>
+              )}
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Full Seed Data */}
         <Card className="max-w-2xl mx-auto">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Database className="h-6 w-6" />
-              Données de Démonstration
+              Données de Démonstration Complètes
             </CardTitle>
             <CardDescription>
-              Générez des profils et contenus de démonstration pour votre POC
+              Générez des profils et contenus de démonstration complets pour votre POC
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
