@@ -100,6 +100,31 @@ export function useContract(contractId: string | undefined) {
     
     setSaving(true);
     
+    // Check if this is a substantive change that should reset signatures
+    const substantiveFields = [
+      'campaign_title', 'campaign_description', 'total_amount', 
+      'platform_commission_rate', 'deadline', 'exclusivity_period',
+      'usage_rights', 'brand_obligations', 'creator_obligations',
+      'payment_terms', 'validation_deadline_days', 'dispute_resolution',
+      'deliverables', 'content_types', 'platforms'
+    ];
+    
+    const hasSubstantiveChanges = Object.keys(updates).some(key => 
+      substantiveFields.includes(key) && 
+      JSON.stringify(updates[key as keyof Contract]) !== JSON.stringify(contract[key as keyof Contract])
+    );
+    
+    // Reset signatures if substantive changes were made and contract was previously signed/approved
+    if (hasSubstantiveChanges && (contract.brand_signed_at || contract.creator_signed_at || contract.status === 'ready_to_sign')) {
+      updates.brand_signed_at = null;
+      updates.creator_signed_at = null;
+      updates.brand_signature_ip = null;
+      updates.creator_signature_ip = null;
+      updates.status = 'revision_requested';
+      updates.version = (contract.version || 1) + 1;
+      toast.info('Les signatures ont été réinitialisées suite aux modifications');
+    }
+    
     // Track changes
     if (trackChanges) {
       const changeRecords: Omit<ContractChange, 'id' | 'created_at' | 'user'>[] = [];

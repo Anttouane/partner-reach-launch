@@ -8,13 +8,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MessageSquare, Send, CreditCard, FileText } from "lucide-react";
+import { MessageSquare, Send, CreditCard, FileText, Eye, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { PaymentDialog } from "@/components/PaymentDialog";
 import { CreateContractDialog } from "@/components/contracts/CreateContractDialog";
 import { ContractList } from "@/components/contracts/ContractList";
+import { Contract } from "@/types/contract";
 
 interface Conversation {
   id: string;
@@ -56,6 +57,8 @@ const Messages = () => {
   const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
   const [contractDialogOpen, setContractDialogOpen] = useState(false);
   const [userProfile, setUserProfile] = useState<{ user_type: string } | null>(null);
+  const [existingContract, setExistingContract] = useState<Contract | null>(null);
+  const [loadingContract, setLoadingContract] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -170,6 +173,55 @@ const Messages = () => {
 
     fetchConversations();
   }, [user]);
+
+  // Fetch existing contract for selected conversation
+  useEffect(() => {
+    if (!selectedConversation) {
+      setExistingContract(null);
+      return;
+    }
+
+    const fetchContract = async () => {
+      setLoadingContract(true);
+      const { data, error } = await supabase
+        .from("contracts")
+        .select("*")
+        .eq("conversation_id", selectedConversation)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (!error && data) {
+        setExistingContract(data as Contract);
+      } else {
+        setExistingContract(null);
+      }
+      setLoadingContract(false);
+    };
+
+    fetchContract();
+
+    // Subscribe to contract changes
+    const contractChannel = supabase
+      .channel(`contract-for-convo:${selectedConversation}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "contracts",
+          filter: `conversation_id=eq.${selectedConversation}`,
+        },
+        () => {
+          fetchContract();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(contractChannel);
+    };
+  }, [selectedConversation]);
 
   useEffect(() => {
     if (!selectedConversation) return;
@@ -358,14 +410,26 @@ const Messages = () => {
                       )}
                     </div>
                     <div className="flex gap-2 ml-auto">
-                      {userProfile?.user_type === 'brand' && (
+                      {/* Contract button - visible for both parties if exists, or create for brand */}
+                      {existingContract ? (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => navigate(`/contracts/${existingContract.id}`)}
+                          disabled={loadingContract}
+                        >
+                          <Eye className="h-4 w-4 mr-2" />
+                          Voir le contrat
+                        </Button>
+                      ) : userProfile?.user_type === 'brand' && (
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => setContractDialogOpen(true)}
+                          disabled={loadingContract}
                         >
-                          <FileText className="h-4 w-4 mr-2" />
-                          Contrat
+                          <Plus className="h-4 w-4 mr-2" />
+                          Créer contrat
                         </Button>
                       )}
                       {userProfile?.user_type === 'brand' && (
