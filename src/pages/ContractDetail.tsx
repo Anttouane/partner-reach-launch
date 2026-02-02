@@ -9,6 +9,7 @@ import { ContractStatusBadge } from '@/components/contracts/ContractStatusBadge'
 import { ContractSectionCard } from '@/components/contracts/ContractSectionCard';
 import { ContractFinancialSection } from '@/components/contracts/ContractFinancialSection';
 import { ContractSignatureSection } from '@/components/contracts/ContractSignatureSection';
+import { ContractHistory } from '@/components/contracts/ContractHistory';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -499,6 +500,11 @@ const ContractDetail = () => {
           isBrand={isBrand}
           onSign={handleSign}
         />
+
+        {/* Section G: Change History */}
+        <div className="mt-6">
+          <ContractHistory changes={changes} />
+        </div>
       </main>
     </div>
   );
