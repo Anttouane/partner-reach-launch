@@ -127,17 +127,39 @@ const ContractDetail = () => {
     if (!contract) return;
     
     try {
+      toast.info('Génération du contrat en cours...');
+      
       const { data, error } = await supabase.functions.invoke('generate-contract-pdf', {
         body: { contractId: contract.id },
       });
 
       if (error) throw error;
 
-      // Download the PDF
-      const link = document.createElement('a');
-      link.href = data.url;
-      link.download = `contrat-${contract.id}.pdf`;
-      link.click();
+      // Open HTML in new window for printing as PDF
+      const printWindow = window.open('', '_blank');
+      if (printWindow) {
+        printWindow.document.write(data.html);
+        printWindow.document.close();
+        
+        // Trigger print dialog after content loads
+        printWindow.onload = () => {
+          setTimeout(() => {
+            printWindow.print();
+          }, 500);
+        };
+        
+        toast.success('Contrat ouvert - utilisez "Enregistrer en PDF" dans le dialogue d\'impression');
+      } else {
+        // Fallback: download as HTML file
+        const blob = new Blob([data.html], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = data.filename || `contrat-${contract.id}.html`;
+        link.click();
+        URL.revokeObjectURL(url);
+        toast.success('Fichier téléchargé - ouvrez-le et imprimez en PDF');
+      }
     } catch (error) {
       console.error(error);
       toast.error("Erreur lors de l'export PDF");
