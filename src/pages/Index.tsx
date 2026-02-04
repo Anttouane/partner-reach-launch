@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Sparkles, Users, Briefcase, Zap, Heart, Shield, TrendingUp, Target, Rocket, CheckCircle, ArrowRight, Star } from "lucide-react";
+import { Sparkles, Users, Briefcase, Zap, Heart, Shield, TrendingUp, Target, Rocket, CheckCircle, ArrowRight, Star, MessageSquare, FileText, CreditCard, BarChart3, Handshake, BadgePercent } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Index = () => {
@@ -15,17 +15,17 @@ const Index = () => {
             </Link>
             
             <nav className="hidden md:flex items-center space-x-8">
-              <a href="#valeur" className="text-foreground hover:text-primary transition-colors font-medium">
-                Valeur
+              <a href="#tarifs" className="text-foreground hover:text-primary transition-colors font-medium">
+                Tarifs
+              </a>
+              <a href="#fonctionnalites" className="text-foreground hover:text-primary transition-colors font-medium">
+                Fonctionnalités
               </a>
               <a href="#fonctionnement" className="text-foreground hover:text-primary transition-colors font-medium">
                 Fonctionnement
               </a>
               <a href="#benefices" className="text-foreground hover:text-primary transition-colors font-medium">
                 Bénéfices
-              </a>
-              <a href="#exemples" className="text-foreground hover:text-primary transition-colors font-medium">
-                Exemples
               </a>
             </nav>
 
@@ -50,17 +50,17 @@ const Index = () => {
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20">
                 <Sparkles className="h-4 w-4 text-primary" />
-                <span className="text-sm font-semibold text-foreground">La plateforme de mise en relation</span>
+                <span className="text-sm font-semibold text-foreground">100% gratuit • Commission 5% uniquement</span>
               </div>
               
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-tight">
                 Connectez marques et créateurs{" "}
-                <span className="text-primary">simplement</span>
+                <span className="text-primary">directement</span>
               </h1>
               
               <p className="text-xl text-muted-foreground leading-relaxed">
-                Partnery facilite les collaborations entre marques et créateurs de contenu. 
-                Une plateforme moderne, accessible et équitable pour tous.
+                Partnery élimine les intermédiaires et facilite les partenariats authentiques. 
+                Inscription gratuite, sans abonnement. Vous ne payez que 5% sur vos transactions réussies.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
@@ -70,27 +70,11 @@ const Index = () => {
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
-                <a href="#fonctionnement">
+                <a href="#tarifs">
                   <Button size="lg" variant="outline" className="border-2 border-primary text-foreground hover:bg-primary/10 text-lg px-8 py-6 w-full sm:w-auto">
-                    Comment ça marche
+                    Voir nos tarifs
                   </Button>
                 </a>
-              </div>
-
-              {/* Stats rapides */}
-              <div className="grid grid-cols-3 gap-6 pt-8">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-primary">500+</div>
-                  <div className="text-sm text-muted-foreground">Créateurs</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-secondary">200+</div>
-                  <div className="text-sm text-muted-foreground">Marques</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-foreground">1000+</div>
-                  <div className="text-sm text-muted-foreground">Collaborations</div>
-                </div>
               </div>
             </motion.div>
 
@@ -111,11 +95,11 @@ const Index = () => {
                         <Briefcase className="h-6 w-6 text-primary-foreground" />
                       </div>
                       <div>
-                        <div className="font-bold text-foreground">Marque Tech</div>
+                        <div className="font-bold text-foreground">Marque</div>
                         <div className="text-sm text-muted-foreground">Recherche créateurs</div>
                       </div>
                     </div>
-                    <p className="text-sm text-foreground/80">Budget 1000-2000€ pour campagne produit</p>
+                    <p className="text-sm text-foreground/80">Publiez vos opportunités de partenariat</p>
                   </div>
 
                   {/* Flèche de connexion */}
@@ -132,11 +116,11 @@ const Index = () => {
                         <Users className="h-6 w-6 text-secondary-foreground" />
                       </div>
                       <div>
-                        <div className="font-bold text-foreground">Créateur Tech</div>
-                        <div className="text-sm text-muted-foreground">50K abonnés</div>
+                        <div className="font-bold text-foreground">Créateur</div>
+                        <div className="text-sm text-muted-foreground">Proposez vos services</div>
                       </div>
                     </div>
-                    <p className="text-sm text-foreground/80">Spécialisé en reviews et unboxing</p>
+                    <p className="text-sm text-foreground/80">Créez votre pitch et attirez des marques</p>
                   </div>
                 </div>
               </div>
@@ -145,8 +129,135 @@ const Index = () => {
         </div>
       </section>
 
-      
-      {/* Section Valeur Ajoutée */}
+      {/* Section Modèle Économique Transparent */}
+      <section id="tarifs" className="py-24 px-4 bg-card">
+        <div className="container mx-auto max-w-6xl">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4">
+              <BadgePercent className="h-5 w-5 text-primary" />
+              <span className="text-sm font-semibold text-foreground">Tarification transparente</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+              100% Gratuit pour démarrer
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Pas d'abonnement, pas de frais cachés. Vous ne payez que lorsque vous réussissez.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="bg-background rounded-3xl p-8 border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-soft text-center"
+            >
+              <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mb-6 mx-auto">
+                <CheckCircle className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="text-2xl font-bold text-foreground mb-4">Inscription gratuite</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Créez votre profil, publiez vos offres ou pitchs, et explorez la plateforme sans aucun frais.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="bg-gradient-to-br from-primary/10 to-secondary/10 rounded-3xl p-8 border-2 border-primary/40 shadow-soft text-center relative"
+            >
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary text-primary-foreground text-sm font-semibold rounded-full">
+                Notre modèle
+              </div>
+              <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mb-6 mx-auto">
+                <BadgePercent className="h-8 w-8 text-primary-foreground" />
+              </div>
+              <h3 className="text-4xl font-bold text-primary mb-2">5%</h3>
+              <h4 className="text-xl font-bold text-foreground mb-4">Commission uniquement</h4>
+              <p className="text-muted-foreground leading-relaxed">
+                Prélevée sur les transactions réussies. Les créateurs reçoivent 95% du montant payé par la marque.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="bg-background rounded-3xl p-8 border-2 border-secondary/20 hover:border-secondary/40 transition-all hover:shadow-soft text-center"
+            >
+              <div className="w-16 h-16 bg-secondary/20 rounded-2xl flex items-center justify-center mb-6 mx-auto">
+                <TrendingUp className="h-8 w-8 text-secondary" />
+              </div>
+              <h3 className="text-2xl font-bold text-foreground mb-4">vs Agences : 15-30%</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Les agences traditionnelles prennent 15 à 30% de commission. Avec Partnery, gardez plus de revenus.
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section Fonctionnalités */}
+      <section id="fonctionnalites" className="py-24 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 rounded-full mb-4">
+              <Rocket className="h-5 w-5 text-secondary" />
+              <span className="text-sm font-semibold text-foreground">Nos outils</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+              Tout ce dont vous avez besoin
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Une plateforme complète pour gérer vos partenariats de A à Z.
+            </p>
+          </motion.div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              { icon: MessageSquare, title: "Messagerie intégrée", desc: "Discutez directement avec vos partenaires potentiels sans quitter la plateforme.", color: "primary" },
+              { icon: FileText, title: "Contrats sécurisés", desc: "Créez et signez des contrats collaboratifs avec suivi des modifications.", color: "secondary" },
+              { icon: CreditCard, title: "Paiements sécurisés", desc: "Transactions protégées via Stripe. Paiement libéré après validation.", color: "primary" },
+              { icon: BarChart3, title: "Tableau de bord", desc: "Suivez vos statistiques, revenus et performances en temps réel.", color: "secondary" },
+              { icon: Handshake, title: "Gestion des partenariats", desc: "Organisez tous vos contrats, conversations et paiements en un seul endroit.", color: "primary" },
+              { icon: Shield, title: "Profils vérifiés", desc: "Collaborez en confiance avec des profils authentiques et vérifiés.", color: "secondary" }
+            ].map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className={`bg-card rounded-3xl p-8 border-2 ${feature.color === 'primary' ? 'border-primary/20 hover:border-primary/40' : 'border-secondary/20 hover:border-secondary/40'} transition-all hover:shadow-soft`}
+              >
+                <div className={`w-14 h-14 ${feature.color === 'primary' ? 'bg-primary/20' : 'bg-secondary/20'} rounded-2xl flex items-center justify-center mb-6`}>
+                  <feature.icon className={`h-7 w-7 ${feature.color === 'primary' ? 'text-primary' : 'text-secondary'}`} />
+                </div>
+                <h3 className="text-xl font-bold text-foreground mb-3">{feature.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{feature.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Section Notre Mission */}
       <section id="valeur" className="py-24 px-4 bg-card">
         <div className="container mx-auto max-w-6xl">
           <motion.div 
@@ -161,11 +272,11 @@ const Index = () => {
               <span className="text-sm font-semibold text-foreground">Notre mission</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              La mise en relation simplifiée
+              Éliminer les intermédiaires
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Nous éliminons les intermédiaires et facilitons les connexions authentiques 
-              entre marques et créateurs de contenu.
+              Notre objectif est de créer un écosystème transparent où marques et créateurs 
+              peuvent collaborer directement, sans agences coûteuses.
             </p>
           </motion.div>
 
@@ -180,10 +291,10 @@ const Index = () => {
               <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mb-6">
                 <Zap className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4">Rapide</h3>
+              <h3 className="text-2xl font-bold text-foreground mb-4">Connexion directe</h3>
               <p className="text-muted-foreground leading-relaxed">
-                Trouvez des partenaires en quelques clics. Notre algorithme intelligent 
-                vous met en relation avec les bons profils instantanément.
+                Plus besoin de passer par des agences. Discutez, négociez et collaborez 
+                directement avec vos partenaires.
               </p>
             </motion.div>
 
@@ -197,10 +308,10 @@ const Index = () => {
               <div className="w-16 h-16 bg-secondary/20 rounded-2xl flex items-center justify-center mb-6">
                 <Shield className="h-8 w-8 text-secondary" />
               </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4">Sécurisé</h3>
+              <h3 className="text-2xl font-bold text-foreground mb-4">Transparence totale</h3>
               <p className="text-muted-foreground leading-relaxed">
-                Profils vérifiés, paiements sécurisés et contrats standardisés. 
-                Collaborez en toute confiance.
+                Pas de frais cachés, pas de surprises. Notre commission de 5% est claire 
+                et visible dès le départ.
               </p>
             </motion.div>
 
@@ -214,10 +325,10 @@ const Index = () => {
               <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mb-6">
                 <Heart className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4">Équitable</h3>
+              <h3 className="text-2xl font-bold text-foreground mb-4">Équitable pour tous</h3>
               <p className="text-muted-foreground leading-relaxed">
-                Transparence totale sur les tarifs. Les créateurs gardent plus, 
-                les marques paient moins.
+                Les créateurs gardent plus de revenus, les marques paient moins. 
+                Tout le monde y gagne.
               </p>
             </motion.div>
           </div>
@@ -258,9 +369,9 @@ const Index = () => {
               <div className="w-24 h-24 rounded-full bg-primary/10 text-primary font-bold text-3xl flex items-center justify-center mx-auto mb-6 border-2 border-primary/20">
                 1
               </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4">Inscription</h3>
+              <h3 className="text-2xl font-bold text-foreground mb-4">Inscription gratuite</h3>
               <p className="text-muted-foreground leading-relaxed">
-                Créez votre profil en quelques clics, que vous soyez une marque ou un créateur.
+                Créez votre profil en quelques clics, que vous soyez une marque ou un créateur. C'est 100% gratuit.
               </p>
             </motion.div>
 
@@ -275,9 +386,9 @@ const Index = () => {
               <div className="w-24 h-24 rounded-full bg-secondary/10 text-secondary font-bold text-3xl flex items-center justify-center mx-auto mb-6 border-2 border-secondary/20">
                 2
               </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4">Match</h3>
+              <h3 className="text-2xl font-bold text-foreground mb-4">Trouvez & Discutez</h3>
               <p className="text-muted-foreground leading-relaxed">
-                Découvrez les profils qui correspondent à vos besoins grâce à notre algorithme.
+                Explorez les profils, envoyez des messages et négociez vos partenariats directement.
               </p>
             </motion.div>
 
@@ -292,9 +403,9 @@ const Index = () => {
               <div className="w-24 h-24 rounded-full bg-primary/10 text-primary font-bold text-3xl flex items-center justify-center mx-auto mb-6 border-2 border-primary/20">
                 3
               </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4">Collaboration</h3>
+              <h3 className="text-2xl font-bold text-foreground mb-4">Collaborez & Payez</h3>
               <p className="text-muted-foreground leading-relaxed">
-                Entrez en contact, discutez de vos projets et lancez des partenariats uniques.
+                Signez un contrat sécurisé et effectuez le paiement. Nous ne prenons que 5% de commission.
               </p>
             </motion.div>
           </div>
@@ -319,7 +430,7 @@ const Index = () => {
               Pourquoi choisir Partnery ?
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Gagnez en visibilité, développez votre réseau et boostez votre chiffre d'affaires.
+              Des avantages concrets pour les marques et les créateurs.
             </p>
           </motion.div>
 
@@ -335,21 +446,21 @@ const Index = () => {
               <h3 className="text-3xl font-bold text-foreground mb-4">Pour les marques</h3>
               <ul className="space-y-4">
                 <li className="flex items-start gap-4">
-                  <CheckCircle className="h-6 w-6 text-primary" />
+                  <CheckCircle className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" />
                   <p className="text-muted-foreground leading-relaxed">
-                    Accédez à un vivier de créateurs talentueux et pertinents pour votre marque.
+                    <span className="font-semibold text-foreground">Économisez jusqu'à 25%</span> par rapport aux agences traditionnelles grâce à notre faible commission.
                   </p>
                 </li>
                 <li className="flex items-start gap-4">
-                  <CheckCircle className="h-6 w-6 text-primary" />
+                  <CheckCircle className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" />
                   <p className="text-muted-foreground leading-relaxed">
-                    Gérez facilement vos campagnes de partenariats de A à Z.
+                    <span className="font-semibold text-foreground">Contact direct</span> avec les créateurs sans intermédiaire pour des négociations transparentes.
                   </p>
                 </li>
                 <li className="flex items-start gap-4">
-                  <CheckCircle className="h-6 w-6 text-primary" />
+                  <CheckCircle className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" />
                   <p className="text-muted-foreground leading-relaxed">
-                    Mesurez l'impact de vos collaborations grâce à des statistiques détaillées.
+                    <span className="font-semibold text-foreground">Contrats sécurisés</span> avec suivi des livrables et paiements protégés.
                   </p>
                 </li>
               </ul>
@@ -366,149 +477,25 @@ const Index = () => {
               <h3 className="text-3xl font-bold text-foreground mb-4">Pour les créateurs</h3>
               <ul className="space-y-4">
                 <li className="flex items-start gap-4">
-                  <CheckCircle className="h-6 w-6 text-secondary" />
+                  <CheckCircle className="h-6 w-6 text-secondary flex-shrink-0 mt-0.5" />
                   <p className="text-muted-foreground leading-relaxed">
-                    Trouvez des marques qui correspondent à votre univers et à vos valeurs.
+                    <span className="font-semibold text-foreground">Gardez 95% de vos revenus</span> au lieu des 70-85% avec les agences.
                   </p>
                 </li>
                 <li className="flex items-start gap-4">
-                  <CheckCircle className="h-6 w-6 text-secondary" />
+                  <CheckCircle className="h-6 w-6 text-secondary flex-shrink-0 mt-0.5" />
                   <p className="text-muted-foreground leading-relaxed">
-                    Monétisez votre talent et développez votre communauté.
+                    <span className="font-semibold text-foreground">Visibilité accrue</span> auprès des marques qui recherchent activement des créateurs.
                   </p>
                 </li>
                 <li className="flex items-start gap-4">
-                  <CheckCircle className="h-6 w-6 text-secondary" />
+                  <CheckCircle className="h-6 w-6 text-secondary flex-shrink-0 mt-0.5" />
                   <p className="text-muted-foreground leading-relaxed">
-                    Simplifiez la gestion de vos partenariats et recevez des paiements sécurisés.
+                    <span className="font-semibold text-foreground">Paiements garantis</span> avec un système de validation sécurisé.
                   </p>
                 </li>
               </ul>
             </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section Exemples */}
-      <section id="exemples" className="py-24 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 rounded-full mb-4">
-              <Briefcase className="h-5 w-5 text-secondary" />
-              <span className="text-sm font-semibold text-foreground">Exemples</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              Découvrez des exemples de collaborations
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Voici quelques opportunités et pitchs disponibles sur Partnery
-            </p>
-          </motion.div>
-
-          {/* Exemples Marques */}
-          <div className="mb-16">
-            <h3 className="text-2xl font-bold text-center mb-8 text-foreground">Opportunités de marques</h3>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { emoji: "💡", title: "Lumos Wear", desc: "Recherche créateurs lifestyle pour lancer une nouvelle veste LED" },
-                { emoji: "🌱", title: "EcoSip", desc: "Partenariats micro-influenceurs pour campagne zéro plastique" },
-                { emoji: "✨", title: "NovaSkincare", desc: "Budget 500–1500€ pour UGC autour d'une routine peau sensible" },
-                { emoji: "🎧", title: "UrbanBeats Audio", desc: "Cherche créateurs tech pour tester le casque UB-One" }
-              ].map((brand, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-background rounded-3xl p-6 border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-soft"
-                >
-                  <div className="w-full h-32 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl mb-4 flex items-center justify-center">
-                    <span className="text-5xl">{brand.emoji}</span>
-                  </div>
-                  <h4 className="text-xl font-bold text-foreground mb-2">{brand.title}</h4>
-                  <p className="text-sm text-muted-foreground">{brand.desc}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-
-          {/* Exemples Créateurs */}
-          <div>
-            <h3 className="text-2xl font-bold text-center mb-8 text-foreground">Pitchs de créateurs</h3>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { emoji: "💪", title: "EmmaFit", desc: "Créatrice fitness ouverte aux marques bien-être et équipement" },
-                { emoji: "📱", title: "TechByLeo", desc: "Micro-influenceur tech spécialisé en vidéos courtes" },
-                { emoji: "🍽️", title: "SarahEats", desc: "Créatrice food pour contenus recettes simples & healthy" },
-                { emoji: "✈️", title: "JulesRoadTrip", desc: "Créateur voyage spécialisé drone & exploration urbaine" }
-              ].map((creator, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-background rounded-3xl p-6 border-2 border-secondary/20 hover:border-secondary/40 transition-all hover:shadow-soft"
-                >
-                  <div className="w-full h-32 bg-gradient-to-br from-secondary/20 to-secondary/10 rounded-2xl mb-4 flex items-center justify-center">
-                    <span className="text-5xl">{creator.emoji}</span>
-                  </div>
-                  <h4 className="text-xl font-bold text-foreground mb-2">{creator.title}</h4>
-                  <p className="text-sm text-muted-foreground">{creator.desc}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section Preuve Sociale */}
-      <section className="py-24 px-4 bg-card">
-        <div className="container mx-auto max-w-6xl">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4">
-              <TrendingUp className="h-5 w-5 text-primary" />
-              <span className="text-sm font-semibold text-foreground">Chiffres clés</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              Partnery en quelques chiffres
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Des résultats concrets pour nos utilisateurs.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { value: "1000+", label: "Collaborations réussies", color: "text-primary" },
-              { value: "500+", label: "Créateurs de contenu", color: "text-secondary" },
-              { value: "200+", label: "Marques partenaires", color: "text-foreground" }
-            ].map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="text-center"
-              >
-                <div className={`text-5xl font-bold ${stat.color} mb-2`}>{stat.value}</div>
-                <p className="text-muted-foreground">{stat.label}</p>
-              </motion.div>
-            ))}
           </div>
         </div>
       </section>
@@ -525,22 +512,22 @@ const Index = () => {
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4">
               <Rocket className="h-5 w-5 text-primary" />
-              <span className="text-sm font-semibold text-foreground">Pourquoi nous ?</span>
+              <span className="text-sm font-semibold text-foreground">Nos engagements</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              La plateforme idéale pour vos partenariats
+              Une plateforme pensée pour vous
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Une solution complète, simple et efficace pour développer votre activité.
+              Nous nous engageons à maintenir une plateforme transparente, équitable et efficace.
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-12">
             {[
-              { icon: Zap, title: "Gain de temps", desc: "Trouvez rapidement les partenaires adaptés à vos besoins.", color: "primary" },
-              { icon: Shield, title: "Sécurité", desc: "Collaborez en toute confiance grâce à nos outils de protection.", color: "secondary" },
-              { icon: Heart, title: "Simplicité", desc: "Gérez facilement vos partenariats de A à Z.", color: "primary" },
-              { icon: Users, title: "Communauté", desc: "Rejoignez un réseau de professionnels passionnés.", color: "secondary" }
+              { icon: Zap, title: "Rapidité", desc: "Trouvez des partenaires en quelques clics grâce à notre interface intuitive.", color: "primary" },
+              { icon: Shield, title: "Sécurité", desc: "Paiements sécurisés, contrats vérifiés et données protégées.", color: "secondary" },
+              { icon: Heart, title: "Équité", desc: "Commission transparente et équitable de 5% pour tous.", color: "primary" },
+              { icon: Users, title: "Communauté", desc: "Rejoignez un écosystème de marques et créateurs passionnés.", color: "secondary" }
             ].map((item, index) => (
               <motion.div
                 key={index}
@@ -550,8 +537,8 @@ const Index = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="flex items-start gap-6"
               >
-                <div className={`w-16 h-16 bg-${item.color}/20 rounded-2xl flex items-center justify-center`}>
-                  <item.icon className={`h-8 w-8 text-${item.color}`} />
+                <div className={`w-16 h-16 ${item.color === 'primary' ? 'bg-primary/20' : 'bg-secondary/20'} rounded-2xl flex items-center justify-center flex-shrink-0`}>
+                  <item.icon className={`h-8 w-8 ${item.color === 'primary' ? 'text-primary' : 'text-secondary'}`} />
                 </div>
                 <div className="space-y-2">
                   <h3 className="text-2xl font-bold text-foreground">{item.title}</h3>
@@ -571,10 +558,11 @@ const Index = () => {
           >
             <Link to="/auth">
               <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-medium text-lg px-12 py-7">
-                Commencer maintenant
+                Commencer gratuitement
                 <ArrowRight className="ml-2 h-6 w-6" />
               </Button>
             </Link>
+            <p className="mt-4 text-sm text-muted-foreground">Inscription gratuite • Aucun abonnement • 5% de commission uniquement</p>
           </motion.div>
         </div>
       </section>
@@ -586,17 +574,17 @@ const Index = () => {
             <div className="space-y-4">
               <div className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Partnery</div>
               <p className="text-white/70 text-sm leading-relaxed">
-                La plateforme qui connecte marques et créateurs pour des collaborations réussies.
+                La plateforme qui connecte marques et créateurs directement, sans intermédiaires.
               </p>
             </div>
 
             <div>
               <h4 className="font-semibold mb-4">Plateforme</h4>
               <ul className="space-y-2 text-sm text-white/70">
-                <li><a href="#valeur" className="hover:text-primary transition-colors">Valeur ajoutée</a></li>
+                <li><a href="#tarifs" className="hover:text-primary transition-colors">Tarifs</a></li>
+                <li><a href="#fonctionnalites" className="hover:text-primary transition-colors">Fonctionnalités</a></li>
                 <li><a href="#fonctionnement" className="hover:text-primary transition-colors">Comment ça marche</a></li>
                 <li><a href="#benefices" className="hover:text-primary transition-colors">Bénéfices</a></li>
-                <li><a href="#exemples" className="hover:text-primary transition-colors">Exemples</a></li>
               </ul>
             </div>
 
@@ -615,7 +603,7 @@ const Index = () => {
               <p className="text-sm text-white/70 mb-4">contact@partnery.app</p>
               <Link to="/auth">
                 <Button className="bg-primary text-primary-foreground hover:bg-primary/90 w-full font-semibold">
-                  Commencer
+                  Commencer gratuitement
                 </Button>
               </Link>
             </div>
