@@ -229,7 +229,22 @@ const Index = () => {
             </p>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div 
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.15,
+                  delayChildren: 0.1
+                }
+              }
+            }}
+          >
             {[
               { icon: MessageSquare, title: "Messagerie intégrée", desc: "Discutez directement avec vos partenaires potentiels sans quitter la plateforme.", color: "primary" },
               { icon: FileText, title: "Contrats sécurisés", desc: "Créez et signez des contrats collaboratifs avec suivi des modifications.", color: "secondary" },
@@ -240,20 +255,60 @@ const Index = () => {
             ].map((feature, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className={`bg-card rounded-3xl p-8 border-2 ${feature.color === 'primary' ? 'border-primary/20 hover:border-primary/40' : 'border-secondary/20 hover:border-secondary/40'} transition-all hover:shadow-soft`}
+                variants={{
+                  hidden: { 
+                    opacity: 0, 
+                    y: 60,
+                    scale: 0.8,
+                    rotateX: -15
+                  },
+                  visible: { 
+                    opacity: 1, 
+                    y: 0,
+                    scale: 1,
+                    rotateX: 0,
+                    transition: {
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 12,
+                      duration: 0.6
+                    }
+                  }
+                }}
+                whileHover={{ 
+                  y: -12,
+                  scale: 1.03,
+                  rotateY: 5,
+                  transition: { 
+                    type: "spring", 
+                    stiffness: 300, 
+                    damping: 20 
+                  }
+                }}
+                whileTap={{ scale: 0.98 }}
+                className={`bg-card rounded-3xl p-8 border-2 ${feature.color === 'primary' ? 'border-primary/20 hover:border-primary/50' : 'border-secondary/20 hover:border-secondary/50'} transition-colors cursor-pointer group`}
+                style={{ transformStyle: "preserve-3d", perspective: 1000 }}
               >
-                <div className={`w-14 h-14 ${feature.color === 'primary' ? 'bg-primary/20' : 'bg-secondary/20'} rounded-2xl flex items-center justify-center mb-6`}>
-                  <feature.icon className={`h-7 w-7 ${feature.color === 'primary' ? 'text-primary' : 'text-secondary'}`} />
-                </div>
-                <h3 className="text-xl font-bold text-foreground mb-3">{feature.title}</h3>
+                <motion.div 
+                  className={`w-14 h-14 ${feature.color === 'primary' ? 'bg-primary/20 group-hover:bg-primary/30' : 'bg-secondary/20 group-hover:bg-secondary/30'} rounded-2xl flex items-center justify-center mb-6 transition-colors`}
+                  whileHover={{ 
+                    rotate: [0, -10, 10, -10, 0],
+                    transition: { duration: 0.5 }
+                  }}
+                >
+                  <feature.icon className={`h-7 w-7 ${feature.color === 'primary' ? 'text-primary' : 'text-secondary'} transition-transform group-hover:scale-110`} />
+                </motion.div>
+                <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">{feature.title}</h3>
                 <p className="text-muted-foreground leading-relaxed">{feature.desc}</p>
+                
+                {/* Effet de glow au hover */}
+                <motion.div 
+                  className={`absolute inset-0 rounded-3xl ${feature.color === 'primary' ? 'bg-primary/5' : 'bg-secondary/5'} opacity-0 group-hover:opacity-100 transition-opacity -z-10`}
+                  initial={false}
+                />
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
