@@ -1,53 +1,48 @@
 
-# Plan de refonte de la Landing Page Partnery
 
-## ✅ COMPLÉTÉ
+# Ajout des pages légales obligatoires
 
-## Objectif
-Transformer la landing page pour qu'elle soit authentique, transparente et mette en avant les vraies fonctionnalités et le modèle économique de la plateforme.
+## Pages a creer
 
----
+### 1. Mentions Legales (`src/pages/MentionsLegales.tsx`)
+- Editeur du site (nom, adresse, contact)
+- Hebergeur (Lovable / Supabase)
+- Directeur de publication
+- Propriete intellectuelle
 
-## Changements effectués
+### 2. Conditions Generales d'Utilisation (`src/pages/CGU.tsx`)
+- Objet et acceptation des CGU
+- Inscription et comptes utilisateurs
+- Description des services (mise en relation marques/createurs)
+- Modele economique : commission de 5% sur les transactions
+- Obligations des utilisateurs (marques et createurs)
+- Contrats et paiements
+- Responsabilite de la plateforme
+- Resiliation et suppression de compte
+- Modification des CGU
 
-### 1. ✅ Supprimé les statistiques inventées
-- Retiré les sections "500+ Créateurs", "200+ Marques", "1000+ Collaborations" du Hero
-- Retiré la section "Chiffres clés" complète
+### 3. Politique de Confidentialite (`src/pages/PolitiqueConfidentialite.tsx`)
+- Donnees collectees (email, profil, transactions)
+- Finalite du traitement
+- Base legale (RGPD)
+- Duree de conservation
+- Droits des utilisateurs (acces, rectification, suppression)
+- Cookies
+- Contact DPO
 
-### 2. ✅ Supprimé les exemples de partenariats fictifs
-- Retiré la section "Exemples" avec les fausses marques (Lumos Wear, EcoSip, etc.)
-- Retiré les faux profils créateurs (EmmaFit, TechByLeo, etc.)
+## Modifications existantes
 
-### 3. ✅ Ajouté section "Modèle économique transparent"
-- Inscription 100% gratuite
-- Aucun abonnement
-- Commission de seulement 5% sur les transactions réussies
-- Comparaison avec les agences traditionnelles (15-30% de commission)
+### Routes (`src/App.tsx`)
+- Ajout de 3 routes : `/mentions-legales`, `/cgu`, `/politique-confidentialite`
 
-### 4. ✅ Ajouté section "Fonctionnalités"
-- Messagerie intégrée
-- Contrats sécurisés
-- Paiements sécurisés via Stripe
-- Tableau de bord avec statistiques
-- Gestion des partenariats
-- Profils vérifiés
+### Footer de la landing page (`src/pages/Index.tsx`)
+- Ajout de liens vers les 3 pages legales dans le footer existant
 
-### 5. ✅ Renforcé la section "Notre mission"
-- Connexion directe (éliminer les intermédiaires)
-- Transparence totale
-- Équitable pour tous
+## Details techniques
 
----
+- Chaque page utilise les composants UI existants (Card, etc.)
+- Design coherent avec le reste du site (meme header/footer style)
+- Pages accessibles sans authentification
+- Contenu structure avec des sections Accordion pour la lisibilite
+- Textes adaptes au contexte de Partnery (plateforme de mise en relation marques-createurs, commission 5%, paiements Stripe)
 
-## Structure finale de la page
-
-1. **Header** - Navigation mise à jour (Tarifs, Fonctionnalités, Fonctionnement, Bénéfices)
-2. **Hero** - Titre + CTA simplifié (sans stats inventées)
-3. **Modèle économique** - 100% Gratuit + 5% commission + comparaison agences
-4. **Fonctionnalités** - 6 outils avec icônes descriptives
-5. **Notre mission** - Connexion directe, transparence, équité
-6. **Comment ça marche** - 3 étapes simples
-7. **Bénéfices** - Pour marques et créateurs (amélioré avec avantages chiffrés)
-8. **Engagements** - Rapidité, sécurité, équité, communauté
-9. **CTA Final** - Avec mention gratuit + 5%
-10. **Footer** - Liens mis à jour
