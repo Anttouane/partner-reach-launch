@@ -20,6 +20,9 @@ import AdminCategories from "./pages/AdminCategories";
 import AdminDisputes from "./pages/AdminDisputes";
 import Wallet from "./pages/Wallet";
 import ContractDetail from "./pages/ContractDetail";
+import MentionsLegales from "./pages/MentionsLegales";
+import CGU from "./pages/CGU";
+import PolitiqueConfidentialite from "./pages/PolitiqueConfidentialite";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -48,6 +51,9 @@ const App = () => (
           <Route path="/admin/categories" element={<AdminCategories />} />
           <Route path="/admin/disputes" element={<AdminDisputes />} />
           <Route path="/seed-data" element={<SeedData />} />
+          <Route path="/mentions-legales" element={<MentionsLegales />} />
+          <Route path="/cgu" element={<CGU />} />
+          <Route path="/politique-confidentialite" element={<PolitiqueConfidentialite />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
