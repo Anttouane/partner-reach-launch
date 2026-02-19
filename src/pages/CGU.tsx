@@ -3,10 +3,12 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import SEOHead from "@/components/SEOHead";
 
 const CGU = () => {
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead title="Conditions Générales d'Utilisation | Partnery" description="Consultez les conditions générales d'utilisation de Partnery : inscription, services, commission de 5%, obligations et paiements." />
       <header className="border-b border-border bg-background/95 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex items-center gap-4">
           <Link to="/">

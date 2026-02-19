@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -72,6 +73,7 @@ const ResetPassword = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/30 p-4">
+      <SEOHead title="Réinitialiser le mot de passe | Partnery" description="Réinitialisez votre mot de passe Partnery." />
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <KeyRound className="h-12 w-12 mx-auto mb-4 text-primary" />

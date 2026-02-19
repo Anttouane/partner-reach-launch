@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import SEOHead from "@/components/SEOHead";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
@@ -206,6 +207,7 @@ const Wallet = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/30">
+      <SEOHead title="Mon Portefeuille | Partnery" description="Gérez vos revenus, consultez vos paiements reçus et effectuez des retraits sur Partnery." />
       <Header user={user} />
 
       <main className="container mx-auto px-4 py-8">

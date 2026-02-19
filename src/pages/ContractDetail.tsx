@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import SEOHead from '@/components/SEOHead';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { User } from '@supabase/supabase-js';
@@ -217,6 +218,7 @@ const ContractDetail = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/30">
+      <SEOHead title="Contrat de partenariat | Partnery" description="Consultez et gérez votre contrat de partenariat sur Partnery." />
       <Header user={user} />
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">

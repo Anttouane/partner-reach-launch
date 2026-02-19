@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Sparkles, Building2, ArrowLeft } from "lucide-react";
+import SEOHead from "@/components/SEOHead";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -114,6 +115,7 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/30 p-4">
+      <SEOHead title="Connexion | Partnery" description="Connectez-vous ou créez votre compte Partnery pour accéder à la plateforme de mise en relation créateurs et marques." />
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2">Bienvenue sur Partnery</h1>

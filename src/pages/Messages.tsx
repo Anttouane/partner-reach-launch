@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import SEOHead from "@/components/SEOHead";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
@@ -324,6 +325,7 @@ const Messages = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/30">
+      <SEOHead title="Messages | Partnery" description="Discutez avec vos partenaires potentiels et gérez vos conversations sur Partnery." />
       <Header user={user} />
 
       <main className="container mx-auto px-4 py-8">
