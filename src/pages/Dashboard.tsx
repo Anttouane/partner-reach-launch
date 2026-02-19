@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import SEOHead from "@/components/SEOHead";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
@@ -284,6 +285,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/10">
+      <SEOHead title="Tableau de bord | Partnery" description="Gérez vos collaborations, suivez vos revenus et découvrez de nouvelles opportunités sur Partnery." />
       <Header user={user} />
       <main className="container mx-auto px-4 py-8">
         <motion.div 

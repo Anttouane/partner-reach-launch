@@ -2,10 +2,15 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Sparkles, Users, Briefcase, Zap, Heart, Shield, TrendingUp, Target, Rocket, CheckCircle, ArrowRight, Star, MessageSquare, FileText, CreditCard, BarChart3, Handshake, BadgePercent } from "lucide-react";
 import { motion } from "framer-motion";
+import SEOHead from "@/components/SEOHead";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/30">
+      <SEOHead
+        title="Partnery - Connectez créateurs et marques"
+        description="Plateforme de mise en relation entre créateurs de contenu et marques pour des collaborations sponsoring authentiques et équitables. Commission de 5% uniquement."
+      />
       {/* Header fixe */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="container mx-auto px-4 py-4">
