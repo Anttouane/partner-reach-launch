@@ -203,9 +203,9 @@ const Index = () => {
               <div className="w-16 h-16 bg-secondary/20 rounded-2xl flex items-center justify-center mb-6 mx-auto">
                 <TrendingUp className="h-8 w-8 text-secondary" />
               </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4">vs Agences : 15-30%</h3>
+              <h3 className="text-2xl font-bold text-foreground mb-4">Agences : 15-30% de commission</h3>
               <p className="text-muted-foreground leading-relaxed">
-                Les agences traditionnelles prennent 15 à 30% de commission. Avec Partnery, gardez plus de revenus.
+                Les agences traditionnelles prélèvent 15 à 30% sur chaque collaboration. Partnery est <span className="font-semibold text-foreground">100% gratuit à l'inscription</span>, avec seulement 5% sur les transactions réussies.
               </p>
             </motion.div>
           </div>
@@ -508,7 +508,7 @@ const Index = () => {
                 <li className="flex items-start gap-4">
                   <CheckCircle className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" />
                   <p className="text-muted-foreground leading-relaxed">
-                    <span className="font-semibold text-foreground">Économisez jusqu'à 25%</span> par rapport aux agences traditionnelles grâce à notre faible commission.
+                    <span className="font-semibold text-foreground">Inscription 100% gratuite</span> — contrairement aux autres plateformes, aucun abonnement ni frais caché. Seulement 5% sur les collaborations réussies.
                   </p>
                 </li>
                 <li className="flex items-start gap-4">
