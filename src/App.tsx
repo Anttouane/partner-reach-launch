@@ -8,6 +8,7 @@ import Auth from "./pages/Auth";
 import ResetPassword from "./pages/ResetPassword";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
+import PublicProfile from "./pages/PublicProfile";
 import Discover from "./pages/Discover";
 import Messages from "./pages/Messages";
 import CreatePitch from "./pages/CreatePitch";
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/discover" element={<Discover />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/:id" element={<PublicProfile />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/create-pitch" element={<CreatePitch />} />

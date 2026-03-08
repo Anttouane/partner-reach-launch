@@ -389,17 +389,24 @@ const Messages = () => {
           <Card className="md:col-span-2 overflow-hidden flex flex-col">
             {selectedConversation && selectedConvo ? (
               <>
-                {/* Chat header */}
-                <div className="p-4 border-b bg-card">
+                 <div className="p-4 border-b bg-card">
                   <div className="flex items-center gap-3">
-                    <Avatar>
+                    <Avatar 
+                      className="cursor-pointer hover:ring-2 hover:ring-primary/30 transition-all"
+                      onClick={() => navigate(`/profile/${selectedConvo.otherUser.id}`)}
+                    >
                       <AvatarImage src={selectedConvo.otherUser.avatar_url || undefined} />
                       <AvatarFallback>
                         {selectedConvo.otherUser.full_name?.charAt(0) || "U"}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
-                      <p className="font-medium">{selectedConvo.otherUser.full_name || "Utilisateur"}</p>
+                      <p 
+                        className="font-medium cursor-pointer hover:text-primary transition-colors"
+                        onClick={() => navigate(`/profile/${selectedConvo.otherUser.id}`)}
+                      >
+                        {selectedConvo.otherUser.full_name || "Utilisateur"}
+                      </p>
                       <p className="text-xs text-muted-foreground capitalize">
                         {selectedConvo.otherUser.user_type === "creator" ? "Créateur" : "Marque"}
                       </p>
