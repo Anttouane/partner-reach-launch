@@ -24,9 +24,12 @@ const SEOHead = ({ title, description, ogImage }: SEOHeadProps) => {
     setMeta("description", description);
     setMeta("og:title", title, true);
     setMeta("og:description", description, true);
+    setMeta("og:type", "website", true);
+    setMeta("og:url", window.location.href, true);
     if (ogImage) {
       setMeta("og:image", ogImage, true);
     }
+    setMeta("twitter:card", "summary_large_image");
     setMeta("twitter:title", title, true);
     setMeta("twitter:description", description, true);
 
