@@ -19,8 +19,6 @@ const CreatePitch = () => {
     title: "",
     description: "",
     content_type: "",
-    estimated_reach: "",
-    budget_range: "",
     tags: "",
   });
   const navigate = useNavigate();
@@ -58,8 +56,6 @@ const CreatePitch = () => {
         title: formData.title,
         description: formData.description,
         content_type: formData.content_type || null,
-        estimated_reach: formData.estimated_reach ? parseInt(formData.estimated_reach) : null,
-        budget_range: formData.budget_range || null,
         tags: formData.tags ? formData.tags.split(",").map(t => t.trim()) : null,
         status: "active",
       });
@@ -138,38 +134,16 @@ const CreatePitch = () => {
                 />
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="content_type">Type de contenu</Label>
-                  <Input
-                    id="content_type"
-                    value={formData.content_type}
-                    onChange={(e) => setFormData({ ...formData, content_type: e.target.value })}
-                    placeholder="Ex: Vidéo YouTube, Post Instagram"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="estimated_reach">Portée estimée</Label>
-                  <Input
-                    id="estimated_reach"
-                    type="number"
-                    value={formData.estimated_reach}
-                    onChange={(e) => setFormData({ ...formData, estimated_reach: e.target.value })}
-                    placeholder="100000"
-                  />
-                </div>
-              </div>
-
               <div className="space-y-2">
-                <Label htmlFor="budget_range">Fourchette budgétaire</Label>
+                <Label htmlFor="content_type">Type de contenu</Label>
                 <Input
-                  id="budget_range"
-                  value={formData.budget_range}
-                  onChange={(e) => setFormData({ ...formData, budget_range: e.target.value })}
-                  placeholder="Ex: 500€ - 2000€"
+                  id="content_type"
+                  value={formData.content_type}
+                  onChange={(e) => setFormData({ ...formData, content_type: e.target.value })}
+                  placeholder="Ex: Vidéo YouTube, Post Instagram"
                 />
               </div>
+
 
               <div className="space-y-2">
                 <Label htmlFor="tags">Tags (séparés par des virgules)</Label>
