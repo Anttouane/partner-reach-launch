@@ -84,36 +84,23 @@ const PitchForm = ({ initialData, onSubmit, isEdit = false }: PitchFormProps) =>
         />
       </div>
 
-      <div className="grid md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="content_type">Type de contenu</Label>
-          <Select
-            value={formData.content_type}
-            onValueChange={(value) => setFormData({ ...formData, content_type: value })}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Sélectionnez un type" />
-            </SelectTrigger>
-            <SelectContent>
-              {CONTENT_TYPES.map((type) => (
-                <SelectItem key={type.value} value={type.value}>
-                  {type.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="estimated_reach">Portée estimée</Label>
-          <Input
-            id="estimated_reach"
-            type="number"
-            value={formData.estimated_reach}
-            onChange={(e) => setFormData({ ...formData, estimated_reach: e.target.value })}
-            placeholder="100000"
-          />
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="content_type">Type de contenu</Label>
+        <Select
+          value={formData.content_type}
+          onValueChange={(value) => setFormData({ ...formData, content_type: value })}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Sélectionnez un type" />
+          </SelectTrigger>
+          <SelectContent>
+            {CONTENT_TYPES.map((type) => (
+              <SelectItem key={type.value} value={type.value}>
+                {type.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
 
