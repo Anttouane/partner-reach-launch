@@ -41,6 +41,7 @@ interface ProfileCardProps {
 }
 
 const ProfileCard = ({ profile, isCreator, index = 0 }: ProfileCardProps) => {
+  const navigate = useNavigate();
   const details = isCreator ? profile.creator_profiles : profile.brand_profiles;
 
   const getInitials = (name?: string) => {
