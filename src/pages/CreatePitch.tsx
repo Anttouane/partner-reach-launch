@@ -134,27 +134,14 @@ const CreatePitch = () => {
                 />
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="content_type">Type de contenu</Label>
-                  <Input
-                    id="content_type"
-                    value={formData.content_type}
-                    onChange={(e) => setFormData({ ...formData, content_type: e.target.value })}
-                    placeholder="Ex: Vidéo YouTube, Post Instagram"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="estimated_reach">Portée estimée</Label>
-                  <Input
-                    id="estimated_reach"
-                    type="number"
-                    value={formData.estimated_reach}
-                    onChange={(e) => setFormData({ ...formData, estimated_reach: e.target.value })}
-                    placeholder="100000"
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="content_type">Type de contenu</Label>
+                <Input
+                  id="content_type"
+                  value={formData.content_type}
+                  onChange={(e) => setFormData({ ...formData, content_type: e.target.value })}
+                  placeholder="Ex: Vidéo YouTube, Post Instagram"
+                />
               </div>
 
               <div className="space-y-2">
