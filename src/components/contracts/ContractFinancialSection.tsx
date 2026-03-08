@@ -17,7 +17,7 @@ export function ContractFinancialSection({ contract, isLocked, onUpdate }: Contr
 
   const commissionRate = contract.platform_commission_rate;
   const commissionAmount = Math.round(totalAmount * 100 * (commissionRate / 100));
-  const stripeFeeEstimate = Math.round(totalAmount * 100 * 0.029 + 25); // 2.9% + 0.25€
+  const stripeFeeEstimate = Math.round(totalAmount * 100 * 0.015 + 25); // 1.5% + 0.25€
   const creatorNet = Math.round(totalAmount * 100 - commissionAmount - stripeFeeEstimate);
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export function ContractFinancialSection({ contract, isLocked, onUpdate }: Contr
             <span>-{(commissionAmount / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} €</span>
           </div>
           <div className="flex justify-between text-muted-foreground">
-            <span>- Frais Stripe (estimé ~2.9% + 0.25€)</span>
+            <span>- Frais Stripe (estimé ~1.5% + 0.25€)</span>
             <span>-{(stripeFeeEstimate / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} €</span>
           </div>
           <Separator className="my-2" />
