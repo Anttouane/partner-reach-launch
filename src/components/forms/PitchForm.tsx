@@ -91,15 +91,6 @@ const PitchForm = ({ initialData, onSubmit, isEdit = false }: PitchFormProps) =>
         </div>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="budget_range">Fourchette budgétaire</Label>
-        <Input
-          id="budget_range"
-          value={formData.budget_range}
-          onChange={(e) => setFormData({ ...formData, budget_range: e.target.value })}
-          placeholder="Ex: 500€ - 2000€"
-        />
-      </div>
 
       <div className="space-y-2">
         <Label htmlFor="tags">Tags (séparés par des virgules)</Label>
