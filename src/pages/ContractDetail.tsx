@@ -223,25 +223,33 @@ const ContractDetail = () => {
       <Header user={user} />
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
+        {/* Disclaimer */}
+        <ContractDisclaimer />
+
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+            <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="shrink-0">
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div>
-              <div className="flex items-center gap-3">
-                <h1 className="text-2xl font-bold">Contrat de partenariat</h1>
+              <div className="flex items-center gap-3 flex-wrap">
+                <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <FileText className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold">Contrat de partenariat</h1>
+                  <p className="text-sm text-muted-foreground">
+                    Version {contract.version} · Créé le {format(new Date(contract.created_at), 'dd MMMM yyyy', { locale: fr })}
+                  </p>
+                </div>
                 <ContractStatusBadge status={contract.status} />
               </div>
-              <p className="text-sm text-muted-foreground">
-                Version {contract.version} · Créé le {format(new Date(contract.created_at), 'dd MMMM yyyy', { locale: fr })}
-              </p>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 shrink-0">
             {Object.keys(pendingChanges).length > 0 && (
-              <Button onClick={handleSave} disabled={saving}>
+              <Button onClick={handleSave} disabled={saving} className="shadow-[var(--shadow-soft)]">
                 <Save className="h-4 w-4 mr-2" />
                 {saving ? 'Enregistrement...' : 'Enregistrer'}
               </Button>
