@@ -33,6 +33,9 @@ const Index = () => {
               <a href="#benefices" className="text-foreground hover:text-primary transition-colors font-medium">
                 Bénéfices
               </a>
+              <a href="#faq" className="text-foreground hover:text-primary transition-colors font-medium">
+                FAQ
+              </a>
             </nav>
 
             <Link to="/auth">
