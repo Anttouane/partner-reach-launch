@@ -56,8 +56,6 @@ const CreatePitch = () => {
         title: formData.title,
         description: formData.description,
         content_type: formData.content_type || null,
-        estimated_reach: formData.estimated_reach ? parseInt(formData.estimated_reach) : null,
-        budget_range: formData.budget_range || null,
         tags: formData.tags ? formData.tags.split(",").map(t => t.trim()) : null,
         status: "active",
       });
