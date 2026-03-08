@@ -19,6 +19,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ContractDisclaimer } from '@/components/contracts/ContractDisclaimer';
 import {
   ArrowLeft,
   FileText,
