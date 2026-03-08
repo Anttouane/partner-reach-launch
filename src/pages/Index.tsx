@@ -771,7 +771,7 @@ const Index = () => {
 
           <div className="pt-8 border-t border-white/10">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-sm text-white/60">© 2024 Partnery. Tous droits réservés.</p>
+              <p className="text-sm text-white/60">© 2025 Partnery. Tous droits réservés.</p>
               <div className="flex gap-6 text-sm text-white/60">
                 <Link to="/mentions-legales" className="hover:text-primary transition-colors">Mentions légales</Link>
                 <Link to="/cgu" className="hover:text-primary transition-colors">CGU</Link>
