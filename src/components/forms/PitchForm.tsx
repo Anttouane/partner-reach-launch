@@ -3,7 +3,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, Sparkles, Save } from "lucide-react";
+
+const CONTENT_TYPES = [
+  { value: "video-youtube", label: "Vidéo YouTube" },
+  { value: "short-youtube", label: "Short YouTube" },
+  { value: "reel-instagram", label: "Reel Instagram" },
+  { value: "post-instagram", label: "Post Instagram" },
+  { value: "story-instagram", label: "Story Instagram" },
+  { value: "video-tiktok", label: "Vidéo TikTok" },
+  { value: "tweet", label: "Tweet / Post X" },
+  { value: "article-blog", label: "Article de blog" },
+  { value: "podcast", label: "Podcast" },
+  { value: "live-stream", label: "Live Stream" },
+  { value: "unboxing", label: "Unboxing" },
+  { value: "autre", label: "Autre" },
+];
 
 interface PitchFormData {
   title: string;
@@ -71,12 +87,21 @@ const PitchForm = ({ initialData, onSubmit, isEdit = false }: PitchFormProps) =>
       <div className="grid md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="content_type">Type de contenu</Label>
-          <Input
-            id="content_type"
+          <Select
             value={formData.content_type}
-            onChange={(e) => setFormData({ ...formData, content_type: e.target.value })}
-            placeholder="Ex: Vidéo YouTube, Post Instagram"
-          />
+            onValueChange={(value) => setFormData({ ...formData, content_type: value })}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Sélectionnez un type" />
+            </SelectTrigger>
+            <SelectContent>
+              {CONTENT_TYPES.map((type) => (
+                <SelectItem key={type.value} value={type.value}>
+                  {type.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2">
