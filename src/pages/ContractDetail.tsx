@@ -265,20 +265,22 @@ const ContractDetail = () => {
 
         {/* Action bar for approval/revision */}
         {canEdit && contract.status !== 'ready_to_sign' && contract.status !== 'signed' && (
-          <Card className="mb-6 border-primary/50">
+          <Card className="mb-6 border-primary/40 bg-primary/5 shadow-[var(--shadow-soft)]">
             <CardContent className="py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-sm">
-                  <RefreshCw className="h-4 w-4 text-primary" />
-                  <span>
-                    {contract.status === 'draft' && 'Contrat en brouillon - Modifiez et approuvez quand prêt'}
-                    {contract.status === 'revision_requested' && 'Révision demandée - Vérifiez les modifications'}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-2.5 text-sm">
+                  <div className="h-8 w-8 rounded-lg bg-primary/15 flex items-center justify-center shrink-0">
+                    <RefreshCw className="h-4 w-4 text-primary" />
+                  </div>
+                  <span className="font-medium">
+                    {contract.status === 'draft' && 'Contrat en brouillon — Modifiez et approuvez quand vous êtes prêt'}
+                    {contract.status === 'revision_requested' && 'Révision demandée — Vérifiez les modifications'}
                   </span>
                 </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={handleRequestRevision}>
+                <div className="flex gap-2 shrink-0">
+                  <Button variant="outline" size="sm" onClick={handleRequestRevision} className="bg-background">
                     <X className="h-4 w-4 mr-1" />
-                    Demander révision
+                    Révision
                   </Button>
                   <Button size="sm" onClick={handleApprove}>
                     <Check className="h-4 w-4 mr-1" />
