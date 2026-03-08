@@ -231,7 +231,7 @@ const PublicProfile = () => {
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {creatorProfile.instagram_followers && (
                   <div className="bg-muted/50 rounded-xl p-4 text-center hover:bg-primary/10 transition-colors">
-                    <Instagram className="h-5 w-5 mx-auto mb-2 text-pink-500" />
+                    <Instagram className="h-5 w-5 mx-auto mb-2 text-primary" />
                     <div className="text-lg font-bold text-foreground">{formatFollowers(creatorProfile.instagram_followers)}</div>
                     <div className="text-xs text-muted-foreground">Instagram</div>
                   </div>
