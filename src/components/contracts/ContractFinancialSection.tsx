@@ -71,7 +71,7 @@ export function ContractFinancialSection({ contract, isLocked, onUpdate }: Contr
             <span>-{(commissionAmount / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} €</span>
           </div>
           <div className="flex justify-between text-muted-foreground">
-            <span>- Frais Stripe (estimé ~2.9% + 0.25€)</span>
+            <span>- Frais Stripe (estimé ~1.5% + 0.25€)</span>
             <span>-{(stripeFeeEstimate / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} €</span>
           </div>
           <Separator className="my-2" />
