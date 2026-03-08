@@ -54,7 +54,9 @@ const Profile = () => {
     instagram_handle: "",
     youtube_handle: "",
     tiktok_handle: "",
-    audience_size: "",
+    instagram_followers: "",
+    youtube_followers: "",
+    tiktok_followers: "",
     engagement_rate: "",
     // Brand fields
     company_name: "",
