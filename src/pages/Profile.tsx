@@ -246,9 +246,11 @@ const Profile = () => {
             instagram_handle: formData.instagram_handle,
             youtube_handle: formData.youtube_handle,
             tiktok_handle: formData.tiktok_handle,
-            audience_size: formData.audience_size ? parseInt(formData.audience_size) : null,
+            instagram_followers: formData.instagram_followers ? parseInt(formData.instagram_followers) : null,
+            youtube_followers: formData.youtube_followers ? parseInt(formData.youtube_followers) : null,
+            tiktok_followers: formData.tiktok_followers ? parseInt(formData.tiktok_followers) : null,
             engagement_rate: formData.engagement_rate ? parseFloat(formData.engagement_rate) : null,
-          });
+          } as any);
 
         if (error) throw error;
       } else {
