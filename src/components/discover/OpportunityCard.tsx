@@ -37,7 +37,13 @@ const OpportunityCard = ({ opportunity, index = 0 }: OpportunityCardProps) => {
       >
         <CardHeader className="pb-3">
           <div className="flex items-center gap-3">
-            <div className="relative">
+            <div 
+              className="relative cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                if ((opportunity as any).brand_id) navigate(`/profile/${(opportunity as any).brand_id}`);
+              }}
+            >
               <Avatar className="h-12 w-12 ring-2 ring-secondary/10 transition-all duration-300 group-hover:ring-secondary/30">
                 <AvatarImage src={opportunity.profiles?.avatar_url} />
                 <AvatarFallback className="bg-gradient-to-br from-secondary/20 to-primary/20 text-secondary font-semibold">
@@ -52,7 +58,13 @@ const OpportunityCard = ({ opportunity, index = 0 }: OpportunityCardProps) => {
               <CardTitle className="text-lg truncate group-hover:text-secondary transition-colors">
                 {opportunity.title}
               </CardTitle>
-              <CardDescription className="truncate">
+              <CardDescription 
+                className="truncate cursor-pointer hover:text-secondary transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if ((opportunity as any).brand_id) navigate(`/profile/${(opportunity as any).brand_id}`);
+                }}
+              >
                 Par {opportunity.profiles?.full_name || "Marque"}
               </CardDescription>
             </div>

@@ -157,16 +157,27 @@ const ProfileCard = ({ profile, isCreator, index = 0 }: ProfileCardProps) => {
             />
           </div>
 
-          {/* CTA Button */}
-          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-            <Button 
-              variant="default" 
-              className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary shadow-md hover:shadow-lg transition-all"
-            >
-              <MessageSquare className="h-4 w-4 mr-2" />
-              Contacter
-            </Button>
-          </motion.div>
+          {/* CTA Buttons */}
+          <div className="flex gap-2">
+            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="flex-1">
+              <Button 
+                variant="outline"
+                className="w-full"
+                onClick={() => navigate(`/profile/${profile.id}`)}
+              >
+                Voir le profil
+              </Button>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="flex-1">
+              <Button 
+                variant="default" 
+                className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary shadow-md hover:shadow-lg transition-all"
+              >
+                <MessageSquare className="h-4 w-4 mr-2" />
+                Contacter
+              </Button>
+            </motion.div>
+          </div>
         </CardContent>
       </Card>
     </motion.div>

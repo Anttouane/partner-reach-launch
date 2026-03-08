@@ -41,6 +41,7 @@ const App = () => (
           <Route path="/discover" element={<Discover />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/:id" element={<PublicProfile />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/wallet" element={<Wallet />} />
           <Route path="/create-pitch" element={<CreatePitch />} />

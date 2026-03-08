@@ -38,7 +38,13 @@ const PitchCard = ({ pitch, index = 0 }: PitchCardProps) => {
       >
         <CardHeader className="pb-3">
           <div className="flex items-center gap-3">
-            <div className="relative">
+            <div 
+              className="relative cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                if ((pitch as any).creator_id) navigate(`/profile/${(pitch as any).creator_id}`);
+              }}
+            >
               <Avatar className="h-12 w-12 ring-2 ring-primary/10 transition-all duration-300 group-hover:ring-primary/30">
                 <AvatarImage src={pitch.profiles?.avatar_url} />
                 <AvatarFallback className="bg-gradient-to-br from-primary/20 to-secondary/20 text-primary font-semibold">
@@ -53,7 +59,13 @@ const PitchCard = ({ pitch, index = 0 }: PitchCardProps) => {
               <CardTitle className="text-lg truncate group-hover:text-primary transition-colors">
                 {pitch.title}
               </CardTitle>
-              <CardDescription className="truncate">
+              <CardDescription 
+                className="truncate cursor-pointer hover:text-primary transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if ((pitch as any).creator_id) navigate(`/profile/${(pitch as any).creator_id}`);
+                }}
+              >
                 Par {pitch.profiles?.full_name || "Créateur"}
               </CardDescription>
             </div>
