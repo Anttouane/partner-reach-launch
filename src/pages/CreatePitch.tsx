@@ -19,8 +19,6 @@ const CreatePitch = () => {
     title: "",
     description: "",
     content_type: "",
-    estimated_reach: "",
-    budget_range: "",
     tags: "",
   });
   const navigate = useNavigate();
