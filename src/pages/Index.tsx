@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Sparkles, Users, Briefcase, Zap, Heart, Shield, TrendingUp, Target, Rocket, CheckCircle, ArrowRight, Star, MessageSquare, FileText, CreditCard, BarChart3, Handshake, BadgePercent } from "lucide-react";
+import { Sparkles, Users, Briefcase, Zap, Heart, Shield, TrendingUp, Target, Rocket, CheckCircle, ArrowRight, Star, MessageSquare, FileText, CreditCard, BarChart3, Handshake, BadgePercent, HelpCircle } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { motion } from "framer-motion";
 import SEOHead from "@/components/SEOHead";
 
@@ -31,6 +32,9 @@ const Index = () => {
               </a>
               <a href="#benefices" className="text-foreground hover:text-primary transition-colors font-medium">
                 Bénéfices
+              </a>
+              <a href="#faq" className="text-foreground hover:text-primary transition-colors font-medium">
+                FAQ
               </a>
             </nav>
 
@@ -627,6 +631,102 @@ const Index = () => {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <section id="faq" className="py-24 px-4 bg-card">
+        <div className="container mx-auto max-w-3xl">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4">
+              <HelpCircle className="h-5 w-5 text-primary" />
+              <span className="text-sm font-semibold text-foreground">FAQ</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+              Questions fréquentes
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Tout ce que vous devez savoir avant de commencer sur Partnery.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <Accordion type="multiple" className="space-y-4">
+              <AccordionItem value="gratuit" className="bg-background rounded-2xl border-2 border-primary/10 px-6 hover:border-primary/30 transition-colors">
+                <AccordionTrigger className="text-lg font-semibold hover:no-underline">
+                  Partnery est-il gratuit ?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground leading-relaxed">
+                  Oui, l'inscription et l'utilisation de Partnery sont <strong className="text-foreground">100% gratuites</strong>. Il n'y a aucun abonnement ni frais d'inscription. Partnery ne prélève qu'une commission de 5% sur les collaborations réussies, uniquement lorsqu'un paiement est effectué.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="commission" className="bg-background rounded-2xl border-2 border-primary/10 px-6 hover:border-primary/30 transition-colors">
+                <AccordionTrigger className="text-lg font-semibold hover:no-underline">
+                  Comment fonctionne la commission de 5% ?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground leading-relaxed">
+                  Partnery prélève <strong className="text-foreground">5% du montant total</strong> de chaque transaction réussie. Par exemple, pour un contrat de 1 000 €, le créateur reçoit 950 €. En plus de cette commission, des frais bancaires Stripe s'appliquent (~1,5% + 0,25 € pour les cartes européennes). Ces frais sont indiqués de manière transparente lors de chaque transaction.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="paiements" className="bg-background rounded-2xl border-2 border-primary/10 px-6 hover:border-primary/30 transition-colors">
+                <AccordionTrigger className="text-lg font-semibold hover:no-underline">
+                  Comment sont sécurisés les paiements ?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground leading-relaxed">
+                  Tous les paiements sont traités de manière sécurisée via <strong className="text-foreground">Stripe</strong>, leader mondial du paiement en ligne. Les fonds sont libérés au créateur uniquement après validation du livrable par la marque, garantissant une protection pour les deux parties.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="agence" className="bg-background rounded-2xl border-2 border-primary/10 px-6 hover:border-primary/30 transition-colors">
+                <AccordionTrigger className="text-lg font-semibold hover:no-underline">
+                  Partnery remplace-t-il une agence ?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground leading-relaxed">
+                  Partnery vous permet de vous connecter <strong className="text-foreground">directement</strong> avec des marques ou des créateurs, sans intermédiaire. Là où une agence traditionnelle prélève entre 15% et 30% de commission, Partnery ne prend que 5%. Vous gardez le contrôle total de vos collaborations.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="contrats" className="bg-background rounded-2xl border-2 border-primary/10 px-6 hover:border-primary/30 transition-colors">
+                <AccordionTrigger className="text-lg font-semibold hover:no-underline">
+                  Les contrats sont-ils juridiquement valides ?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground leading-relaxed">
+                  Partnery met à disposition un <strong className="text-foreground">outil de création de contrats</strong> pour simplifier vos collaborations. Cependant, Partnery n'est pas responsable du contenu, de l'exécution ou du respect des contrats générés. Ce service ne constitue pas un conseil juridique. Pour toute question légale, consultez un professionnel du droit.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="litige" className="bg-background rounded-2xl border-2 border-primary/10 px-6 hover:border-primary/30 transition-colors">
+                <AccordionTrigger className="text-lg font-semibold hover:no-underline">
+                  Comment résoudre un litige ?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground leading-relaxed">
+                  Partnery dispose d'un <strong className="text-foreground">système de médiation intégré</strong>. En cas de désaccord entre une marque et un créateur, les deux parties peuvent ouvrir un litige directement depuis la plateforme. Notre équipe intervient pour faciliter une résolution amiable.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="inscription" className="bg-background rounded-2xl border-2 border-primary/10 px-6 hover:border-primary/30 transition-colors">
+                <AccordionTrigger className="text-lg font-semibold hover:no-underline">
+                  Qui peut s'inscrire sur Partnery ?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground leading-relaxed">
+                  Partnery est ouvert à <strong className="text-foreground">tous les créateurs de contenu et toutes les marques</strong>, quelle que soit leur taille ou leur audience. Que vous soyez un micro-influenceur ou une grande marque, vous pouvez rejoindre la plateforme et commencer à collaborer.
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer id="contact" className="py-12 px-4 bg-foreground text-white">
         <div className="container mx-auto max-w-6xl">
@@ -654,7 +754,7 @@ const Index = () => {
                 <li><Link to="/discover" className="hover:text-primary transition-colors">Découvrir</Link></li>
                 <li><a href="#" className="hover:text-primary transition-colors">Blog</a></li>
                 <li><a href="#" className="hover:text-primary transition-colors">Aide</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">FAQ</a></li>
+                <li><a href="#faq" className="hover:text-primary transition-colors">FAQ</a></li>
               </ul>
             </div>
 
