@@ -238,7 +238,7 @@ const PublicProfile = () => {
                 )}
                 {creatorProfile.youtube_followers && (
                   <div className="bg-muted/50 rounded-xl p-4 text-center hover:bg-primary/10 transition-colors">
-                    <Youtube className="h-5 w-5 mx-auto mb-2 text-red-500" />
+                    <Youtube className="h-5 w-5 mx-auto mb-2 text-destructive" />
                     <div className="text-lg font-bold text-foreground">{formatFollowers(creatorProfile.youtube_followers)}</div>
                     <div className="text-xs text-muted-foreground">YouTube</div>
                   </div>
