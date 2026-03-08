@@ -411,9 +411,12 @@ export type Database = {
           created_at: string
           engagement_rate: number | null
           id: string
+          instagram_followers: number | null
           instagram_handle: string | null
+          tiktok_followers: number | null
           tiktok_handle: string | null
           updated_at: string
+          youtube_followers: number | null
           youtube_handle: string | null
         }
         Insert: {
@@ -422,9 +425,12 @@ export type Database = {
           created_at?: string
           engagement_rate?: number | null
           id: string
+          instagram_followers?: number | null
           instagram_handle?: string | null
+          tiktok_followers?: number | null
           tiktok_handle?: string | null
           updated_at?: string
+          youtube_followers?: number | null
           youtube_handle?: string | null
         }
         Update: {
@@ -433,9 +439,12 @@ export type Database = {
           created_at?: string
           engagement_rate?: number | null
           id?: string
+          instagram_followers?: number | null
           instagram_handle?: string | null
+          tiktok_followers?: number | null
           tiktok_handle?: string | null
           updated_at?: string
+          youtube_followers?: number | null
           youtube_handle?: string | null
         }
         Relationships: [

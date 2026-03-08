@@ -54,7 +54,9 @@ const Profile = () => {
     instagram_handle: "",
     youtube_handle: "",
     tiktok_handle: "",
-    audience_size: "",
+    instagram_followers: "",
+    youtube_followers: "",
+    tiktok_followers: "",
     engagement_rate: "",
     // Brand fields
     company_name: "",
@@ -141,7 +143,9 @@ const Profile = () => {
             instagram_handle: creatorData.instagram_handle || "",
             youtube_handle: creatorData.youtube_handle || "",
             tiktok_handle: creatorData.tiktok_handle || "",
-            audience_size: creatorData.audience_size?.toString() || "",
+            instagram_followers: (creatorData as any).instagram_followers?.toString() || "",
+            youtube_followers: (creatorData as any).youtube_followers?.toString() || "",
+            tiktok_followers: (creatorData as any).tiktok_followers?.toString() || "",
             engagement_rate: creatorData.engagement_rate?.toString() || "",
           }));
         }
@@ -242,9 +246,11 @@ const Profile = () => {
             instagram_handle: formData.instagram_handle,
             youtube_handle: formData.youtube_handle,
             tiktok_handle: formData.tiktok_handle,
-            audience_size: formData.audience_size ? parseInt(formData.audience_size) : null,
+            instagram_followers: formData.instagram_followers ? parseInt(formData.instagram_followers) : null,
+            youtube_followers: formData.youtube_followers ? parseInt(formData.youtube_followers) : null,
+            tiktok_followers: formData.tiktok_followers ? parseInt(formData.tiktok_followers) : null,
             engagement_rate: formData.engagement_rate ? parseFloat(formData.engagement_rate) : null,
-          });
+          } as any);
 
         if (error) throw error;
       } else {
@@ -522,28 +528,58 @@ const Profile = () => {
                   </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid md:grid-cols-3 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="audience">Taille d'audience</Label>
+                    <Label htmlFor="instagram_followers" className="flex items-center gap-2">
+                      <Instagram className="h-4 w-4" /> Abonnés Instagram
+                    </Label>
                     <Input
-                      id="audience"
+                      id="instagram_followers"
                       type="number"
                       placeholder="50000"
-                      value={formData.audience_size}
-                      onChange={(e) => setFormData({ ...formData, audience_size: e.target.value })}
+                      value={formData.instagram_followers}
+                      onChange={(e) => setFormData({ ...formData, instagram_followers: e.target.value })}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="engagement">Taux d'engagement (%)</Label>
+                    <Label htmlFor="youtube_followers" className="flex items-center gap-2">
+                      <Youtube className="h-4 w-4" /> Abonnés YouTube
+                    </Label>
                     <Input
-                      id="engagement"
+                      id="youtube_followers"
                       type="number"
-                      step="0.1"
-                      placeholder="4.5"
-                      value={formData.engagement_rate}
-                      onChange={(e) => setFormData({ ...formData, engagement_rate: e.target.value })}
+                      placeholder="100000"
+                      value={formData.youtube_followers}
+                      onChange={(e) => setFormData({ ...formData, youtube_followers: e.target.value })}
                     />
                   </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="tiktok_followers" className="flex items-center gap-2">
+                      <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                      </svg>
+                      Abonnés TikTok
+                    </Label>
+                    <Input
+                      id="tiktok_followers"
+                      type="number"
+                      placeholder="200000"
+                      value={formData.tiktok_followers}
+                      onChange={(e) => setFormData({ ...formData, tiktok_followers: e.target.value })}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="engagement">Taux d'engagement (%)</Label>
+                  <Input
+                    id="engagement"
+                    type="number"
+                    step="0.1"
+                    placeholder="4.5"
+                    value={formData.engagement_rate}
+                    onChange={(e) => setFormData({ ...formData, engagement_rate: e.target.value })}
+                  />
                 </div>
               </>
             ) : (
