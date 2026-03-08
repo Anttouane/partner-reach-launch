@@ -87,12 +87,21 @@ const PitchForm = ({ initialData, onSubmit, isEdit = false }: PitchFormProps) =>
       <div className="grid md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="content_type">Type de contenu</Label>
-          <Input
-            id="content_type"
+          <Select
             value={formData.content_type}
-            onChange={(e) => setFormData({ ...formData, content_type: e.target.value })}
-            placeholder="Ex: Vidéo YouTube, Post Instagram"
-          />
+            onValueChange={(value) => setFormData({ ...formData, content_type: value })}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Sélectionnez un type" />
+            </SelectTrigger>
+            <SelectContent>
+              {CONTENT_TYPES.map((type) => (
+                <SelectItem key={type.value} value={type.value}>
+                  {type.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2">
