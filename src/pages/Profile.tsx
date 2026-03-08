@@ -143,7 +143,9 @@ const Profile = () => {
             instagram_handle: creatorData.instagram_handle || "",
             youtube_handle: creatorData.youtube_handle || "",
             tiktok_handle: creatorData.tiktok_handle || "",
-            audience_size: creatorData.audience_size?.toString() || "",
+            instagram_followers: (creatorData as any).instagram_followers?.toString() || "",
+            youtube_followers: (creatorData as any).youtube_followers?.toString() || "",
+            tiktok_followers: (creatorData as any).tiktok_followers?.toString() || "",
             engagement_rate: creatorData.engagement_rate?.toString() || "",
           }));
         }
