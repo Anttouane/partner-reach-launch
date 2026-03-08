@@ -19,6 +19,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ContractDisclaimer } from '@/components/contracts/ContractDisclaimer';
 import {
   ArrowLeft,
   FileText,
@@ -222,25 +223,33 @@ const ContractDetail = () => {
       <Header user={user} />
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
+        {/* Disclaimer */}
+        <ContractDisclaimer />
+
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+            <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="shrink-0">
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div>
-              <div className="flex items-center gap-3">
-                <h1 className="text-2xl font-bold">Contrat de partenariat</h1>
+              <div className="flex items-center gap-3 flex-wrap">
+                <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <FileText className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold">Contrat de partenariat</h1>
+                  <p className="text-sm text-muted-foreground">
+                    Version {contract.version} · Créé le {format(new Date(contract.created_at), 'dd MMMM yyyy', { locale: fr })}
+                  </p>
+                </div>
                 <ContractStatusBadge status={contract.status} />
               </div>
-              <p className="text-sm text-muted-foreground">
-                Version {contract.version} · Créé le {format(new Date(contract.created_at), 'dd MMMM yyyy', { locale: fr })}
-              </p>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 shrink-0">
             {Object.keys(pendingChanges).length > 0 && (
-              <Button onClick={handleSave} disabled={saving}>
+              <Button onClick={handleSave} disabled={saving} className="shadow-[var(--shadow-soft)]">
                 <Save className="h-4 w-4 mr-2" />
                 {saving ? 'Enregistrement...' : 'Enregistrer'}
               </Button>
@@ -256,20 +265,22 @@ const ContractDetail = () => {
 
         {/* Action bar for approval/revision */}
         {canEdit && contract.status !== 'ready_to_sign' && contract.status !== 'signed' && (
-          <Card className="mb-6 border-primary/50">
+          <Card className="mb-6 border-primary/40 bg-primary/5 shadow-[var(--shadow-soft)]">
             <CardContent className="py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-sm">
-                  <RefreshCw className="h-4 w-4 text-primary" />
-                  <span>
-                    {contract.status === 'draft' && 'Contrat en brouillon - Modifiez et approuvez quand prêt'}
-                    {contract.status === 'revision_requested' && 'Révision demandée - Vérifiez les modifications'}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-2.5 text-sm">
+                  <div className="h-8 w-8 rounded-lg bg-primary/15 flex items-center justify-center shrink-0">
+                    <RefreshCw className="h-4 w-4 text-primary" />
+                  </div>
+                  <span className="font-medium">
+                    {contract.status === 'draft' && 'Contrat en brouillon — Modifiez et approuvez quand vous êtes prêt'}
+                    {contract.status === 'revision_requested' && 'Révision demandée — Vérifiez les modifications'}
                   </span>
                 </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={handleRequestRevision}>
+                <div className="flex gap-2 shrink-0">
+                  <Button variant="outline" size="sm" onClick={handleRequestRevision} className="bg-background">
                     <X className="h-4 w-4 mr-1" />
-                    Demander révision
+                    Révision
                   </Button>
                   <Button size="sm" onClick={handleApprove}>
                     <Check className="h-4 w-4 mr-1" />

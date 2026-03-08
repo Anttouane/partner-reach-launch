@@ -1,3 +1,5 @@
+import { Users, Megaphone, Coins, ClipboardCheck, ShieldCheck } from 'lucide-react';
+
 export type ContractStatus = 
   | 'draft'
   | 'revision_requested'
@@ -124,4 +126,12 @@ export const SECTION_LABELS: Record<ContractSection, string> = {
   financial: 'C. Conditions financières',
   obligations: 'D. Obligations',
   validation: 'E. Validation & litiges',
+};
+
+export const SECTION_ICONS: Record<ContractSection, any> = {
+  parties: Users,
+  campaign: Megaphone,
+  financial: Coins,
+  obligations: ClipboardCheck,
+  validation: ShieldCheck,
 };
