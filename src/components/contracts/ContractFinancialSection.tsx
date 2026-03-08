@@ -17,7 +17,7 @@ export function ContractFinancialSection({ contract, isLocked, onUpdate }: Contr
 
   const commissionRate = contract.platform_commission_rate;
   const commissionAmount = Math.round(totalAmount * 100 * (commissionRate / 100));
-  const stripeFeeEstimate = Math.round(totalAmount * 100 * 0.029 + 25); // 2.9% + 0.25€
+  const stripeFeeEstimate = Math.round(totalAmount * 100 * 0.015 + 25); // 1.5% + 0.25€
   const creatorNet = Math.round(totalAmount * 100 - commissionAmount - stripeFeeEstimate);
 
   useEffect(() => {
