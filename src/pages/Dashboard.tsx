@@ -387,6 +387,18 @@ const Dashboard = () => {
           </motion.div>
         )}
 
+        {/* My Content Section */}
+        <motion.div
+          className="mb-8"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div variants={itemVariants}>
+            {user && <MyContentList userId={user.id} userType={isCreator ? "creator" : "brand"} />}
+          </motion.div>
+        </motion.div>
+
         {/* Contracts Section */}
         <motion.div
           className="mb-8"
