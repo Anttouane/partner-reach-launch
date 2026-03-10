@@ -23,11 +23,14 @@ serve(async (req) => {
 
   try {
     const webhookSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET");
-    if (webhookSecret && signature) {
-      event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
-    } else {
-      event = JSON.parse(body);
+    if (!webhookSecret || !signature) {
+      console.error("Missing webhook secret or signature");
+      return new Response(JSON.stringify({ error: "Missing webhook secret or signature" }), {
+        status: 400,
+        headers: corsHeaders,
+      });
     }
+    event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err: unknown) {
     const errMessage = err instanceof Error ? err.message : "Unknown error";
     console.error("Webhook signature verification failed:", errMessage);
