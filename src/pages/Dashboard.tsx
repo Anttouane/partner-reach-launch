@@ -14,6 +14,7 @@ import PerformanceStats from "@/components/dashboard/PerformanceStats";
 import SpendingChart from "@/components/dashboard/SpendingChart";
 import BrandPerformanceStats from "@/components/dashboard/BrandPerformanceStats";
 import { ContractList } from "@/components/contracts/ContractList";
+import MyContentList from "@/components/dashboard/MyContentList";
 
 interface DashboardStats {
   opportunities: number;
