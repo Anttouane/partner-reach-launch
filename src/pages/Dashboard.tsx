@@ -14,6 +14,7 @@ import PerformanceStats from "@/components/dashboard/PerformanceStats";
 import SpendingChart from "@/components/dashboard/SpendingChart";
 import BrandPerformanceStats from "@/components/dashboard/BrandPerformanceStats";
 import { ContractList } from "@/components/contracts/ContractList";
+import MyContentList from "@/components/dashboard/MyContentList";
 
 interface DashboardStats {
   opportunities: number;
@@ -385,6 +386,18 @@ const Dashboard = () => {
             </motion.div>
           </motion.div>
         )}
+
+        {/* My Content Section */}
+        <motion.div
+          className="mb-8"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div variants={itemVariants}>
+            {user && <MyContentList userId={user.id} userType={isCreator ? "creator" : "brand"} />}
+          </motion.div>
+        </motion.div>
 
         {/* Contracts Section */}
         <motion.div
