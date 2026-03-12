@@ -176,57 +176,85 @@ const Messages = () => {
     fetchConversations();
   }, [user]);
 
-  // Handle ?contact= query param to open or create a conversation
+  // Handle ?contact= query param to open or create a conversation directly
   useEffect(() => {
     const contactId = searchParams.get("contact");
-    if (!contactId || !user || conversations.length === 0 && loading) return;
+    if (!contactId || !user) return;
 
-    const handleContact = async () => {
-      // Check if conversation already exists
-      const existing = conversations.find(
-        (c) =>
-          (c.participant_1 === contactId && c.participant_2 === user.id) ||
-          (c.participant_2 === contactId && c.participant_1 === user.id)
-      );
+    const openDirectConversation = async () => {
+      // Always check in DB first to avoid race conditions with local state loading
+      const { data: existingConvo } = await supabase
+        .from("conversations")
+        .select("id, participant_1, participant_2, updated_at, opportunity_id, pitch_id")
+        .or(`and(participant_1.eq.${user.id},participant_2.eq.${contactId}),and(participant_1.eq.${contactId},participant_2.eq.${user.id})`)
+        .maybeSingle();
 
-      if (existing) {
-        setSelectedConversation(existing.id);
-      } else {
-        // Create a new conversation
-        const { data, error } = await supabase
+      let targetConvo = existingConvo;
+
+      if (!targetConvo) {
+        const { data: createdConvo, error: createError } = await supabase
           .from("conversations")
           .insert({
             participant_1: user.id,
             participant_2: contactId,
           })
-          .select()
+          .select("id, participant_1, participant_2, updated_at, opportunity_id, pitch_id")
           .single();
 
-        if (error) {
-          toast.error("Erreur lors de la création de la conversation");
-        } else if (data) {
-          // Fetch the other user's profile
-          const { data: profile } = await supabase
-            .from("profiles")
-            .select("id, full_name, avatar_url, user_type")
-            .eq("id", contactId)
-            .single();
+        if (createError) {
+          // Retry fetch in case conversation was created concurrently
+          const { data: retryConvo } = await supabase
+            .from("conversations")
+            .select("id, participant_1, participant_2, updated_at, opportunity_id, pitch_id")
+            .or(`and(participant_1.eq.${user.id},participant_2.eq.${contactId}),and(participant_1.eq.${contactId},participant_2.eq.${user.id})`)
+            .maybeSingle();
 
-          const newConvo: Conversation = {
-            ...data,
-            otherUser: profile || { id: contactId, full_name: "Utilisateur", avatar_url: null, user_type: "creator" },
-          };
-          setConversations((prev) => [newConvo, ...prev]);
-          setSelectedConversation(data.id);
+          if (!retryConvo) {
+            toast.error("Erreur lors de l'ouverture de la conversation");
+            return;
+          }
+
+          targetConvo = retryConvo;
+        } else {
+          targetConvo = createdConvo;
         }
       }
 
-      // Clear the query param
+      if (!targetConvo) return;
+
+      const convo = targetConvo;
+      setSelectedConversation(convo.id);
+
+      const { data: contactProfile } = await supabase
+        .from("profiles")
+        .select("id, full_name, avatar_url, user_type")
+        .eq("id", contactId)
+        .maybeSingle();
+
+      // Ensure the conversation exists in the sidebar immediately
+      setConversations((prev) => {
+        const alreadyExists = prev.some((c) => c.id === convo.id);
+        if (alreadyExists) return prev;
+
+        return [
+          {
+            ...convo,
+            otherUser: contactProfile || {
+              id: contactId,
+              full_name: "Utilisateur",
+              avatar_url: null,
+              user_type: "creator",
+            },
+          },
+          ...prev,
+        ];
+      });
+
       setSearchParams({}, { replace: true });
     };
 
-    handleContact();
-  }, [searchParams, user, conversations, loading]);
+    openDirectConversation();
+  }, [searchParams, user, setSearchParams]);
 
   // Fetch existing contract for selected conversation
   useEffect(() => {
