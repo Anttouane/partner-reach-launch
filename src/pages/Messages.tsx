@@ -176,6 +176,58 @@ const Messages = () => {
     fetchConversations();
   }, [user]);
 
+  // Handle ?contact= query param to open or create a conversation
+  useEffect(() => {
+    const contactId = searchParams.get("contact");
+    if (!contactId || !user || conversations.length === 0 && loading) return;
+
+    const handleContact = async () => {
+      // Check if conversation already exists
+      const existing = conversations.find(
+        (c) =>
+          (c.participant_1 === contactId && c.participant_2 === user.id) ||
+          (c.participant_2 === contactId && c.participant_1 === user.id)
+      );
+
+      if (existing) {
+        setSelectedConversation(existing.id);
+      } else {
+        // Create a new conversation
+        const { data, error } = await supabase
+          .from("conversations")
+          .insert({
+            participant_1: user.id,
+            participant_2: contactId,
+          })
+          .select()
+          .single();
+
+        if (error) {
+          toast.error("Erreur lors de la création de la conversation");
+        } else if (data) {
+          // Fetch the other user's profile
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("id, full_name, avatar_url, user_type")
+            .eq("id", contactId)
+            .single();
+
+          const newConvo: Conversation = {
+            ...data,
+            otherUser: profile || { id: contactId, full_name: "Utilisateur", avatar_url: null, user_type: "creator" },
+          };
+          setConversations((prev) => [newConvo, ...prev]);
+          setSelectedConversation(data.id);
+        }
+      }
+
+      // Clear the query param
+      setSearchParams({}, { replace: true });
+    };
+
+    handleContact();
+  }, [searchParams, user, conversations, loading]);
+
   // Fetch existing contract for selected conversation
   useEffect(() => {
     if (!selectedConversation) {
