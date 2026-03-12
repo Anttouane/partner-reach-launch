@@ -61,6 +61,7 @@ const Messages = () => {
   const [existingContract, setExistingContract] = useState<Contract | null>(null);
   const [loadingContract, setLoadingContract] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const scrollToBottom = () => {
