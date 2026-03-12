@@ -256,6 +256,15 @@ const Messages = () => {
     openDirectConversation();
   }, [searchParams, user, setSearchParams]);
 
+  // Handle ?conversation= query param to select a conversation directly
+  useEffect(() => {
+    const conversationId = searchParams.get("conversation");
+    if (!conversationId || !user) return;
+
+    setSelectedConversation(conversationId);
+    setSearchParams({}, { replace: true });
+  }, [searchParams, user, setSearchParams]);
+
   // Fetch existing contract for selected conversation
   useEffect(() => {
     if (!selectedConversation) {
