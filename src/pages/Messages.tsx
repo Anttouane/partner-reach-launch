@@ -222,16 +222,17 @@ const Messages = () => {
 
       if (!targetConvo) return;
 
-      setSelectedConversation(targetConvo.id);
+      const convo = targetConvo;
+      setSelectedConversation(convo.id);
 
       // Ensure the conversation exists in the sidebar immediately
       setConversations((prev) => {
-        const alreadyExists = prev.some((c) => c.id === targetConvo!.id);
+        const alreadyExists = prev.some((c) => c.id === convo.id);
         if (alreadyExists) return prev;
 
         return [
           {
-            ...targetConvo,
+            ...convo,
             otherUser: {
               id: contactId,
               full_name: "Utilisateur",
