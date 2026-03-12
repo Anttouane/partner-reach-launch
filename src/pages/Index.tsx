@@ -138,6 +138,32 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Bande de stats */}
+      <section className="py-12 px-4 bg-foreground">
+        <div className="container mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center"
+          >
+            {[
+              { value: "5%", label: "Commission seulement", sub: "vs 15-30% en agence" },
+              { value: "100%", label: "Gratuit à l'inscription", sub: "Aucun abonnement" },
+              { value: "2", label: "Types d'acteurs", sub: "Marques & Créateurs" },
+              { value: "1", label: "Plateforme tout-en-un", sub: "Contact, contrat, paiement" },
+            ].map((stat, i) => (
+              <div key={i} className="space-y-1">
+                <div className="text-4xl font-bold text-primary">{stat.value}</div>
+                <div className="text-white font-semibold text-sm">{stat.label}</div>
+                <div className="text-white/50 text-xs">{stat.sub}</div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
       {/* Section Modèle Économique Transparent */}
       <section id="tarifs" className="py-24 px-4 bg-card">
         <div className="container mx-auto max-w-6xl">
@@ -321,8 +347,60 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Section Comparaison Partnery vs Agences */}
+      <section className="py-24 px-4 bg-card">
+        <div className="container mx-auto max-w-4xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 rounded-full mb-4">
+              <TrendingUp className="h-5 w-5 text-secondary" />
+              <span className="text-sm font-semibold text-foreground">Pourquoi Partnery ?</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+              La différence est claire
+            </h2>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="overflow-hidden rounded-3xl border-2 border-primary/20"
+          >
+            <div className="grid grid-cols-3 bg-foreground text-white text-center">
+              <div className="py-4 px-4 font-semibold text-white/70 text-sm">Critère</div>
+              <div className="py-4 px-4 font-bold text-secondary">Agences traditionnelles</div>
+              <div className="py-4 px-4 font-bold text-primary">Partnery</div>
+            </div>
+            {[
+              { criteria: "Commission", agency: "15 – 30%", partnery: "5% seulement", good: true },
+              { criteria: "Inscription", agency: "Abonnement mensuel", partnery: "100% gratuit", good: true },
+              { criteria: "Contrats", agency: "Gérés par l'agence", partnery: "Générés en 1 clic", good: true },
+              { criteria: "Contact direct", agency: "Intermédiaire obligatoire", partnery: "Direct créateur ↔ marque", good: true },
+              { criteria: "Petits créateurs", agency: "Souvent ignorés", partnery: "Priorité micro/nano", good: true },
+              { criteria: "Paiements", agency: "Délais longs", partnery: "Sécurisés via Stripe", good: true },
+            ].map((row, i) => (
+              <div key={i} className={`grid grid-cols-3 text-center ${i % 2 === 0 ? 'bg-background' : 'bg-muted/30'}`}>
+                <div className="py-4 px-4 font-semibold text-foreground text-sm border-r border-border">{row.criteria}</div>
+                <div className="py-4 px-4 text-muted-foreground text-sm border-r border-border flex items-center justify-center gap-2">
+                  <span className="text-destructive font-bold">✗</span> {row.agency}
+                </div>
+                <div className="py-4 px-4 text-sm font-semibold text-primary flex items-center justify-center gap-2">
+                  <span className="text-green-500 font-bold">✓</span> {row.partnery}
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
       {/* Section Notre Mission */}
-      <section id="valeur" className="py-24 px-4 bg-card">
+      <section id="valeur" className="py-24 px-4">
         <div className="container mx-auto max-w-6xl">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
@@ -612,21 +690,114 @@ const Index = () => {
             ))}
           </div>
 
-          {/* CTA Final */}
-          <motion.div 
+        </div>
+      </section>
+
+      {/* Section Témoignages */}
+      <section className="py-24 px-4 bg-card">
+        <div className="container mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4">
+              <Star className="h-5 w-5 text-primary" />
+              <span className="text-sm font-semibold text-foreground">Ils nous font confiance</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+              Ce qu'ils en pensent
+            </h2>
+          </motion.div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Sophie M.",
+                role: "Créatrice lifestyle · 12k abonnés",
+                quote: "J'ai trouvé mon premier partenariat en moins d'une semaine. Le contrat généré automatiquement m'a sauvé beaucoup de temps.",
+                initial: "SM",
+                color: "bg-primary/20 text-primary",
+              },
+              {
+                name: "Lucas D.",
+                role: "Fondateur · Marque e-commerce",
+                quote: "Fini les agences à 20% de commission. Avec Partnery on parle directement aux créateurs et le résultat est bien meilleur.",
+                initial: "LD",
+                color: "bg-secondary/20 text-secondary",
+              },
+              {
+                name: "Inès R.",
+                role: "Créatrice food · 8k abonnés",
+                quote: "La plateforme est super intuitive. J'ai pu proposer mon profil à des marques que j'aurais jamais pu contacter avant.",
+                initial: "IR",
+                color: "bg-primary/20 text-primary",
+              },
+            ].map((t, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="bg-background rounded-3xl p-8 border-2 border-primary/10 hover:border-primary/30 transition-all hover:shadow-soft flex flex-col gap-6"
+              >
+                <div className="flex gap-1">
+                  {[...Array(5)].map((_, s) => (
+                    <Star key={s} className="h-4 w-4 fill-primary text-primary" />
+                  ))}
+                </div>
+                <p className="text-muted-foreground leading-relaxed italic">"{t.quote}"</p>
+                <div className="flex items-center gap-3 mt-auto">
+                  <div className={`w-10 h-10 rounded-full ${t.color} flex items-center justify-center font-bold text-sm`}>
+                    {t.initial}
+                  </div>
+                  <div>
+                    <div className="font-semibold text-foreground text-sm">{t.name}</div>
+                    <div className="text-xs text-muted-foreground">{t.role}</div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Final impactant */}
+      <section className="py-24 px-4 bg-gradient-to-br from-foreground via-foreground to-foreground/90">
+        <div className="container mx-auto max-w-4xl text-center">
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mt-16"
+            className="space-y-8"
           >
-            <Link to="/auth">
-              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-medium text-lg px-12 py-7">
-                Commencer gratuitement
-                <ArrowRight className="ml-2 h-6 w-6" />
-              </Button>
-            </Link>
-            <p className="mt-4 text-sm text-muted-foreground">Inscription gratuite • Aucun abonnement • 5% de commission uniquement</p>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/20 rounded-full border border-primary/30">
+              <Rocket className="h-4 w-4 text-primary" />
+              <span className="text-sm font-semibold text-primary">Lancez-vous maintenant</span>
+            </div>
+            <h2 className="text-4xl md:text-6xl font-bold text-white leading-tight">
+              Prêt à créer votre premier partenariat ?
+            </h2>
+            <p className="text-xl text-white/60 max-w-2xl mx-auto">
+              Inscription gratuite. Pas d'abonnement. Seulement 5% quand vous réussissez.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/auth">
+                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-12 py-7 font-bold">
+                  Commencer gratuitement
+                  <ArrowRight className="ml-2 h-6 w-6" />
+                </Button>
+              </Link>
+              <a href="#fonctionnalites">
+                <Button size="lg" variant="outline" className="border-2 border-white/20 text-white hover:bg-white/10 text-lg px-8 py-7">
+                  Voir les fonctionnalités
+                </Button>
+              </a>
+            </div>
+            <p className="text-sm text-white/30">Rejoignez les premières marques et créateurs sur Partnery</p>
           </motion.div>
         </div>
       </section>
@@ -710,7 +881,7 @@ const Index = () => {
                   Comment résoudre un litige ?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground leading-relaxed">
-                  Partnery dispose d'un <strong className="text-foreground">système de médiation intégré</strong>. En cas de désaccord entre une marque et un créateur, les deux parties peuvent ouvrir un litige directement depuis la plateforme. Notre équipe intervient pour faciliter une résolution amiable.
+                  En cas de désaccord, les deux parties peuvent ouvrir un <strong className="text-foreground">ticket de support</strong> directement depuis la plateforme. Partnery met à disposition un espace de communication pour faciliter le dialogue entre marque et créateur. Partnery n'est pas responsable de l'issue des litiges et ne constitue pas une instance juridique.
                 </AccordionContent>
               </AccordionItem>
 
