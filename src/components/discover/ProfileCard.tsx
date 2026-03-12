@@ -172,6 +172,7 @@ const ProfileCard = ({ profile, isCreator, index = 0 }: ProfileCardProps) => {
               <Button 
                 variant="default" 
                 className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary shadow-md hover:shadow-lg transition-all"
+                onClick={() => navigate(`/messages?contact=${profile.id}`)}
               >
                 <MessageSquare className="h-4 w-4 mr-2" />
                 Contacter
