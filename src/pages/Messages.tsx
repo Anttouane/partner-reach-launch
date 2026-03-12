@@ -225,6 +225,12 @@ const Messages = () => {
       const convo = targetConvo;
       setSelectedConversation(convo.id);
 
+      const { data: contactProfile } = await supabase
+        .from("profiles")
+        .select("id, full_name, avatar_url, user_type")
+        .eq("id", contactId)
+        .maybeSingle();
+
       // Ensure the conversation exists in the sidebar immediately
       setConversations((prev) => {
         const alreadyExists = prev.some((c) => c.id === convo.id);
@@ -233,7 +239,7 @@ const Messages = () => {
         return [
           {
             ...convo,
-            otherUser: {
+            otherUser: contactProfile || {
               id: contactId,
               full_name: "Utilisateur",
               avatar_url: null,
