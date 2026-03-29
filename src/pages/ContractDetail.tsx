@@ -246,19 +246,20 @@ const ContractDetail = () => {
                 </p>
               </div>
             </div>
-          <div className="flex gap-2 shrink-0">
-            {Object.keys(pendingChanges).length > 0 && (
-              <Button onClick={handleSave} disabled={saving} className="shadow-[var(--shadow-soft)]">
-                <Save className="h-4 w-4 mr-2" />
-                {saving ? 'Enregistrement...' : 'Enregistrer'}
-              </Button>
-            )}
-            {contract.status === 'signed' && (
-              <Button variant="outline" onClick={handleExportPDF}>
-                <Download className="h-4 w-4 mr-2" />
-                Exporter PDF
-              </Button>
-            )}
+            <div className="flex gap-2 shrink-0">
+              {Object.keys(pendingChanges).length > 0 && (
+                <Button onClick={handleSave} disabled={saving} className="shadow-[var(--shadow-soft)]">
+                  <Save className="h-4 w-4 mr-2" />
+                  {saving ? 'Enregistrement...' : 'Enregistrer'}
+                </Button>
+              )}
+              {contract.status === 'signed' && (
+                <Button variant="outline" onClick={handleExportPDF}>
+                  <Download className="h-4 w-4 mr-2" />
+                  Exporter PDF
+                </Button>
+              )}
+            </div>
           </div>
         </div>
 
