@@ -1,75 +1,45 @@
 
-# Optimisation SEO complete de Partnery
 
-## 1. Meta tags dynamiques par page
+# Amélioration du module Contrat — Disclaimer + Design
 
-Creation d'un composant `src/components/SEOHead.tsx` utilisant `document.title` et des meta tags dynamiques via `useEffect` (pas besoin d'installer react-helmet, on peut gerer ca nativement).
+## Objectif
+1. Renforcer le disclaimer légal (Partnery = outil de simplification, pas de responsabilité juridique)
+2. Améliorer le design global de la page contrat
 
-Chaque page aura son propre titre et description :
-- `/` : "Partnery - Connectez createurs et marques"
-- `/discover` : "Decouvrir les opportunites | Partnery"
-- `/auth` : "Connexion | Partnery"
-- `/dashboard` : "Tableau de bord | Partnery"
-- `/mentions-legales` : "Mentions legales | Partnery"
-- `/cgu` : "Conditions generales d'utilisation | Partnery"
-- `/politique-confidentialite` : "Politique de confidentialite | Partnery"
-- etc.
+## Changements prévus
 
-## 2. Mise a jour de `index.html`
+### 1. Refonte du ContractDisclaimer
+- Remplacer la petite alerte actuelle par un encart plus visible et structuré avec une icône `ShieldAlert`
+- Texte clair en 3 points : (1) outil de simplification administrative, (2) aucune responsabilité sur le contenu/exécution, (3) ne constitue pas un conseil juridique
+- Design : fond avec bordure colorée, texte lisible, icône proéminente
 
-- Remplacer l'image Open Graph generique (lovable.dev) par une URL propre a Partnery
-- Mettre a jour le twitter:site vers un compte Partnery
-- Ajouter un lien canonical
-- Ajouter la balise `<link rel="sitemap">` vers le sitemap
+### 2. Amélioration du header de la page ContractDetail
+- Ajouter un gradient subtil en background sur le header
+- Badge de statut plus visible avec des couleurs plus marquées
+- Meilleur espacement et hiérarchie visuelle
 
-## 3. Donnees structurees JSON-LD
+### 3. Refonte des ContractSectionCard
+- Headers de section avec icônes plus grandes et un label stylisé (lettres A-E en badge coloré)
+- Meilleur contraste entre les sections éditables et verrouillées
+- Bordures et ombres plus raffinées
 
-Ajout dans `index.html` d'un script JSON-LD pour :
-- **Organization** : nom, logo, URL, description de Partnery
-- **WebSite** : nom du site, URL, description
+### 4. Amélioration de la section financière
+- Rendre le récapitulatif financier plus visuel avec un fond gradient et une mise en avant du net créateur
+- Séparateurs plus nets
 
-## 4. Sitemap (`public/sitemap.xml`)
+### 5. Refonte de la section signatures
+- Boîtes de signature avec un design plus premium (gradient, icônes, bordures stylisées)
+- État "signé" plus célébratoire (vert avec coche animée)
+- État "en attente" plus clair
 
-Creation d'un sitemap statique listant toutes les pages publiques :
-- `/`
-- `/auth`
-- `/discover`
-- `/mentions-legales`
-- `/cgu`
-- `/politique-confidentialite`
+### 6. Disclaimer dans le dialog de création aussi
+- Ajouter une ligne de disclaimer dans `CreateContractDialog` avant le bouton de création
 
-## 5. Mise a jour de `robots.txt`
+## Fichiers modifiés
+- `src/components/contracts/ContractDisclaimer.tsx` — refonte complète
+- `src/pages/ContractDetail.tsx` — améliorations header + layout
+- `src/components/contracts/ContractSectionCard.tsx` — design amélioré des headers
+- `src/components/contracts/ContractSignatureSection.tsx` — design premium
+- `src/components/contracts/ContractFinancialSection.tsx` — récapitulatif visuel
+- `src/components/contracts/CreateContractDialog.tsx` — ajout disclaimer
 
-Ajout de la reference vers le sitemap :
-```
-Sitemap: https://partnery.app/sitemap.xml
-```
-
-## 6. HTML semantique
-
-Verification et ajout de balises semantiques (`<main>`, `<article>`, `<nav>`, `<section>`) la ou elles manquent, notamment dans la landing page.
-
-## Details techniques
-
-### Fichiers a creer
-- `src/components/SEOHead.tsx` : composant reutilisable pour meta tags dynamiques
-- `public/sitemap.xml` : sitemap statique
-
-### Fichiers a modifier
-- `index.html` : JSON-LD, image OG, canonical
-- `public/robots.txt` : ajout sitemap
-- `src/pages/Index.tsx` : ajout du composant SEOHead
-- `src/pages/Auth.tsx` : ajout SEOHead
-- `src/pages/Discover.tsx` : ajout SEOHead
-- `src/pages/Dashboard.tsx` : ajout SEOHead
-- `src/pages/Profile.tsx` : ajout SEOHead
-- `src/pages/Messages.tsx` : ajout SEOHead
-- `src/pages/MentionsLegales.tsx` : ajout SEOHead
-- `src/pages/CGU.tsx` : ajout SEOHead
-- `src/pages/PolitiqueConfidentialite.tsx` : ajout SEOHead
-- Autres pages : ajout SEOHead avec titre/description adaptes
-
-### Approche
-- Pas de nouvelle dependance : utilisation de `useEffect` natif pour mettre a jour `document.title` et les meta tags
-- Le composant SEOHead accepte `title`, `description` et optionnellement `ogImage`
-- Copyright mis a jour de 2024 a 2025 dans le footer
