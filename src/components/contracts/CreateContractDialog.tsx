@@ -145,6 +145,10 @@ export function CreateContractDialog({
           </div>
         </div>
 
+        <p className="text-[11px] text-muted-foreground leading-relaxed px-1">
+          En créant ce contrat, vous reconnaissez que Partnery agit uniquement comme outil de simplification et n'est pas responsable du contenu ou de l'exécution du contrat.
+        </p>
+
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={loading}>
             Annuler

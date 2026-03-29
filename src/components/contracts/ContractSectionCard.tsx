@@ -10,6 +10,14 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
+const SECTION_LETTERS: Record<ContractSection, string> = {
+  parties: 'A',
+  campaign: 'B',
+  financial: 'C',
+  obligations: 'D',
+  validation: 'E',
+};
+
 interface ContractSectionCardProps {
   section: ContractSection;
   children: React.ReactNode;
@@ -73,16 +81,30 @@ export function ContractSectionCard({
   };
 
   const Icon = SECTION_ICONS[section];
+  const letter = SECTION_LETTERS[section];
 
   return (
-    <Card className="mb-4 overflow-hidden border-border/60 shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-medium)] transition-shadow duration-300">
-      <CardHeader className="pb-3 bg-gradient-to-r from-muted/30 to-transparent border-b border-border/40">
+    <Card className={cn(
+      "mb-5 overflow-hidden transition-all duration-300",
+      isLocked
+        ? "border-border/40 opacity-90"
+        : "border-border/60 shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-medium)]"
+    )}>
+      <CardHeader className="pb-3 bg-gradient-to-r from-muted/40 to-transparent border-b border-border/40">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-base font-semibold flex items-center gap-2.5">
-            <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
-              <Icon className="h-4 w-4 text-primary" />
+          <CardTitle className="text-base font-semibold flex items-center gap-3">
+            <div className="relative">
+              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                <Icon className="h-5 w-5 text-primary" />
+              </div>
+              <span className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-md bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center shadow-sm">
+                {letter}
+              </span>
             </div>
-            {SECTION_LABELS[section]}
+            <span>{SECTION_LABELS[section]}</span>
+            {isLocked && (
+              <Badge variant="secondary" className="text-[10px] h-5 ml-1">Verrouillé</Badge>
+            )}
           </CardTitle>
           <div className="flex items-center gap-1">
             {sectionChanges.length > 0 && (
