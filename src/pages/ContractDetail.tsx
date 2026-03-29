@@ -227,26 +227,25 @@ const ContractDetail = () => {
         <ContractDisclaimer />
 
         {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="shrink-0">
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div>
-              <div className="flex items-center gap-3 flex-wrap">
-                <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <FileText className="h-5 w-5 text-primary" />
-                </div>
-                <div>
+        <div className="rounded-xl bg-gradient-to-r from-primary/5 via-primary/3 to-transparent border border-border/50 p-5 mb-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="shrink-0">
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                <FileText className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <div className="flex items-center gap-3 flex-wrap">
                   <h1 className="text-2xl font-bold">Contrat de partenariat</h1>
-                  <p className="text-sm text-muted-foreground">
-                    Version {contract.version} · Créé le {format(new Date(contract.created_at), 'dd MMMM yyyy', { locale: fr })}
-                  </p>
+                  <ContractStatusBadge status={contract.status} />
                 </div>
-                <ContractStatusBadge status={contract.status} />
+                <p className="text-sm text-muted-foreground mt-0.5">
+                  Version {contract.version} · Créé le {format(new Date(contract.created_at), 'dd MMMM yyyy', { locale: fr })}
+                </p>
               </div>
             </div>
-          </div>
           <div className="flex gap-2 shrink-0">
             {Object.keys(pendingChanges).length > 0 && (
               <Button onClick={handleSave} disabled={saving} className="shadow-[var(--shadow-soft)]">
