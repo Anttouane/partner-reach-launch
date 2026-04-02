@@ -230,7 +230,7 @@ const generateContractHTML = (contract: any): string => {
     <h2 class="section-title">B. DÉTAILS DE LA CAMPAGNE</h2>
     <div class="field">
       <div class="field-label">Description</div>
-      <div class="field-value">${contract.campaign_description || 'Non renseigné'}</div>
+      <div class="field-value">${safe(contract.campaign_description)}</div>
     </div>
     <div style="display: flex; gap: 30px; margin-top: 15px;">
       <div class="field" style="flex: 1;">
