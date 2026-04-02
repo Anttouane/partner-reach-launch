@@ -360,7 +360,7 @@ const ContractDetail = () => {
                   id="creator_name"
                   value={getValue('creator_name') || ''}
                   onChange={e => handleFieldChange('creator_name', e.target.value)}
-                  disabled={!canEdit}
+                  disabled={!canEditField('creator_name')}
                 />
               </div>
               <div className="space-y-2">
@@ -369,7 +369,7 @@ const ContractDetail = () => {
                   id="creator_address"
                   value={getValue('creator_address') || ''}
                   onChange={e => handleFieldChange('creator_address', e.target.value)}
-                  disabled={!canEdit}
+                  disabled={!canEditField('creator_address')}
                   rows={2}
                 />
               </div>
