@@ -25,7 +25,6 @@ export function ContractFinancialSection({ contract, isLocked, onUpdate }: Contr
       onUpdate({
         total_amount: Math.round(totalAmount * 100),
         platform_commission_amount: commissionAmount,
-        stripe_fee_estimate: stripeFeeEstimate,
         creator_net_amount: creatorNet,
         payment_terms: paymentTerms || null,
       });
