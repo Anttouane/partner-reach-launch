@@ -83,6 +83,18 @@ const ContractDetail = () => {
   const isCreator = user?.id === contract?.creator_id;
   const canEdit = (isBrand || isCreator) && !isLocked;
 
+  // Field-level permissions: each party can only edit their own info
+  const brandFields: (keyof Contract)[] = ['brand_name', 'brand_company', 'brand_address', 'brand_obligations'];
+  const creatorFields: (keyof Contract)[] = ['creator_name', 'creator_address', 'creator_obligations'];
+
+  const canEditField = (field: keyof Contract) => {
+    if (!canEdit) return false;
+    if (brandFields.includes(field)) return isBrand;
+    if (creatorFields.includes(field)) return isCreator;
+    // Shared fields (campaign, financial, validation, etc.) editable by both
+    return true;
+  };
+
   const handleFieldChange = (field: keyof Contract, value: any) => {
     setPendingChanges(prev => ({ ...prev, [field]: value }));
   };
@@ -314,7 +326,7 @@ const ContractDetail = () => {
                   id="brand_name"
                   value={getValue('brand_name') || ''}
                   onChange={e => handleFieldChange('brand_name', e.target.value)}
-                  disabled={!canEdit}
+                  disabled={!canEditField('brand_name')}
                 />
               </div>
               <div className="space-y-2">
@@ -323,7 +335,7 @@ const ContractDetail = () => {
                   id="brand_company"
                   value={getValue('brand_company') || ''}
                   onChange={e => handleFieldChange('brand_company', e.target.value)}
-                  disabled={!canEdit}
+                  disabled={!canEditField('brand_company')}
                 />
               </div>
               <div className="space-y-2">
@@ -332,7 +344,7 @@ const ContractDetail = () => {
                   id="brand_address"
                   value={getValue('brand_address') || ''}
                   onChange={e => handleFieldChange('brand_address', e.target.value)}
-                  disabled={!canEdit}
+                  disabled={!canEditField('brand_address')}
                   rows={2}
                 />
               </div>
@@ -348,7 +360,7 @@ const ContractDetail = () => {
                   id="creator_name"
                   value={getValue('creator_name') || ''}
                   onChange={e => handleFieldChange('creator_name', e.target.value)}
-                  disabled={!canEdit}
+                  disabled={!canEditField('creator_name')}
                 />
               </div>
               <div className="space-y-2">
@@ -357,7 +369,7 @@ const ContractDetail = () => {
                   id="creator_address"
                   value={getValue('creator_address') || ''}
                   onChange={e => handleFieldChange('creator_address', e.target.value)}
-                  disabled={!canEdit}
+                  disabled={!canEditField('creator_address')}
                   rows={2}
                 />
               </div>
@@ -471,7 +483,7 @@ const ContractDetail = () => {
                 value={getValue('brand_obligations') || ''}
                 onChange={e => handleFieldChange('brand_obligations', e.target.value)}
                 placeholder="Ex: Fournir les produits, briefing créatif..."
-                disabled={!canEdit}
+                disabled={!canEditField('brand_obligations')}
                 rows={5}
               />
             </div>
@@ -482,7 +494,7 @@ const ContractDetail = () => {
                 value={getValue('creator_obligations') || ''}
                 onChange={e => handleFieldChange('creator_obligations', e.target.value)}
                 placeholder="Ex: Publier X posts, respecter les guidelines..."
-                disabled={!canEdit}
+                disabled={!canEditField('creator_obligations')}
                 rows={5}
               />
             </div>
