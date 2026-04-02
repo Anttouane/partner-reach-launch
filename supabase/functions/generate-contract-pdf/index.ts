@@ -201,7 +201,7 @@ const generateContractHTML = (contract: any): string => {
         <div class="party-title">LA MARQUE</div>
         <div class="field">
           <div class="field-label">Nom / Contact</div>
-          <div class="field-value">${contract.brand_name || 'Non renseigné'}</div>
+          <div class="field-value">${safe(contract.brand_name)}</div>
         </div>
         <div class="field">
           <div class="field-label">Société</div>
