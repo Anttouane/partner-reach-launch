@@ -287,7 +287,7 @@ const generateContractHTML = (contract: any): string => {
       </div>
       <div class="obligation-box">
         <div class="obligation-title">Obligations du Créateur</div>
-        <div>${contract.creator_obligations || 'Non renseigné'}</div>
+        <div>${safe(contract.creator_obligations)}</div>
       </div>
     </div>
   </div>
