@@ -57,8 +57,7 @@ export function CreateContractDialog({
       const totalAmount = parseFloat(formData.total_amount) * 100 || 0;
       const commissionRate = 5.00;
       const commissionAmount = Math.round(totalAmount * (commissionRate / 100));
-      const stripeFeeEstimate = Math.round(totalAmount * 0.015 + 25);
-      const creatorNetAmount = Math.round(totalAmount - commissionAmount - stripeFeeEstimate);
+      const creatorNetAmount = Math.round(totalAmount - commissionAmount);
 
       const { data, error } = await supabase
         .from('contracts')
@@ -73,7 +72,6 @@ export function CreateContractDialog({
           total_amount: totalAmount,
           platform_commission_rate: commissionRate,
           platform_commission_amount: commissionAmount,
-          stripe_fee_estimate: stripeFeeEstimate,
           creator_net_amount: creatorNetAmount,
           status: 'draft',
         })

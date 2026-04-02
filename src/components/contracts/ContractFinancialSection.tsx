@@ -18,15 +18,13 @@ export function ContractFinancialSection({ contract, isLocked, onUpdate }: Contr
 
   const commissionRate = contract.platform_commission_rate;
   const commissionAmount = Math.round(totalAmount * 100 * (commissionRate / 100));
-  const stripeFeeEstimate = Math.round(totalAmount * 100 * 0.015 + 25);
-  const creatorNet = Math.round(totalAmount * 100 - commissionAmount - stripeFeeEstimate);
+  const creatorNet = Math.round(totalAmount * 100 - commissionAmount);
 
   useEffect(() => {
     const handler = setTimeout(() => {
       onUpdate({
         total_amount: Math.round(totalAmount * 100),
         platform_commission_amount: commissionAmount,
-        stripe_fee_estimate: stripeFeeEstimate,
         creator_net_amount: creatorNet,
         payment_terms: paymentTerms || null,
       });
@@ -80,13 +78,6 @@ export function ContractFinancialSection({ contract, isLocked, onUpdate }: Contr
                 Commission plateforme ({commissionRate}%)
               </span>
               <span>-{(commissionAmount / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} €</span>
-            </div>
-            <div className="flex justify-between items-center text-sm text-muted-foreground">
-              <span className="flex items-center gap-1.5">
-                <ArrowDown className="h-3 w-3" />
-                Frais Stripe (estimé ~1.5% + 0.25€)
-              </span>
-              <span>-{(stripeFeeEstimate / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} €</span>
             </div>
           </div>
 
