@@ -16,6 +16,17 @@ const formatDate = (dateStr: string | null): string => {
   return date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
 };
 
+const escapeHtml = (str: string): string =>
+  String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+
+const safe = (value: string | null | undefined, fallback = 'Non renseigné'): string =>
+  escapeHtml(value || fallback);
+
 const generateContractHTML = (contract: any): string => {
   const signedStatus = contract.brand_signed_at && contract.creator_signed_at;
   

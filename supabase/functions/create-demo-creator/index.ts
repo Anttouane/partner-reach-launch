@@ -10,6 +10,16 @@ Deno.serve(async (req) => {
     return new Response('ok', { headers: corsHeaders })
   }
 
+  // Security gate: require admin secret
+  const adminSecret = Deno.env.get('SEED_ADMIN_SECRET');
+  const provided = req.headers.get('x-admin-secret');
+  if (!adminSecret || provided !== adminSecret) {
+    return new Response(JSON.stringify({ error: 'Forbidden' }), { 
+      status: 403, 
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+    });
+  }
+
   try {
     const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
