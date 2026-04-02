@@ -188,7 +188,7 @@ const generateContractHTML = (contract: any): string => {
 <body>
   <div class="header">
     <h1>CONTRAT DE PARTENARIAT</h1>
-    <div class="subtitle">${contract.campaign_title}</div>
+    <div class="subtitle">${safe(contract.campaign_title)}</div>
     <div class="status-badge">
       ${signedStatus ? '✓ CONTRAT SIGNÉ' : '⏳ EN ATTENTE DE SIGNATURE'}
     </div>
