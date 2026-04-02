@@ -273,7 +273,7 @@ const generateContractHTML = (contract: any): string => {
     ${contract.payment_terms ? `
     <div class="field" style="margin-top: 20px;">
       <div class="field-label">Conditions de paiement</div>
-      <div class="field-value">${contract.payment_terms}</div>
+      <div class="field-value">${safe(contract.payment_terms)}</div>
     </div>
     ` : ''}
   </div>
