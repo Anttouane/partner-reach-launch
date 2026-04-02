@@ -483,7 +483,7 @@ const ContractDetail = () => {
                 value={getValue('brand_obligations') || ''}
                 onChange={e => handleFieldChange('brand_obligations', e.target.value)}
                 placeholder="Ex: Fournir les produits, briefing créatif..."
-                disabled={!canEdit}
+                disabled={!canEditField('brand_obligations')}
                 rows={5}
               />
             </div>
@@ -494,7 +494,7 @@ const ContractDetail = () => {
                 value={getValue('creator_obligations') || ''}
                 onChange={e => handleFieldChange('creator_obligations', e.target.value)}
                 placeholder="Ex: Publier X posts, respecter les guidelines..."
-                disabled={!canEdit}
+                disabled={!canEditField('creator_obligations')}
                 rows={5}
               />
             </div>
