@@ -301,7 +301,7 @@ const generateContractHTML = (contract: any): string => {
     ${contract.dispute_resolution ? `
     <div class="field" style="margin-top: 15px;">
       <div class="field-label">Résolution des litiges</div>
-      <div class="field-value">${contract.dispute_resolution}</div>
+      <div class="field-value">${safe(contract.dispute_resolution)}</div>
     </div>
     ` : ''}
   </div>
