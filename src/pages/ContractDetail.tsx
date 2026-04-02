@@ -326,7 +326,7 @@ const ContractDetail = () => {
                   id="brand_name"
                   value={getValue('brand_name') || ''}
                   onChange={e => handleFieldChange('brand_name', e.target.value)}
-                  disabled={!canEdit}
+                  disabled={!canEditField('brand_name')}
                 />
               </div>
               <div className="space-y-2">
@@ -335,7 +335,7 @@ const ContractDetail = () => {
                   id="brand_company"
                   value={getValue('brand_company') || ''}
                   onChange={e => handleFieldChange('brand_company', e.target.value)}
-                  disabled={!canEdit}
+                  disabled={!canEditField('brand_company')}
                 />
               </div>
               <div className="space-y-2">
@@ -344,7 +344,7 @@ const ContractDetail = () => {
                   id="brand_address"
                   value={getValue('brand_address') || ''}
                   onChange={e => handleFieldChange('brand_address', e.target.value)}
-                  disabled={!canEdit}
+                  disabled={!canEditField('brand_address')}
                   rows={2}
                 />
               </div>
