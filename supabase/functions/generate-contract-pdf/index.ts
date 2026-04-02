@@ -283,7 +283,7 @@ const generateContractHTML = (contract: any): string => {
     <div class="obligations">
       <div class="obligation-box">
         <div class="obligation-title">Obligations de la Marque</div>
-        <div>${contract.brand_obligations || 'Non renseigné'}</div>
+        <div>${safe(contract.brand_obligations)}</div>
       </div>
       <div class="obligation-box">
         <div class="obligation-title">Obligations du Créateur</div>
