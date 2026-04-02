@@ -16,6 +16,17 @@ const formatDate = (dateStr: string | null): string => {
   return date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
 };
 
+const escapeHtml = (str: string): string =>
+  String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+
+const safe = (value: string | null | undefined, fallback = 'Non renseigné'): string =>
+  escapeHtml(value || fallback);
+
 const generateContractHTML = (contract: any): string => {
   const signedStatus = contract.brand_signed_at && contract.creator_signed_at;
   
@@ -177,7 +188,7 @@ const generateContractHTML = (contract: any): string => {
 <body>
   <div class="header">
     <h1>CONTRAT DE PARTENARIAT</h1>
-    <div class="subtitle">${contract.campaign_title}</div>
+    <div class="subtitle">${safe(contract.campaign_title)}</div>
     <div class="status-badge">
       ${signedStatus ? '✓ CONTRAT SIGNÉ' : '⏳ EN ATTENTE DE SIGNATURE'}
     </div>
@@ -190,26 +201,26 @@ const generateContractHTML = (contract: any): string => {
         <div class="party-title">LA MARQUE</div>
         <div class="field">
           <div class="field-label">Nom / Contact</div>
-          <div class="field-value">${contract.brand_name || 'Non renseigné'}</div>
+          <div class="field-value">${safe(contract.brand_name)}</div>
         </div>
         <div class="field">
           <div class="field-label">Société</div>
-          <div class="field-value">${contract.brand_company || 'Non renseigné'}</div>
+          <div class="field-value">${safe(contract.brand_company)}</div>
         </div>
         <div class="field">
           <div class="field-label">Adresse</div>
-          <div class="field-value">${contract.brand_address || 'Non renseigné'}</div>
+          <div class="field-value">${safe(contract.brand_address)}</div>
         </div>
       </div>
       <div class="party">
         <div class="party-title">LE CRÉATEUR</div>
         <div class="field">
           <div class="field-label">Nom</div>
-          <div class="field-value">${contract.creator_name || 'Non renseigné'}</div>
+          <div class="field-value">${safe(contract.creator_name)}</div>
         </div>
         <div class="field">
           <div class="field-label">Adresse</div>
-          <div class="field-value">${contract.creator_address || 'Non renseigné'}</div>
+          <div class="field-value">${safe(contract.creator_address)}</div>
         </div>
       </div>
     </div>
@@ -219,7 +230,7 @@ const generateContractHTML = (contract: any): string => {
     <h2 class="section-title">B. DÉTAILS DE LA CAMPAGNE</h2>
     <div class="field">
       <div class="field-label">Description</div>
-      <div class="field-value">${contract.campaign_description || 'Non renseigné'}</div>
+      <div class="field-value">${safe(contract.campaign_description)}</div>
     </div>
     <div style="display: flex; gap: 30px; margin-top: 15px;">
       <div class="field" style="flex: 1;">
@@ -234,7 +245,7 @@ const generateContractHTML = (contract: any): string => {
     ${contract.usage_rights ? `
     <div class="field" style="margin-top: 15px;">
       <div class="field-label">Droits d'utilisation</div>
-      <div class="field-value">${contract.usage_rights}</div>
+      <div class="field-value">${safe(contract.usage_rights)}</div>
     </div>
     ` : ''}
   </div>
@@ -262,7 +273,7 @@ const generateContractHTML = (contract: any): string => {
     ${contract.payment_terms ? `
     <div class="field" style="margin-top: 20px;">
       <div class="field-label">Conditions de paiement</div>
-      <div class="field-value">${contract.payment_terms}</div>
+      <div class="field-value">${safe(contract.payment_terms)}</div>
     </div>
     ` : ''}
   </div>
@@ -272,11 +283,11 @@ const generateContractHTML = (contract: any): string => {
     <div class="obligations">
       <div class="obligation-box">
         <div class="obligation-title">Obligations de la Marque</div>
-        <div>${contract.brand_obligations || 'Non renseigné'}</div>
+        <div>${safe(contract.brand_obligations)}</div>
       </div>
       <div class="obligation-box">
         <div class="obligation-title">Obligations du Créateur</div>
-        <div>${contract.creator_obligations || 'Non renseigné'}</div>
+        <div>${safe(contract.creator_obligations)}</div>
       </div>
     </div>
   </div>
@@ -290,7 +301,7 @@ const generateContractHTML = (contract: any): string => {
     ${contract.dispute_resolution ? `
     <div class="field" style="margin-top: 15px;">
       <div class="field-label">Résolution des litiges</div>
-      <div class="field-value">${contract.dispute_resolution}</div>
+      <div class="field-value">${safe(contract.dispute_resolution)}</div>
     </div>
     ` : ''}
   </div>
