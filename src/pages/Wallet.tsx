@@ -267,10 +267,30 @@ const Wallet = () => {
                         onChange={(e) => setWithdrawIban(e.target.value.toUpperCase())}
                       />
                     </div>
+                    {withdrawAmount && parseFloat(withdrawAmount) > 0 && (
+                      <div className="rounded-lg bg-muted p-4 space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Montant demandé</span>
+                          <span className="font-medium">{parseFloat(withdrawAmount).toFixed(2)} €</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Frais Stripe estimés (~1.5% + 0.25€)</span>
+                          <span className="text-destructive">
+                            -{((parseFloat(withdrawAmount) * 0.015 + 0.25)).toFixed(2)} €
+                          </span>
+                        </div>
+                        <div className="border-t pt-2 flex justify-between">
+                          <span className="font-medium">Vous recevrez (estimé)</span>
+                          <span className="font-bold text-primary">
+                            {(parseFloat(withdrawAmount) - (parseFloat(withdrawAmount) * 0.015 + 0.25)).toFixed(2)} €
+                          </span>
+                        </div>
+                      </div>
+                    )}
                     <div className="flex items-start gap-2 p-3 bg-muted rounded-lg">
                       <AlertCircle className="h-4 w-4 text-muted-foreground mt-0.5" />
                       <p className="text-sm text-muted-foreground">
-                        Les retraits sont traités sous 3-5 jours ouvrés
+                        Les retraits sont traités sous 3-5 jours ouvrés. Des frais de transfert Stripe s'appliquent.
                       </p>
                     </div>
                   </div>

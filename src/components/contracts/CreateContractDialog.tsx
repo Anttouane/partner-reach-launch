@@ -72,7 +72,6 @@ export function CreateContractDialog({
           total_amount: totalAmount,
           platform_commission_rate: commissionRate,
           platform_commission_amount: commissionAmount,
-          stripe_fee_estimate: stripeFeeEstimate,
           creator_net_amount: creatorNetAmount,
           status: 'draft',
         })
