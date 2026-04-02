@@ -245,7 +245,7 @@ const generateContractHTML = (contract: any): string => {
     ${contract.usage_rights ? `
     <div class="field" style="margin-top: 15px;">
       <div class="field-label">Droits d'utilisation</div>
-      <div class="field-value">${contract.usage_rights}</div>
+      <div class="field-value">${safe(contract.usage_rights)}</div>
     </div>
     ` : ''}
   </div>
