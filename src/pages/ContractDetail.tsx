@@ -83,6 +83,18 @@ const ContractDetail = () => {
   const isCreator = user?.id === contract?.creator_id;
   const canEdit = (isBrand || isCreator) && !isLocked;
 
+  // Field-level permissions: each party can only edit their own info
+  const brandFields: (keyof Contract)[] = ['brand_name', 'brand_company', 'brand_address', 'brand_obligations'];
+  const creatorFields: (keyof Contract)[] = ['creator_name', 'creator_address', 'creator_obligations'];
+
+  const canEditField = (field: keyof Contract) => {
+    if (!canEdit) return false;
+    if (brandFields.includes(field)) return isBrand;
+    if (creatorFields.includes(field)) return isCreator;
+    // Shared fields (campaign, financial, validation, etc.) editable by both
+    return true;
+  };
+
   const handleFieldChange = (field: keyof Contract, value: any) => {
     setPendingChanges(prev => ({ ...prev, [field]: value }));
   };
