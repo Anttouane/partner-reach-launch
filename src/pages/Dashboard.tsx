@@ -74,6 +74,7 @@ const Dashboard = () => {
     totalCreatorsWorkedWith: 0,
   });
   const navigate = useNavigate();
+  const { isComplete: profileComplete, isLoading: profileLoading } = useProfileCompletion(user?.id);
 
   useEffect(() => {
     const checkUser = async () => {
