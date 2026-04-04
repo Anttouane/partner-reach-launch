@@ -13,7 +13,7 @@ import Discover from "./pages/Discover";
 import Messages from "./pages/Messages";
 import CreatePitch from "./pages/CreatePitch";
 import CreateOpportunity from "./pages/CreateOpportunity";
-import SeedData from "./pages/SeedData";
+
 import PitchDetail from "./pages/PitchDetail";
 import OpportunityDetail from "./pages/OpportunityDetail";
 import AdminPayments from "./pages/AdminPayments";
@@ -52,7 +52,7 @@ const App = () => (
           <Route path="/admin/payments" element={<AdminPayments />} />
           <Route path="/admin/categories" element={<AdminCategories />} />
           <Route path="/admin/disputes" element={<AdminDisputes />} />
-          <Route path="/seed-data" element={<SeedData />} />
+          
           <Route path="/mentions-legales" element={<MentionsLegales />} />
           <Route path="/cgu" element={<CGU />} />
           <Route path="/politique-confidentialite" element={<PolitiqueConfidentialite />} />
