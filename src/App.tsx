@@ -13,7 +13,7 @@ import Discover from "./pages/Discover";
 import Messages from "./pages/Messages";
 import CreatePitch from "./pages/CreatePitch";
 import CreateOpportunity from "./pages/CreateOpportunity";
-import SeedData from "./pages/SeedData";
+
 import PitchDetail from "./pages/PitchDetail";
 import OpportunityDetail from "./pages/OpportunityDetail";
 import AdminPayments from "./pages/AdminPayments";
