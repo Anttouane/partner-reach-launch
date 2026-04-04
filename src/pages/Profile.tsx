@@ -40,6 +40,9 @@ const Profile = () => {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [searchParams] = useSearchParams();
+  const isOnboarding = searchParams.get("onboarding") === "true";
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     full_name: "",
     bio: "",
