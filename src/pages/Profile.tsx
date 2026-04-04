@@ -419,7 +419,7 @@ const Profile = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="category">Catégorie</Label>
+                <Label htmlFor="category">Catégorie <span className="text-destructive">*</span></Label>
                 <Select 
                   value={formData.category_id} 
                   onValueChange={(value) => setFormData({ ...formData, category_id: value })}
