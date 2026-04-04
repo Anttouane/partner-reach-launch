@@ -302,6 +302,10 @@ const Profile = () => {
         title: "Profil mis à jour !",
         description: "Vos informations ont été sauvegardées avec succès.",
       });
+
+      if (isOnboarding) {
+        navigate("/dashboard");
+      }
     } catch (error: any) {
       toast({
         title: "Erreur",
