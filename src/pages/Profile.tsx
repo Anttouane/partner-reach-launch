@@ -333,7 +333,33 @@ const Profile = () => {
       <Header user={user} />
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
-        <h1 className="text-3xl font-bold mb-6">Mon Profil</h1>
+        {isOnboarding && (
+          <Alert className="mb-6 border-primary/50 bg-primary/5">
+            <AlertCircle className="h-5 w-5 text-primary" />
+            <AlertTitle className="text-primary font-semibold">Bienvenue sur Partnery ! 🎉</AlertTitle>
+            <AlertDescription>
+              Complétez votre profil avec les informations obligatoires pour pouvoir utiliser la plateforme.
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {validationErrors.length > 0 && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertCircle className="h-5 w-5" />
+            <AlertTitle>Champs manquants</AlertTitle>
+            <AlertDescription>
+              <ul className="list-disc pl-4 mt-1 space-y-1">
+                {validationErrors.map((err, i) => (
+                  <li key={i}>{err}</li>
+                ))}
+              </ul>
+            </AlertDescription>
+          </Alert>
+        )}
+
+        <h1 className="text-3xl font-bold mb-6">
+          {isOnboarding ? "Complétez votre profil" : "Mon Profil"}
+        </h1>
 
         {/* Avatar Section */}
         <Card className="mb-6">
