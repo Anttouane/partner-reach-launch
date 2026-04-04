@@ -71,10 +71,25 @@ const Auth = () => {
 
       if (error) throw error;
 
-      toast({
-        title: "Compte créé avec succès !",
-        description: "Vous pouvez maintenant vous connecter.",
+      // Auto sign-in after signup
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       });
+
+      if (signInError) {
+        toast({
+          title: "Compte créé !",
+          description: "Vérifiez votre email puis connectez-vous.",
+        });
+        return;
+      }
+
+      toast({
+        title: "Bienvenue sur Partnery !",
+        description: "Complétez votre profil pour commencer.",
+      });
+      navigate("/profile?onboarding=true");
     } catch (error: any) {
       toast({
         title: "Erreur",
