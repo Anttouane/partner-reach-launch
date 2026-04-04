@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import SEOHead from "@/components/SEOHead";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useProfileCompletion } from "@/hooks/useProfileCompletion";
 import { User } from "@supabase/supabase-js";
 import Header from "@/components/Header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -73,6 +74,7 @@ const Dashboard = () => {
     totalCreatorsWorkedWith: 0,
   });
   const navigate = useNavigate();
+  const { isComplete: profileComplete, isLoading: profileLoading } = useProfileCompletion(user?.id);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -98,6 +100,12 @@ const Dashboard = () => {
 
     return () => subscription.unsubscribe();
   }, [navigate]);
+
+  useEffect(() => {
+    if (!profileLoading && user && !profileComplete) {
+      navigate("/profile?onboarding=true");
+    }
+  }, [profileLoading, profileComplete, user, navigate]);
 
   const loadDashboardData = async (currentUser: User) => {
     const userType = currentUser.user_metadata?.user_type || "creator";

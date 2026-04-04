@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import SEOHead from "@/components/SEOHead";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 import Header from "@/components/Header";
@@ -12,7 +12,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Camera, Instagram, Youtube, Twitter, Linkedin, Globe } from "lucide-react";
+import { Loader2, Camera, Instagram, Youtube, Twitter, Linkedin, Globe, AlertCircle } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import PortfolioSection from "@/components/portfolio/PortfolioSection";
 
 interface Category {
@@ -39,6 +40,9 @@ const Profile = () => {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [searchParams] = useSearchParams();
+  const isOnboarding = searchParams.get("onboarding") === "true";
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     full_name: "",
     bio: "",
@@ -214,9 +218,36 @@ const Profile = () => {
     }
   };
 
+  const validateProfile = (): string[] => {
+    const errors: string[] = [];
+    if (!formData.full_name.trim()) errors.push("Le nom complet est obligatoire");
+    if (!formData.bio.trim()) errors.push("La bio est obligatoire");
+    if (!formData.category_id) errors.push("La catégorie est obligatoire");
+
+    if (profile?.user_type === "creator") {
+      if (!formData.instagram_handle && !formData.youtube_handle && !formData.tiktok_handle) {
+        errors.push("Au moins un réseau social (@) est obligatoire");
+      }
+    } else {
+      if (!formData.company_name.trim()) errors.push("Le nom de l'entreprise est obligatoire");
+      if (!formData.industry.trim()) errors.push("Le secteur d'activité est obligatoire");
+    }
+    return errors;
+  };
+
   const handleSave = async () => {
     if (!user) return;
 
+    const errors = validateProfile();
+    setValidationErrors(errors);
+    if (errors.length > 0) {
+      toast({
+        title: "Champs obligatoires manquants",
+        description: "Veuillez remplir tous les champs obligatoires.",
+        variant: "destructive",
+      });
+      return;
+    }
     setSaving(true);
     try {
       // Update main profile
@@ -271,6 +302,10 @@ const Profile = () => {
         title: "Profil mis à jour !",
         description: "Vos informations ont été sauvegardées avec succès.",
       });
+
+      if (isOnboarding) {
+        navigate("/dashboard");
+      }
     } catch (error: any) {
       toast({
         title: "Erreur",
@@ -298,7 +333,33 @@ const Profile = () => {
       <Header user={user} />
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
-        <h1 className="text-3xl font-bold mb-6">Mon Profil</h1>
+        {isOnboarding && (
+          <Alert className="mb-6 border-primary/50 bg-primary/5">
+            <AlertCircle className="h-5 w-5 text-primary" />
+            <AlertTitle className="text-primary font-semibold">Bienvenue sur Partnery ! 🎉</AlertTitle>
+            <AlertDescription>
+              Complétez votre profil avec les informations obligatoires pour pouvoir utiliser la plateforme.
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {validationErrors.length > 0 && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertCircle className="h-5 w-5" />
+            <AlertTitle>Champs manquants</AlertTitle>
+            <AlertDescription>
+              <ul className="list-disc pl-4 mt-1 space-y-1">
+                {validationErrors.map((err, i) => (
+                  <li key={i}>{err}</li>
+                ))}
+              </ul>
+            </AlertDescription>
+          </Alert>
+        )}
+
+        <h1 className="text-3xl font-bold mb-6">
+          {isOnboarding ? "Complétez votre profil" : "Mon Profil"}
+        </h1>
 
         {/* Avatar Section */}
         <Card className="mb-6">
@@ -350,7 +411,7 @@ const Profile = () => {
           <CardContent className="space-y-4">
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="full_name">Nom complet</Label>
+                <Label htmlFor="full_name">Nom complet <span className="text-destructive">*</span></Label>
                 <Input
                   id="full_name"
                   value={formData.full_name}
@@ -358,7 +419,7 @@ const Profile = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="category">Catégorie</Label>
+                <Label htmlFor="category">Catégorie <span className="text-destructive">*</span></Label>
                 <Select 
                   value={formData.category_id} 
                   onValueChange={(value) => setFormData({ ...formData, category_id: value })}
@@ -378,7 +439,7 @@ const Profile = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="bio">Bio</Label>
+              <Label htmlFor="bio">Bio <span className="text-destructive">*</span></Label>
               <Textarea
                 id="bio"
                 value={formData.bio}
@@ -491,8 +552,8 @@ const Profile = () => {
             <CardTitle>{isCreator ? "Informations créateur" : "Informations entreprise"}</CardTitle>
             <CardDescription>
               {isCreator 
-                ? "Détails sur votre activité de créateur de contenu"
-                : "Détails sur votre entreprise"}
+                ? "Détails sur votre activité — au moins un @ est obligatoire"
+                : "Détails sur votre entreprise (obligatoire)"}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -585,7 +646,7 @@ const Profile = () => {
             ) : (
               <>
                 <div className="space-y-2">
-                  <Label htmlFor="company">Nom de l'entreprise</Label>
+                  <Label htmlFor="company">Nom de l'entreprise <span className="text-destructive">*</span></Label>
                   <Input
                     id="company"
                     value={formData.company_name}
@@ -595,7 +656,7 @@ const Profile = () => {
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="industry">Secteur</Label>
+                    <Label htmlFor="industry">Secteur <span className="text-destructive">*</span></Label>
                     <Input
                       id="industry"
                       value={formData.industry}
