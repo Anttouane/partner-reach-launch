@@ -12,7 +12,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Camera, Instagram, Youtube, Twitter, Linkedin, Globe } from "lucide-react";
+import { Loader2, Camera, Instagram, Youtube, Twitter, Linkedin, Globe, AlertCircle } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import PortfolioSection from "@/components/portfolio/PortfolioSection";
 
 interface Category {
