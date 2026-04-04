@@ -646,7 +646,7 @@ const Profile = () => {
             ) : (
               <>
                 <div className="space-y-2">
-                  <Label htmlFor="company">Nom de l'entreprise</Label>
+                  <Label htmlFor="company">Nom de l'entreprise <span className="text-destructive">*</span></Label>
                   <Input
                     id="company"
                     value={formData.company_name}
