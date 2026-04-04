@@ -218,9 +218,36 @@ const Profile = () => {
     }
   };
 
+  const validateProfile = (): string[] => {
+    const errors: string[] = [];
+    if (!formData.full_name.trim()) errors.push("Le nom complet est obligatoire");
+    if (!formData.bio.trim()) errors.push("La bio est obligatoire");
+    if (!formData.category_id) errors.push("La catégorie est obligatoire");
+
+    if (profile?.user_type === "creator") {
+      if (!formData.instagram_handle && !formData.youtube_handle && !formData.tiktok_handle) {
+        errors.push("Au moins un réseau social (@) est obligatoire");
+      }
+    } else {
+      if (!formData.company_name.trim()) errors.push("Le nom de l'entreprise est obligatoire");
+      if (!formData.industry.trim()) errors.push("Le secteur d'activité est obligatoire");
+    }
+    return errors;
+  };
+
   const handleSave = async () => {
     if (!user) return;
 
+    const errors = validateProfile();
+    setValidationErrors(errors);
+    if (errors.length > 0) {
+      toast({
+        title: "Champs obligatoires manquants",
+        description: "Veuillez remplir tous les champs obligatoires.",
+        variant: "destructive",
+      });
+      return;
+    }
     setSaving(true);
     try {
       // Update main profile
