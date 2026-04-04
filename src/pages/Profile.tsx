@@ -656,7 +656,7 @@ const Profile = () => {
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="industry">Secteur</Label>
+                    <Label htmlFor="industry">Secteur <span className="text-destructive">*</span></Label>
                     <Input
                       id="industry"
                       value={formData.industry}
