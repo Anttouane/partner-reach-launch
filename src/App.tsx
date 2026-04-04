@@ -52,7 +52,7 @@ const App = () => (
           <Route path="/admin/payments" element={<AdminPayments />} />
           <Route path="/admin/categories" element={<AdminCategories />} />
           <Route path="/admin/disputes" element={<AdminDisputes />} />
-          <Route path="/seed-data" element={<SeedData />} />
+          
           <Route path="/mentions-legales" element={<MentionsLegales />} />
           <Route path="/cgu" element={<CGU />} />
           <Route path="/politique-confidentialite" element={<PolitiqueConfidentialite />} />
