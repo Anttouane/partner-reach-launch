@@ -439,7 +439,7 @@ const Profile = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="bio">Bio</Label>
+              <Label htmlFor="bio">Bio <span className="text-destructive">*</span></Label>
               <Textarea
                 id="bio"
                 value={formData.bio}
