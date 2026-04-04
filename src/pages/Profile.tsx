@@ -552,8 +552,8 @@ const Profile = () => {
             <CardTitle>{isCreator ? "Informations créateur" : "Informations entreprise"}</CardTitle>
             <CardDescription>
               {isCreator 
-                ? "Détails sur votre activité de créateur de contenu"
-                : "Détails sur votre entreprise"}
+                ? "Détails sur votre activité — au moins un @ est obligatoire"
+                : "Détails sur votre entreprise (obligatoire)"}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
