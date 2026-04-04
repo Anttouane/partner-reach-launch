@@ -101,6 +101,12 @@ const Dashboard = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
+  useEffect(() => {
+    if (!profileLoading && user && !profileComplete) {
+      navigate("/profile?onboarding=true");
+    }
+  }, [profileLoading, profileComplete, user, navigate]);
+
   const loadDashboardData = async (currentUser: User) => {
     const userType = currentUser.user_metadata?.user_type || "creator";
     
