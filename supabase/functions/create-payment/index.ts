@@ -75,7 +75,7 @@ serve(async (req) => {
       .eq("user_id", payee_id)
       .maybeSingle();
 
-    let commissionRate = 10;
+    let commissionRate = 5;
     if (userCommission) {
       commissionRate = parseFloat(userCommission.commission_rate);
     } else {
