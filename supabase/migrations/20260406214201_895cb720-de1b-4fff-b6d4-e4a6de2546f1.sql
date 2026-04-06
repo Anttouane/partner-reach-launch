@@ -1,0 +1,1 @@
+UPDATE platform_settings SET setting_value = '5', updated_at = now() WHERE setting_key = 'commission_rate';
