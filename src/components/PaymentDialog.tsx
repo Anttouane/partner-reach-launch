@@ -10,7 +10,7 @@ import { CreditCard, Euro, Loader2, CheckCircle } from "lucide-react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || "");
+const stripePromise = loadStripe("pk_test_51SZuuCPFrJ7yM5bTgly9IHTkjq9AO89q1eiW7yAvgLpVjpR5UPUOhkJei0VAYtK3sT81ZtTGbyqOszbdMJkNP68S00nAa15Zx7");
 
 interface PaymentDialogProps {
   open: boolean;
