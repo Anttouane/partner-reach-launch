@@ -32,6 +32,8 @@ import {
   Briefcase,
   AlertTriangle,
 } from 'lucide-react';
+import { OpenDisputeDialog } from '@/components/disputes/OpenDisputeDialog';
+import { DisputePanel } from '@/components/disputes/DisputePanel';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -547,6 +549,24 @@ const ContractDetail = () => {
           isBrand={isBrand}
           onSign={handleSign}
         />
+
+        {/* Dispute section */}
+        {contract.status === 'disputed' && user && (
+          <div className="mt-6">
+            <DisputePanel contractId={contract.id} userId={user.id} />
+          </div>
+        )}
+
+        {/* Open dispute button - only for signed/active contracts */}
+        {(contract.status === 'signed' || contract.status === 'active') && user && (isBrand || isCreator) && (
+          <div className="mt-6 flex justify-end">
+            <OpenDisputeDialog
+              contractId={contract.id}
+              userId={user.id}
+              onDisputeOpened={() => window.location.reload()}
+            />
+          </div>
+        )}
 
         {/* Section G: Change History */}
         <div className="mt-6">
