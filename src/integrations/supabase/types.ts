@@ -457,6 +457,94 @@ export type Database = {
           },
         ]
       }
+      dispute_evidence: {
+        Row: {
+          created_at: string
+          description: string
+          dispute_id: string
+          evidence_type: string
+          file_url: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          dispute_id: string
+          evidence_type?: string
+          file_url?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          dispute_id?: string
+          evidence_type?: string
+          file_url?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dispute_evidence_dispute_id_fkey"
+            columns: ["dispute_id"]
+            isOneToOne: false
+            referencedRelation: "disputes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      disputes: {
+        Row: {
+          admin_notes: string | null
+          contract_id: string
+          created_at: string
+          id: string
+          opened_by: string
+          reason: string
+          resolution_notes: string | null
+          resolution_type: string | null
+          resolved_by: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          contract_id: string
+          created_at?: string
+          id?: string
+          opened_by: string
+          reason: string
+          resolution_notes?: string | null
+          resolution_type?: string | null
+          resolved_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          contract_id?: string
+          created_at?: string
+          id?: string
+          opened_by?: string
+          reason?: string
+          resolution_notes?: string | null
+          resolution_type?: string | null
+          resolved_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "disputes_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "contracts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           content: string
