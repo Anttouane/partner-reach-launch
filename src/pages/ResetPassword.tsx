@@ -13,18 +13,39 @@ const ResetPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [sessionReady, setSessionReady] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
-    // Listen for password recovery event
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event) => {
-      if (event === "PASSWORD_RECOVERY") {
-        // User is in password recovery mode
-      }
-    });
+    // Exchange the recovery token from the URL hash for a session
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = hashParams.get("access_token");
+    const refreshToken = hashParams.get("refresh_token");
+    const type = hashParams.get("type");
 
-    return () => subscription.unsubscribe();
+    if (accessToken && refreshToken && type === "recovery") {
+      supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken })
+        .then(({ error }) => {
+          if (error) {
+            toast({ title: "Erreur", description: "Lien de réinitialisation invalide ou expiré.", variant: "destructive" });
+          } else {
+            setSessionReady(true);
+          }
+        });
+    } else {
+      // Fallback: listen for PASSWORD_RECOVERY event (e.g. PKCE flow)
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+        if (event === "PASSWORD_RECOVERY") {
+          setSessionReady(true);
+        }
+      });
+      // Check if already has a session
+      supabase.auth.getSession().then(({ data }) => {
+        if (data.session) setSessionReady(true);
+      });
+      return () => subscription.unsubscribe();
+    }
   }, []);
 
   const handleResetPassword = async () => {
