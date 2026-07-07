@@ -32,7 +32,8 @@ const CGU = () => {
                 <AccordionTrigger className="text-lg font-semibold">1. Objet et acceptation</AccordionTrigger>
                 <AccordionContent className="space-y-3 text-muted-foreground">
                   <p>Les présentes Conditions Générales d'Utilisation (CGU) régissent l'accès et l'utilisation de la plateforme Partnery, accessible à l'adresse partnery.app.</p>
-                  <p>Partnery est une plateforme de mise en relation directe entre marques et créateurs de contenu, permettant la création de partenariats sans intermédiaire. <strong className="text-foreground">Partnery agit exclusivement en tant qu'intermédiaire technique de mise en relation et de facilitation des transactions.</strong></p>
+                  <p>Partnery est une plateforme de mise en relation automatisée entre marques et créateurs de contenu. <strong className="text-foreground">Partnery agit exclusivement en tant qu'intermédiaire technique de mise en relation et de facilitation des transactions.</strong></p>
+                  <p><strong className="text-foreground">Matching automatique :</strong> lorsqu'une marque lance une campagne, la plateforme propose automatiquement les créateurs correspondant aux critères. La marque reste seule décisionnaire de la validation finale de chaque profil, et le créateur reste libre d'accepter ou refuser chaque proposition.</p>
                   <p>L'inscription et l'utilisation de la plateforme impliquent l'acceptation pleine et entière des présentes CGU. Si vous n'acceptez pas ces conditions, vous ne devez pas utiliser la plateforme.</p>
                 </AccordionContent>
               </AccordionItem>
