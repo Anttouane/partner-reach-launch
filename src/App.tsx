@@ -6,21 +6,16 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import ResetPassword from "./pages/ResetPassword";
+import Onboarding from "./pages/Onboarding";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
-import PublicProfile from "./pages/PublicProfile";
-import Discover from "./pages/Discover";
 import Messages from "./pages/Messages";
-import CreatePitch from "./pages/CreatePitch";
-import CreateOpportunity from "./pages/CreateOpportunity";
-
-import PitchDetail from "./pages/PitchDetail";
-import OpportunityDetail from "./pages/OpportunityDetail";
+import CampaignNew from "./pages/CampaignNew";
+import CampaignDetail from "./pages/CampaignDetail";
+import CollabActive from "./pages/CollabActive";
 import AdminPayments from "./pages/AdminPayments";
 import AdminCategories from "./pages/AdminCategories";
 import AdminDisputes from "./pages/AdminDisputes";
-import Wallet from "./pages/Wallet";
-import ContractDetail from "./pages/ContractDetail";
 import MentionsLegales from "./pages/MentionsLegales";
 import CGU from "./pages/CGU";
 import PolitiqueConfidentialite from "./pages/PolitiqueConfidentialite";
@@ -38,25 +33,19 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/discover" element={<Discover />} />
+          <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/profile/:id" element={<PublicProfile />} />
           <Route path="/messages" element={<Messages />} />
-          <Route path="/wallet" element={<Wallet />} />
-          <Route path="/create-pitch" element={<CreatePitch />} />
-          <Route path="/create-opportunity" element={<CreateOpportunity />} />
-          <Route path="/pitch/:id" element={<PitchDetail />} />
-          <Route path="/opportunity/:id" element={<OpportunityDetail />} />
-          <Route path="/contract/:id" element={<ContractDetail />} />
+          <Route path="/campaigns/new" element={<CampaignNew />} />
+          <Route path="/campaigns/:id" element={<CampaignDetail />} />
+          <Route path="/collab/:id" element={<CollabActive />} />
           <Route path="/admin/payments" element={<AdminPayments />} />
           <Route path="/admin/categories" element={<AdminCategories />} />
           <Route path="/admin/disputes" element={<AdminDisputes />} />
-          
           <Route path="/mentions-legales" element={<MentionsLegales />} />
           <Route path="/cgu" element={<CGU />} />
           <Route path="/politique-confidentialite" element={<PolitiqueConfidentialite />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
