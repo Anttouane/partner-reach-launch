@@ -108,6 +108,100 @@ export type Database = {
           },
         ]
       }
+      campaign_matches: {
+        Row: {
+          brand_status: Database["public"]["Enums"]["match_brand_status"]
+          campaign_id: string
+          created_at: string
+          creator_id: string
+          creator_status: Database["public"]["Enums"]["match_creator_status"]
+          id: string
+          match_score: number
+          updated_at: string
+        }
+        Insert: {
+          brand_status?: Database["public"]["Enums"]["match_brand_status"]
+          campaign_id: string
+          created_at?: string
+          creator_id: string
+          creator_status?: Database["public"]["Enums"]["match_creator_status"]
+          id?: string
+          match_score?: number
+          updated_at?: string
+        }
+        Update: {
+          brand_status?: Database["public"]["Enums"]["match_brand_status"]
+          campaign_id?: string
+          created_at?: string
+          creator_id?: string
+          creator_status?: Database["public"]["Enums"]["match_creator_status"]
+          id?: string
+          match_score?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_matches_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      campaigns: {
+        Row: {
+          brand_id: string
+          budget_total: number
+          created_at: string
+          creators_wanted: number
+          deadline: string | null
+          description: string | null
+          id: string
+          min_audience: number
+          name: string
+          niche_category_id: string | null
+          status: Database["public"]["Enums"]["campaign_status"]
+          updated_at: string
+        }
+        Insert: {
+          brand_id: string
+          budget_total: number
+          created_at?: string
+          creators_wanted?: number
+          deadline?: string | null
+          description?: string | null
+          id?: string
+          min_audience?: number
+          name: string
+          niche_category_id?: string | null
+          status?: Database["public"]["Enums"]["campaign_status"]
+          updated_at?: string
+        }
+        Update: {
+          brand_id?: string
+          budget_total?: number
+          created_at?: string
+          creators_wanted?: number
+          deadline?: string | null
+          description?: string | null
+          id?: string
+          min_audience?: number
+          name?: string
+          niche_category_id?: string | null
+          status?: Database["public"]["Enums"]["campaign_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaigns_niche_category_id_fkey"
+            columns: ["niche_category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       categories: {
         Row: {
           created_at: string
@@ -128,6 +222,60 @@ export type Database = {
           slug?: string
         }
         Relationships: []
+      }
+      collabs: {
+        Row: {
+          amount: number
+          campaign_id: string
+          commission: number
+          created_at: string
+          creator_id: string
+          id: string
+          match_id: string | null
+          status: Database["public"]["Enums"]["collab_status"]
+          stripe_payment_intent: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          campaign_id: string
+          commission?: number
+          created_at?: string
+          creator_id: string
+          id?: string
+          match_id?: string | null
+          status?: Database["public"]["Enums"]["collab_status"]
+          stripe_payment_intent?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          campaign_id?: string
+          commission?: number
+          created_at?: string
+          creator_id?: string
+          id?: string
+          match_id?: string | null
+          status?: Database["public"]["Enums"]["collab_status"]
+          stripe_payment_intent?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collabs_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collabs_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "campaign_matches"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       contract_changes: {
         Row: {
@@ -413,6 +561,7 @@ export type Database = {
           id: string
           instagram_followers: number | null
           instagram_handle: string | null
+          rate_per_collab: number | null
           tiktok_followers: number | null
           tiktok_handle: string | null
           updated_at: string
@@ -427,6 +576,7 @@ export type Database = {
           id: string
           instagram_followers?: number | null
           instagram_handle?: string | null
+          rate_per_collab?: number | null
           tiktok_followers?: number | null
           tiktok_handle?: string | null
           updated_at?: string
@@ -441,6 +591,7 @@ export type Database = {
           id?: string
           instagram_followers?: number | null
           instagram_handle?: string | null
+          rate_per_collab?: number | null
           tiktok_followers?: number | null
           tiktok_handle?: string | null
           updated_at?: string
@@ -913,6 +1064,19 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      campaign_status:
+        | "draft"
+        | "matching"
+        | "active"
+        | "completed"
+        | "cancelled"
+      collab_status:
+        | "awaiting_payment"
+        | "escrowed"
+        | "delivered"
+        | "released"
+        | "refunded"
+        | "disputed"
       contract_status:
         | "draft"
         | "revision_requested"
@@ -922,6 +1086,8 @@ export type Database = {
         | "completed"
         | "disputed"
         | "cancelled"
+      match_brand_status: "pending" | "approved" | "rejected"
+      match_creator_status: "pending" | "accepted" | "refused"
       user_type: "creator" | "brand"
     }
     CompositeTypes: {
@@ -1051,6 +1217,21 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      campaign_status: [
+        "draft",
+        "matching",
+        "active",
+        "completed",
+        "cancelled",
+      ],
+      collab_status: [
+        "awaiting_payment",
+        "escrowed",
+        "delivered",
+        "released",
+        "refunded",
+        "disputed",
+      ],
       contract_status: [
         "draft",
         "revision_requested",
@@ -1061,6 +1242,8 @@ export const Constants = {
         "disputed",
         "cancelled",
       ],
+      match_brand_status: ["pending", "approved", "rejected"],
+      match_creator_status: ["pending", "accepted", "refused"],
       user_type: ["creator", "brand"],
     },
   },
