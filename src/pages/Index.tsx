@@ -97,10 +97,10 @@ const Index = () => {
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
-              { icon: BadgePercent, value: "5%", label: "de commission seulement" },
-              { icon: Target, value: "100%", label: "Matching automatique" },
-              { icon: FileText, value: "1 clic", label: "Contrat généré" },
-              { icon: ShieldCheck, value: "Stripe", label: "Paiement sécurisé" },
+              { icon: BadgePercent, title: "5% de commission", sub: "seulement" },
+              { icon: Target, title: "Matching", sub: "automatique" },
+              { icon: FileText, title: "Contrat généré", sub: "en 1 clic" },
+              { icon: ShieldCheck, title: "Paiement sécurisé", sub: "via Stripe" },
             ].map((s, i) => (
               <motion.div
                 key={i}
@@ -110,9 +110,9 @@ const Index = () => {
                 transition={{ duration: 0.4, delay: i * 0.1 }}
                 className="space-y-2"
               >
-                <s.icon className="h-6 w-6 text-primary mx-auto mb-2" />
-                <div className="text-3xl md:text-4xl font-bold text-background">{s.value}</div>
-                <div className="text-background/70 text-sm font-medium">{s.label}</div>
+                <s.icon className="h-7 w-7 text-primary mx-auto mb-3" />
+                <div className="text-xl md:text-2xl font-bold text-background leading-tight">{s.title}</div>
+                <div className="text-background/60 text-sm">{s.sub}</div>
               </motion.div>
             ))}
           </div>
