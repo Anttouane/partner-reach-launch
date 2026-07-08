@@ -140,7 +140,7 @@ const Index = () => {
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {[
-              { n: "1", title: "Vous définissez votre budget et vos critères", desc: "Niche, audience minimale, nombre de créateurs, deadline." },
+              { n: "1", title: "Vous définissez votre budget et vos critères", desc: "Thématique d'audience, taille minimale, plateformes, nombre de créateurs, deadline." },
               { n: "2", title: "On sélectionne automatiquement les créateurs qui correspondent", desc: "L'algorithme trouve les meilleurs profils pour votre campagne." },
               { n: "3", title: "Vous validez, on gère le contrat et le paiement", desc: "Contrat auto-généré, paiement sécurisé Stripe, tout est traçable." },
             ].map((step, i) => (
