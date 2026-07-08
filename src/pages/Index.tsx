@@ -13,7 +13,6 @@ import {
   Sparkles,
   FileText,
   ShieldCheck,
-  Star,
   Check,
   X,
   Target,
@@ -98,10 +97,10 @@ const Index = () => {
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
-              { icon: BadgePercent, value: "5%", label: "de commission seulement" },
-              { icon: Target, value: "100%", label: "Matching automatique" },
-              { icon: FileText, value: "1 clic", label: "Contrat généré" },
-              { icon: ShieldCheck, value: "Stripe", label: "Paiement sécurisé" },
+              { icon: BadgePercent, title: "5% de commission", sub: "seulement" },
+              { icon: Target, title: "Matching", sub: "automatique" },
+              { icon: FileText, title: "Contrat généré", sub: "en 1 clic" },
+              { icon: ShieldCheck, title: "Paiement sécurisé", sub: "via Stripe" },
             ].map((s, i) => (
               <motion.div
                 key={i}
@@ -111,9 +110,9 @@ const Index = () => {
                 transition={{ duration: 0.4, delay: i * 0.1 }}
                 className="space-y-2"
               >
-                <s.icon className="h-6 w-6 text-primary mx-auto mb-2" />
-                <div className="text-3xl md:text-4xl font-bold text-background">{s.value}</div>
-                <div className="text-background/70 text-sm font-medium">{s.label}</div>
+                <s.icon className="h-7 w-7 text-primary mx-auto mb-3" />
+                <div className="text-xl md:text-2xl font-bold text-background leading-tight">{s.title}</div>
+                <div className="text-background/60 text-sm">{s.sub}</div>
               </motion.div>
             ))}
           </div>
@@ -140,7 +139,7 @@ const Index = () => {
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {[
-              { n: "1", title: "Vous définissez votre budget et vos critères", desc: "Niche, audience minimale, nombre de créateurs, deadline." },
+              { n: "1", title: "Vous définissez votre budget et vos critères", desc: "Thématique d'audience, taille minimale, plateformes, nombre de créateurs, deadline." },
               { n: "2", title: "On sélectionne automatiquement les créateurs qui correspondent", desc: "L'algorithme trouve les meilleurs profils pour votre campagne." },
               { n: "3", title: "Vous validez, on gère le contrat et le paiement", desc: "Contrat auto-généré, paiement sécurisé Stripe, tout est traçable." },
             ].map((step, i) => (
@@ -192,8 +191,8 @@ const Index = () => {
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {[
-              { n: "1", title: "Vous créez votre profil en 2 minutes", desc: "Niche, taille d'audience, tarif par collab. C'est tout." },
-              { n: "2", title: "Vous recevez des propositions adaptées à votre niche", desc: "Fini le démarchage : les marques viennent à vous." },
+              { n: "1", title: "Vous créez votre profil en quelques minutes", desc: "Plateformes, taille d'audience, thématiques abordées, formats proposés (post, story, vidéo, UGC…) et tarif par collab." },
+              { n: "2", title: "Vous recevez des propositions adaptées à votre audience", desc: "Fini le démarchage : les marques alignées avec votre profil viennent directement à vous." },
               { n: "3", title: "Vous acceptez en un clic, le contrat est prêt", desc: "Paiement séquestré, livraison, libération des fonds. Zero friction." },
             ].map((step, i) => (
               <motion.div
@@ -279,73 +278,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* TÉMOIGNAGES */}
-      <section className="py-24 px-4 bg-secondary/20">
-        <div className="container mx-auto max-w-6xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Ils utilisent Partnery
-            </h2>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Camille D.",
-                role: "Marque e-commerce mode",
-                initials: "CD",
-                quote: "En 3 campagnes, j'ai travaillé avec 12 créatrices parfaitement alignées à ma marque. Le matching automatique nous fait gagner des semaines.",
-                bg: "bg-primary/20",
-              },
-              {
-                name: "Lucas M.",
-                role: "Micro-influenceur lifestyle · 8K",
-                initials: "LM",
-                quote: "Fini le démarchage. Je reçois des propositions ciblées, j'accepte celles qui me plaisent. Le paiement arrive à chaque fois.",
-                bg: "bg-secondary/40",
-              },
-              {
-                name: "Sarah B.",
-                role: "Marque food & bien-être",
-                initials: "SB",
-                quote: "5% de commission au lieu de 25%. Pour le même budget, je collabore avec 3x plus de créateurs. Game changer.",
-                bg: "bg-primary/20",
-              },
-            ].map((t, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="bg-background rounded-3xl p-8 border border-border shadow-soft"
-              >
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, s) => (
-                    <Star key={s} className="h-4 w-4 fill-primary text-primary" />
-                  ))}
-                </div>
-                <p className="text-foreground leading-relaxed mb-6 italic">"{t.quote}"</p>
-                <div className="flex items-center gap-3">
-                  <div className={`w-12 h-12 ${t.bg} rounded-full flex items-center justify-center font-bold text-foreground`}>
-                    {t.initials}
-                  </div>
-                  <div>
-                    <div className="font-bold text-foreground">{t.name}</div>
-                    <div className="text-sm text-muted-foreground">{t.role}</div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Témoignages retirés — pas de faux avis */}
 
       {/* CTA FINAL */}
       <section className="py-24 px-4 bg-foreground">
