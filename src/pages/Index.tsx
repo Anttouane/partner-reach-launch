@@ -192,8 +192,8 @@ const Index = () => {
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {[
-              { n: "1", title: "Vous créez votre profil en 2 minutes", desc: "Niche, taille d'audience, tarif par collab. C'est tout." },
-              { n: "2", title: "Vous recevez des propositions adaptées à votre niche", desc: "Fini le démarchage : les marques viennent à vous." },
+              { n: "1", title: "Vous créez votre profil en quelques minutes", desc: "Plateformes, taille d'audience, thématiques abordées, formats proposés (post, story, vidéo, UGC…) et tarif par collab." },
+              { n: "2", title: "Vous recevez des propositions adaptées à votre audience", desc: "Fini le démarchage : les marques alignées avec votre profil viennent directement à vous." },
               { n: "3", title: "Vous acceptez en un clic, le contrat est prêt", desc: "Paiement séquestré, livraison, libération des fonds. Zero friction." },
             ].map((step, i) => (
               <motion.div
