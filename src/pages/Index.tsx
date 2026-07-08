@@ -13,7 +13,6 @@ import {
   Sparkles,
   FileText,
   ShieldCheck,
-  Star,
   Check,
   X,
   Target,
