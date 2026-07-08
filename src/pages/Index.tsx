@@ -279,73 +279,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* TÉMOIGNAGES */}
-      <section className="py-24 px-4 bg-secondary/20">
-        <div className="container mx-auto max-w-6xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Ils utilisent Partnery
-            </h2>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Camille D.",
-                role: "Marque e-commerce mode",
-                initials: "CD",
-                quote: "En 3 campagnes, j'ai travaillé avec 12 créatrices parfaitement alignées à ma marque. Le matching automatique nous fait gagner des semaines.",
-                bg: "bg-primary/20",
-              },
-              {
-                name: "Lucas M.",
-                role: "Micro-influenceur lifestyle · 8K",
-                initials: "LM",
-                quote: "Fini le démarchage. Je reçois des propositions ciblées, j'accepte celles qui me plaisent. Le paiement arrive à chaque fois.",
-                bg: "bg-secondary/40",
-              },
-              {
-                name: "Sarah B.",
-                role: "Marque food & bien-être",
-                initials: "SB",
-                quote: "5% de commission au lieu de 25%. Pour le même budget, je collabore avec 3x plus de créateurs. Game changer.",
-                bg: "bg-primary/20",
-              },
-            ].map((t, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="bg-background rounded-3xl p-8 border border-border shadow-soft"
-              >
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, s) => (
-                    <Star key={s} className="h-4 w-4 fill-primary text-primary" />
-                  ))}
-                </div>
-                <p className="text-foreground leading-relaxed mb-6 italic">"{t.quote}"</p>
-                <div className="flex items-center gap-3">
-                  <div className={`w-12 h-12 ${t.bg} rounded-full flex items-center justify-center font-bold text-foreground`}>
-                    {t.initials}
-                  </div>
-                  <div>
-                    <div className="font-bold text-foreground">{t.name}</div>
-                    <div className="text-sm text-muted-foreground">{t.role}</div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Témoignages retirés — pas de faux avis */}
 
       {/* CTA FINAL */}
       <section className="py-24 px-4 bg-foreground">
