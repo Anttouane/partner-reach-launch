@@ -1,700 +1,286 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Sparkles, Users, Briefcase, Zap, Heart, Shield, TrendingUp, Target, Rocket, CheckCircle, ArrowRight, Star, MessageSquare, FileText, CreditCard, BarChart3, Handshake, BadgePercent, HelpCircle } from "lucide-react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { motion } from "framer-motion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  ArrowRight,
+  BadgePercent,
+  Sparkles,
+  FileText,
+  ShieldCheck,
+  Star,
+  Check,
+  X,
+  Target,
+  UserPlus,
+  Rocket,
+} from "lucide-react";
 import SEOHead from "@/components/SEOHead";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/30">
+    <div className="min-h-screen bg-background">
       <SEOHead
-        title="Partnery - Connectez créateurs et marques"
-        description="Plateforme de mise en relation entre créateurs de contenu et marques pour des collaborations sponsoring authentiques et équitables. Commission de 5% uniquement."
+        title="Partnery — Les meilleures collabs arrivent à vous, automatiquement"
+        description="Les marques déposent leur campagne, Partnery sélectionne automatiquement les créateurs parfaits. Contrat en 1 clic, paiement sécurisé, 5% de commission."
       />
-      {/* Header fixe */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center space-x-2">
-              <span className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Partnery</span>
-            </Link>
-            
-            <nav className="hidden md:flex items-center space-x-8">
-              <a href="#tarifs" className="text-foreground hover:text-primary transition-colors font-medium">
-                Tarifs
-              </a>
-              <a href="#fonctionnalites" className="text-foreground hover:text-primary transition-colors font-medium">
-                Fonctionnalités
-              </a>
-              <a href="#fonctionnement" className="text-foreground hover:text-primary transition-colors font-medium">
-                Fonctionnement
-              </a>
-              <a href="#benefices" className="text-foreground hover:text-primary transition-colors font-medium">
-                Bénéfices
-              </a>
-              <a href="#faq" className="text-foreground hover:text-primary transition-colors font-medium">
-                FAQ
-              </a>
-            </nav>
 
-            <Link to="/auth">
-              <Button className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-soft font-semibold">
-                Rejoindre Partnery
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-sm border-b border-border">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            Partnery
+          </Link>
+          <nav className="hidden md:flex items-center gap-8">
+            <a href="#marques" className="text-sm font-medium text-foreground hover:text-primary transition-colors">Marques</a>
+            <a href="#createurs" className="text-sm font-medium text-foreground hover:text-primary transition-colors">Créateurs</a>
+            <a href="#comparaison" className="text-sm font-medium text-foreground hover:text-primary transition-colors">Comparaison</a>
+            <a href="#faq" className="text-sm font-medium text-foreground hover:text-primary transition-colors">FAQ</a>
+          </nav>
+          <Link to="/auth">
+            <Button size="sm" className="bg-foreground text-background hover:bg-foreground/90 font-semibold">
+              Connexion
+            </Button>
+          </Link>
+        </div>
+      </header>
+
+      {/* HERO */}
+      <section className="pt-32 pb-24 px-4 bg-secondary/40 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-secondary/60 via-secondary/30 to-primary/10 pointer-events-none" />
+        <div className="container mx-auto max-w-5xl relative">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center space-y-8"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-background/70 backdrop-blur rounded-full border border-foreground/10">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <span className="text-sm font-semibold text-foreground">Matching automatique • Commission 5%</span>
+            </div>
+
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-[1.05] tracking-tight">
+              Les meilleures collabs arrivent à vous,{" "}
+              <span className="text-primary">automatiquement</span>
+            </h1>
+
+            <p className="text-xl md:text-2xl text-foreground/70 max-w-3xl mx-auto leading-relaxed">
+              Les marques déposent leur campagne. Partnery sélectionne les créateurs parfaits.
+              Tout le reste est automatique.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+              <Link to="/auth?type=brand">
+                <Button size="lg" className="bg-foreground text-background hover:bg-foreground/90 shadow-medium text-lg px-8 py-6 w-full sm:w-auto font-semibold">
+                  Je suis une marque
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+              <Link to="/auth?type=creator">
+                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-medium text-lg px-8 py-6 w-full sm:w-auto font-semibold">
+                  Je suis un créateur
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* STATS BAND */}
+      <section className="py-16 px-4 bg-foreground">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            {[
+              { icon: BadgePercent, value: "5%", label: "de commission seulement" },
+              { icon: Target, value: "100%", label: "Matching automatique" },
+              { icon: FileText, value: "1 clic", label: "Contrat généré" },
+              { icon: ShieldCheck, value: "Stripe", label: "Paiement sécurisé" },
+            ].map((s, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+                className="space-y-2"
+              >
+                <s.icon className="h-6 w-6 text-primary mx-auto mb-2" />
+                <div className="text-3xl md:text-4xl font-bold text-background">{s.value}</div>
+                <div className="text-background/70 text-sm font-medium">{s.label}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* POUR LES MARQUES */}
+      <section id="marques" className="py-24 px-4 bg-background">
+        <div className="container mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4">
+              <span className="text-sm font-semibold text-primary">Pour les marques</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Lancez une campagne en 3 minutes
+            </h2>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            {[
+              { n: "1", title: "Vous définissez votre budget et vos critères", desc: "Niche, audience minimale, nombre de créateurs, deadline." },
+              { n: "2", title: "On sélectionne automatiquement les créateurs qui correspondent", desc: "L'algorithme trouve les meilleurs profils pour votre campagne." },
+              { n: "3", title: "Vous validez, on gère le contrat et le paiement", desc: "Contrat auto-généré, paiement sécurisé Stripe, tout est traçable." },
+            ].map((step, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="bg-card rounded-3xl p-8 border-2 border-border hover:border-primary/40 transition-colors"
+              >
+                <div className="w-12 h-12 bg-primary text-primary-foreground rounded-2xl flex items-center justify-center text-xl font-bold mb-6">
+                  {step.n}
+                </div>
+                <h3 className="text-lg font-bold text-foreground mb-3 leading-snug">{step.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{step.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <Link to="/auth?type=brand">
+              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-medium text-lg px-8 py-6 font-semibold">
+                <Rocket className="mr-2 h-5 w-5" />
+                Lancer ma première campagne
               </Button>
             </Link>
           </div>
         </div>
-      </header>
-
-      {/* Hero Section */}
-      <section className="pt-32 pb-24 px-4 bg-gradient-to-br from-background via-primary/5 to-secondary/5">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="space-y-8"
-            >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20">
-                <Sparkles className="h-4 w-4 text-primary" />
-                <span className="text-sm font-semibold text-foreground">100% gratuit • Commission 5% uniquement</span>
-              </div>
-              
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-tight">
-                Connectez marques et créateurs{" "}
-                <span className="text-primary">directement</span>
-              </h1>
-              
-              <p className="text-xl text-muted-foreground leading-relaxed">
-                Partnery élimine les intermédiaires et facilite les partenariats authentiques. 
-                Inscription gratuite, sans abonnement. Vous ne payez que 5% sur vos transactions réussies.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link to="/auth">
-                  <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-medium text-lg px-8 py-6 w-full sm:w-auto">
-                    Commencer gratuitement
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </Link>
-                <a href="#tarifs">
-                  <Button size="lg" variant="outline" className="border-2 border-primary text-foreground hover:bg-primary/10 text-lg px-8 py-6 w-full sm:w-auto">
-                    Voir nos tarifs
-                  </Button>
-                </a>
-              </div>
-            </motion.div>
-
-            {/* Illustration Hero */}
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-3xl blur-3xl" />
-              <div className="relative bg-card border-2 border-primary/20 rounded-3xl p-8 shadow-glow">
-                <div className="space-y-6">
-                  {/* Card exemple marque */}
-                  <div className="bg-primary/10 rounded-2xl p-6 border border-primary/20">
-                    <div className="flex items-center gap-4 mb-3">
-                      <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
-                        <Briefcase className="h-6 w-6 text-primary-foreground" />
-                      </div>
-                      <div>
-                        <div className="font-bold text-foreground">Marque</div>
-                        <div className="text-sm text-muted-foreground">Recherche créateurs</div>
-                      </div>
-                    </div>
-                    <p className="text-sm text-foreground/80">Publiez vos opportunités de partenariat</p>
-                  </div>
-
-                  {/* Flèche de connexion */}
-                  <div className="flex justify-center">
-                    <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center shadow-medium">
-                      <Heart className="h-6 w-6 text-white" />
-                    </div>
-                  </div>
-
-                  {/* Card exemple créateur */}
-                  <div className="bg-secondary/10 rounded-2xl p-6 border border-secondary/20">
-                    <div className="flex items-center gap-4 mb-3">
-                      <div className="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center">
-                        <Users className="h-6 w-6 text-secondary-foreground" />
-                      </div>
-                      <div>
-                        <div className="font-bold text-foreground">Créateur</div>
-                        <div className="text-sm text-muted-foreground">Proposez vos services</div>
-                      </div>
-                    </div>
-                    <p className="text-sm text-foreground/80">Créez votre pitch et attirez des marques</p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
       </section>
 
-      {/* Bande de stats */}
-      <section className="py-12 px-4 bg-foreground">
+      {/* POUR LES CRÉATEURS */}
+      <section id="createurs" className="py-24 px-4 bg-secondary/20">
         <div className="container mx-auto max-w-6xl">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center"
-          >
-            {[
-              { value: "5%", label: "Commission seulement", sub: "vs 15-30% en agence" },
-              { value: "100%", label: "Gratuit à l'inscription", sub: "Aucun abonnement" },
-              { value: "2", label: "Types d'acteurs", sub: "Marques & Créateurs" },
-              { value: "1", label: "Plateforme tout-en-un", sub: "Contact, contrat, paiement" },
-            ].map((stat, i) => (
-              <div key={i} className="space-y-1">
-                <div className="text-4xl font-bold text-primary">{stat.value}</div>
-                <div className="text-white font-semibold text-sm">{stat.label}</div>
-                <div className="text-white/50 text-xs">{stat.sub}</div>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Section Modèle Économique Transparent */}
-      <section id="tarifs" className="py-24 px-4 bg-card">
-        <div className="container mx-auto max-w-6xl">
-          <motion.div 
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
             className="text-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4">
-              <BadgePercent className="h-5 w-5 text-primary" />
-              <span className="text-sm font-semibold text-foreground">Tarification transparente</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/40 rounded-full mb-4">
+              <span className="text-sm font-semibold text-foreground">Pour les créateurs</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              100% Gratuit pour démarrer
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Les opportunités viennent à vous
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Pas d'abonnement, pas de frais cachés. Vous ne payez que lorsque vous réussissez.
-            </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="bg-background rounded-3xl p-8 border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-soft text-center"
-            >
-              <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mb-6 mx-auto">
-                <CheckCircle className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4">Inscription gratuite</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Créez votre profil, publiez vos offres ou pitchs, et explorez la plateforme sans aucun frais.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="bg-gradient-to-br from-primary/10 to-secondary/10 rounded-3xl p-8 border-2 border-primary/40 shadow-soft text-center relative"
-            >
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary text-primary-foreground text-sm font-semibold rounded-full">
-                Notre modèle
-              </div>
-              <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mb-6 mx-auto">
-                <BadgePercent className="h-8 w-8 text-primary-foreground" />
-              </div>
-              <h3 className="text-4xl font-bold text-primary mb-2">5%</h3>
-              <h4 className="text-xl font-bold text-foreground mb-4">Commission uniquement</h4>
-              <p className="text-muted-foreground leading-relaxed">
-                Prélevée sur les transactions réussies. Les créateurs reçoivent 95% du montant payé par la marque.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-background rounded-3xl p-8 border-2 border-secondary/20 hover:border-secondary/40 transition-all hover:shadow-soft text-center"
-            >
-              <div className="w-16 h-16 bg-secondary/20 rounded-2xl flex items-center justify-center mb-6 mx-auto">
-                <TrendingUp className="h-8 w-8 text-secondary" />
-              </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4">Agences : 15-30% de commission</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Les agences traditionnelles prélèvent 15 à 30% sur chaque collaboration. Partnery est <span className="font-semibold text-foreground">100% gratuit à l'inscription</span>, avec seulement 5% sur les transactions réussies.
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section Fonctionnalités */}
-      <section id="fonctionnalites" className="py-24 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 rounded-full mb-4">
-              <Rocket className="h-5 w-5 text-secondary" />
-              <span className="text-sm font-semibold text-foreground">Nos outils</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              Tout ce dont vous avez besoin
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Une plateforme complète pour gérer vos partenariats de A à Z.
-            </p>
-          </motion.div>
-
-          <motion.div 
-            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={{
-              hidden: { opacity: 0 },
-              visible: {
-                opacity: 1,
-                transition: {
-                  staggerChildren: 0.15,
-                  delayChildren: 0.1
-                }
-              }
-            }}
-          >
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
             {[
-              { icon: MessageSquare, title: "Messagerie intégrée", desc: "Discutez directement avec vos partenaires potentiels sans quitter la plateforme.", color: "primary" },
-              { icon: FileText, title: "Contrats sécurisés", desc: "Créez et signez des contrats collaboratifs avec suivi des modifications.", color: "secondary" },
-              { icon: CreditCard, title: "Paiements sécurisés", desc: "Transactions protégées via Stripe. Paiement libéré après validation.", color: "primary" },
-              { icon: BarChart3, title: "Tableau de bord", desc: "Suivez vos statistiques, revenus et performances en temps réel.", color: "secondary" },
-              { icon: Handshake, title: "Gestion des partenariats", desc: "Organisez tous vos contrats, conversations et paiements en un seul endroit.", color: "primary" },
-              { icon: Shield, title: "Profils vérifiés", desc: "Collaborez en confiance avec des profils authentiques et vérifiés.", color: "secondary" }
-            ].map((feature, index) => (
+              { n: "1", title: "Vous créez votre profil en 2 minutes", desc: "Niche, taille d'audience, tarif par collab. C'est tout." },
+              { n: "2", title: "Vous recevez des propositions adaptées à votre niche", desc: "Fini le démarchage : les marques viennent à vous." },
+              { n: "3", title: "Vous acceptez en un clic, le contrat est prêt", desc: "Paiement séquestré, livraison, libération des fonds. Zero friction." },
+            ].map((step, i) => (
               <motion.div
-                key={index}
-                variants={{
-                  hidden: { 
-                    opacity: 0, 
-                    y: 60,
-                    scale: 0.8,
-                    rotateX: -15
-                  },
-                  visible: { 
-                    opacity: 1, 
-                    y: 0,
-                    scale: 1,
-                    rotateX: 0,
-                    transition: {
-                      type: "spring",
-                      stiffness: 100,
-                      damping: 12,
-                      duration: 0.6
-                    }
-                  }
-                }}
-                whileHover={{ 
-                  y: -12,
-                  scale: 1.03,
-                  rotateY: 5,
-                  transition: { 
-                    type: "spring", 
-                    stiffness: 300, 
-                    damping: 20 
-                  }
-                }}
-                whileTap={{ scale: 0.98 }}
-                className={`bg-card rounded-3xl p-8 border-2 ${feature.color === 'primary' ? 'border-primary/20 hover:border-primary/50' : 'border-secondary/20 hover:border-secondary/50'} transition-colors cursor-pointer group`}
-                style={{ transformStyle: "preserve-3d", perspective: 1000 }}
-              >
-                <motion.div 
-                  className={`w-14 h-14 ${feature.color === 'primary' ? 'bg-primary/20 group-hover:bg-primary/30' : 'bg-secondary/20 group-hover:bg-secondary/30'} rounded-2xl flex items-center justify-center mb-6 transition-colors`}
-                  whileHover={{ 
-                    rotate: [0, -10, 10, -10, 0],
-                    transition: { duration: 0.5 }
-                  }}
-                >
-                  <feature.icon className={`h-7 w-7 ${feature.color === 'primary' ? 'text-primary' : 'text-secondary'} transition-transform group-hover:scale-110`} />
-                </motion.div>
-                <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">{feature.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{feature.desc}</p>
-                
-                {/* Effet de glow au hover */}
-                <motion.div 
-                  className={`absolute inset-0 rounded-3xl ${feature.color === 'primary' ? 'bg-primary/5' : 'bg-secondary/5'} opacity-0 group-hover:opacity-100 transition-opacity -z-10`}
-                  initial={false}
-                />
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Section Comparaison Partnery vs Agences */}
-      <section className="py-24 px-4 bg-card">
-        <div className="container mx-auto max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 rounded-full mb-4">
-              <TrendingUp className="h-5 w-5 text-secondary" />
-              <span className="text-sm font-semibold text-foreground">Pourquoi Partnery ?</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              La différence est claire
-            </h2>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="overflow-hidden rounded-3xl border-2 border-primary/20"
-          >
-            <div className="grid grid-cols-3 bg-foreground text-white text-center">
-              <div className="py-4 px-4 font-semibold text-white/70 text-sm">Critère</div>
-              <div className="py-4 px-4 font-bold text-secondary">Agences traditionnelles</div>
-              <div className="py-4 px-4 font-bold text-primary">Partnery</div>
-            </div>
-            {[
-              { criteria: "Commission", agency: "15 – 30%", partnery: "5% seulement", good: true },
-              { criteria: "Inscription", agency: "Abonnement mensuel", partnery: "100% gratuit", good: true },
-              { criteria: "Contrats", agency: "Gérés par l'agence", partnery: "Générés en 1 clic", good: true },
-              { criteria: "Contact direct", agency: "Intermédiaire obligatoire", partnery: "Direct créateur ↔ marque", good: true },
-              { criteria: "Petits créateurs", agency: "Souvent ignorés", partnery: "Priorité micro/nano", good: true },
-              { criteria: "Paiements", agency: "Délais longs", partnery: "Sécurisés via Stripe", good: true },
-            ].map((row, i) => (
-              <div key={i} className={`grid grid-cols-3 text-center ${i % 2 === 0 ? 'bg-background' : 'bg-muted/30'}`}>
-                <div className="py-4 px-4 font-semibold text-foreground text-sm border-r border-border">{row.criteria}</div>
-                <div className="py-4 px-4 text-muted-foreground text-sm border-r border-border flex items-center justify-center gap-2">
-                  <span className="text-destructive font-bold">✗</span> {row.agency}
-                </div>
-                <div className="py-4 px-4 text-sm font-semibold text-primary flex items-center justify-center gap-2">
-                  <span className="text-green-500 font-bold">✓</span> {row.partnery}
-                </div>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Section Notre Mission */}
-      <section id="valeur" className="py-24 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4">
-              <Target className="h-5 w-5 text-primary" />
-              <span className="text-sm font-semibold text-foreground">Notre mission</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              Éliminer les intermédiaires
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Notre objectif est de créer un écosystème transparent où marques et créateurs 
-              peuvent collaborer directement, sans agences coûteuses.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="bg-background rounded-3xl p-8 border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-soft"
-            >
-              <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mb-6">
-                <Zap className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4">Connexion directe</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Plus besoin de passer par des agences. Discutez, négociez et collaborez 
-                directement avec vos partenaires.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="bg-background rounded-3xl p-8 border-2 border-secondary/20 hover:border-secondary/40 transition-all hover:shadow-soft"
-            >
-              <div className="w-16 h-16 bg-secondary/20 rounded-2xl flex items-center justify-center mb-6">
-                <Shield className="h-8 w-8 text-secondary" />
-              </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4">Transparence totale</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Pas de frais cachés, pas de surprises. Notre commission de 5% est claire 
-                et visible dès le départ.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-background rounded-3xl p-8 border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-soft"
-            >
-              <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mb-6">
-                <Heart className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4">Équitable pour tous</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Les créateurs gardent plus de revenus, les marques paient moins. 
-                Tout le monde y gagne.
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section Comment ça marche */}
-      <section id="fonctionnement" className="py-24 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 rounded-full mb-4">
-              <Zap className="h-5 w-5 text-secondary" />
-              <span className="text-sm font-semibold text-foreground">Comment ça marche</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              3 étapes simples
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Rejoignez Partnery et lancez-vous en quelques minutes.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-12">
-            {/* Etape 1 */}
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="text-center"
-            >
-              <div className="w-24 h-24 rounded-full bg-primary/10 text-primary font-bold text-3xl flex items-center justify-center mx-auto mb-6 border-2 border-primary/20">
-                1
-              </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4">Inscription gratuite</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Créez votre profil en quelques clics, que vous soyez une marque ou un créateur. C'est 100% gratuit.
-              </p>
-            </motion.div>
-
-            {/* Etape 2 */}
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.15 }}
-              className="text-center"
-            >
-              <div className="w-24 h-24 rounded-full bg-secondary/10 text-secondary font-bold text-3xl flex items-center justify-center mx-auto mb-6 border-2 border-secondary/20">
-                2
-              </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4">Trouvez & Discutez</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Explorez les profils, envoyez des messages et négociez vos partenariats directement.
-              </p>
-            </motion.div>
-
-            {/* Etape 3 */}
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="text-center"
-            >
-              <div className="w-24 h-24 rounded-full bg-primary/10 text-primary font-bold text-3xl flex items-center justify-center mx-auto mb-6 border-2 border-primary/20">
-                3
-              </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4">Collaborez & Payez</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Signez un contrat sécurisé et effectuez le paiement. Nous ne prenons que 5% de commission.
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section Bénéfices */}
-      <section id="benefices" className="py-24 px-4 bg-card">
-        <div className="container mx-auto max-w-6xl">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4">
-              <Star className="h-5 w-5 text-primary" />
-              <span className="text-sm font-semibold text-foreground">Vos avantages</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              Pourquoi choisir Partnery ?
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Des avantages concrets pour les marques et les créateurs.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-12">
-            {/* Bénéfices Marque */}
-            <motion.div 
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="space-y-6"
-            >
-              <h3 className="text-3xl font-bold text-foreground mb-4">Pour les marques</h3>
-              <ul className="space-y-4">
-                <li className="flex items-start gap-4">
-                  <CheckCircle className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" />
-                  <p className="text-muted-foreground leading-relaxed">
-                    <span className="font-semibold text-foreground">Inscription 100% gratuite</span> — contrairement aux autres plateformes, aucun abonnement ni frais caché. Seulement 5% sur les collaborations réussies.
-                  </p>
-                </li>
-                <li className="flex items-start gap-4">
-                  <CheckCircle className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" />
-                  <p className="text-muted-foreground leading-relaxed">
-                    <span className="font-semibold text-foreground">Contact direct</span> avec les créateurs sans intermédiaire pour des négociations transparentes.
-                  </p>
-                </li>
-                <li className="flex items-start gap-4">
-                  <CheckCircle className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" />
-                  <p className="text-muted-foreground leading-relaxed">
-                    <span className="font-semibold text-foreground">Contrats sécurisés</span> avec suivi des livrables et paiements protégés.
-                  </p>
-                </li>
-              </ul>
-            </motion.div>
-
-            {/* Bénéfices Créateur */}
-            <motion.div 
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="space-y-6"
-            >
-              <h3 className="text-3xl font-bold text-foreground mb-4">Pour les créateurs</h3>
-              <ul className="space-y-4">
-                <li className="flex items-start gap-4">
-                  <CheckCircle className="h-6 w-6 text-secondary flex-shrink-0 mt-0.5" />
-                  <p className="text-muted-foreground leading-relaxed">
-                    <span className="font-semibold text-foreground">Gardez 95% de vos revenus</span> au lieu des 70-85% avec les agences.
-                  </p>
-                </li>
-                <li className="flex items-start gap-4">
-                  <CheckCircle className="h-6 w-6 text-secondary flex-shrink-0 mt-0.5" />
-                  <p className="text-muted-foreground leading-relaxed">
-                    <span className="font-semibold text-foreground">Visibilité accrue</span> auprès des marques qui recherchent activement des créateurs.
-                  </p>
-                </li>
-                <li className="flex items-start gap-4">
-                  <CheckCircle className="h-6 w-6 text-secondary flex-shrink-0 mt-0.5" />
-                  <p className="text-muted-foreground leading-relaxed">
-                    <span className="font-semibold text-foreground">Paiements garantis</span> avec un système de validation sécurisé.
-                  </p>
-                </li>
-              </ul>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section Pourquoi Partnery ? */}
-      <section className="py-24 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4">
-              <Rocket className="h-5 w-5 text-primary" />
-              <span className="text-sm font-semibold text-foreground">Nos engagements</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              Une plateforme pensée pour vous
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Nous nous engageons à maintenir une plateforme transparente, équitable et efficace.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-12">
-            {[
-              { icon: Zap, title: "Rapidité", desc: "Trouvez des partenaires en quelques clics grâce à notre interface intuitive.", color: "primary" },
-              { icon: Shield, title: "Sécurité", desc: "Paiements sécurisés, contrats vérifiés et données protégées.", color: "secondary" },
-              { icon: Heart, title: "Équité", desc: "Commission transparente et équitable de 5% pour tous.", color: "primary" },
-              { icon: Users, title: "Communauté", desc: "Rejoignez un écosystème de marques et créateurs passionnés.", color: "secondary" }
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="flex items-start gap-6"
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="bg-background rounded-3xl p-8 border-2 border-border hover:border-secondary transition-colors"
               >
-                <div className={`w-16 h-16 ${item.color === 'primary' ? 'bg-primary/20' : 'bg-secondary/20'} rounded-2xl flex items-center justify-center flex-shrink-0`}>
-                  <item.icon className={`h-8 w-8 ${item.color === 'primary' ? 'text-primary' : 'text-secondary'}`} />
+                <div className="w-12 h-12 bg-secondary text-secondary-foreground rounded-2xl flex items-center justify-center text-xl font-bold mb-6">
+                  {step.n}
                 </div>
-                <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-foreground">{item.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
-                </div>
+                <h3 className="text-lg font-bold text-foreground mb-3 leading-snug">{step.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{step.desc}</p>
               </motion.div>
             ))}
           </div>
 
+          <div className="text-center">
+            <Link to="/auth?type=creator">
+              <Button size="lg" className="bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-medium text-lg px-8 py-6 font-semibold">
+                <UserPlus className="mr-2 h-5 w-5" />
+                Créer mon profil créateur
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* Section Témoignages */}
-      <section className="py-24 px-4 bg-card">
+      {/* COMPARAISON */}
+      <section id="comparaison" className="py-24 px-4 bg-background">
+        <div className="container mx-auto max-w-5xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Partnery vs agences traditionnelles
+            </h2>
+            <p className="text-lg text-muted-foreground">La différence est nette.</p>
+          </motion.div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full bg-card rounded-3xl border-2 border-border overflow-hidden">
+              <thead>
+                <tr className="border-b-2 border-border">
+                  <th className="text-left p-6 text-foreground font-bold"></th>
+                  <th className="p-6 text-center text-muted-foreground font-semibold">Agences traditionnelles</th>
+                  <th className="p-6 text-center text-primary font-bold bg-primary/5">Partnery</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { k: "Commission", a: "20-30%", p: "5%" },
+                  { k: "Recherche de créateurs", a: "Manuelle", p: "Automatique" },
+                  { k: "Contrats", a: "Gérés par l'agence", p: "Générés en 1 clic" },
+                  { k: "Petits créateurs", a: "Ignorés", p: "Priorité" },
+                  { k: "Paiements", a: "Délais longs", p: "Stripe sécurisé" },
+                ].map((row, i) => (
+                  <tr key={i} className="border-b border-border last:border-b-0">
+                    <td className="p-6 font-semibold text-foreground">{row.k}</td>
+                    <td className="p-6 text-center text-muted-foreground">
+                      <div className="flex items-center justify-center gap-2">
+                        <X className="h-4 w-4 text-muted-foreground/60" />
+                        {row.a}
+                      </div>
+                    </td>
+                    <td className="p-6 text-center font-semibold text-foreground bg-primary/5">
+                      <div className="flex items-center justify-center gap-2">
+                        <Check className="h-4 w-4 text-primary" />
+                        {row.p}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* TÉMOIGNAGES */}
+      <section className="py-24 px-4 bg-secondary/20">
         <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -703,36 +289,33 @@ const Index = () => {
             transition={{ duration: 0.5 }}
             className="text-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4">
-              <Star className="h-5 w-5 text-primary" />
-              <span className="text-sm font-semibold text-foreground">Ils nous font confiance</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              Ce qu'ils en pensent
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Ils utilisent Partnery
             </h2>
           </motion.div>
+
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                name: "Sophie M.",
-                role: "Créatrice lifestyle · 12k abonnés",
-                quote: "J'ai trouvé mon premier partenariat en moins d'une semaine. Le contrat généré automatiquement m'a sauvé beaucoup de temps.",
-                initial: "SM",
-                color: "bg-primary/20 text-primary",
+                name: "Camille D.",
+                role: "Marque e-commerce mode",
+                initials: "CD",
+                quote: "En 3 campagnes, j'ai travaillé avec 12 créatrices parfaitement alignées à ma marque. Le matching automatique nous fait gagner des semaines.",
+                bg: "bg-primary/20",
               },
               {
-                name: "Lucas D.",
-                role: "Fondateur · Marque e-commerce",
-                quote: "Fini les agences à 20% de commission. Avec Partnery on parle directement aux créateurs et le résultat est bien meilleur.",
-                initial: "LD",
-                color: "bg-secondary/20 text-secondary",
+                name: "Lucas M.",
+                role: "Micro-influenceur lifestyle · 8K",
+                initials: "LM",
+                quote: "Fini le démarchage. Je reçois des propositions ciblées, j'accepte celles qui me plaisent. Le paiement arrive à chaque fois.",
+                bg: "bg-secondary/40",
               },
               {
-                name: "Inès R.",
-                role: "Créatrice food · 8k abonnés",
-                quote: "La plateforme est super intuitive. J'ai pu proposer mon profil à des marques que j'aurais jamais pu contacter avant.",
-                initial: "IR",
-                color: "bg-primary/20 text-primary",
+                name: "Sarah B.",
+                role: "Marque food & bien-être",
+                initials: "SB",
+                quote: "5% de commission au lieu de 25%. Pour le même budget, je collabore avec 3x plus de créateurs. Game changer.",
+                bg: "bg-primary/20",
               },
             ].map((t, i) => (
               <motion.div
@@ -741,21 +324,21 @@ const Index = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="bg-background rounded-3xl p-8 border-2 border-primary/10 hover:border-primary/30 transition-all hover:shadow-soft flex flex-col gap-6"
+                className="bg-background rounded-3xl p-8 border border-border shadow-soft"
               >
-                <div className="flex gap-1">
+                <div className="flex gap-1 mb-4">
                   {[...Array(5)].map((_, s) => (
                     <Star key={s} className="h-4 w-4 fill-primary text-primary" />
                   ))}
                 </div>
-                <p className="text-muted-foreground leading-relaxed italic">"{t.quote}"</p>
-                <div className="flex items-center gap-3 mt-auto">
-                  <div className={`w-10 h-10 rounded-full ${t.color} flex items-center justify-center font-bold text-sm`}>
-                    {t.initial}
+                <p className="text-foreground leading-relaxed mb-6 italic">"{t.quote}"</p>
+                <div className="flex items-center gap-3">
+                  <div className={`w-12 h-12 ${t.bg} rounded-full flex items-center justify-center font-bold text-foreground`}>
+                    {t.initials}
                   </div>
                   <div>
-                    <div className="font-semibold text-foreground text-sm">{t.name}</div>
-                    <div className="text-xs text-muted-foreground">{t.role}</div>
+                    <div className="font-bold text-foreground">{t.name}</div>
+                    <div className="text-sm text-muted-foreground">{t.role}</div>
                   </div>
                 </div>
               </motion.div>
@@ -764,190 +347,109 @@ const Index = () => {
         </div>
       </section>
 
-      {/* CTA Final impactant */}
-      <section className="py-24 px-4 bg-gradient-to-br from-foreground via-foreground to-foreground/90">
+      {/* CTA FINAL */}
+      <section className="py-24 px-4 bg-foreground">
         <div className="container mx-auto max-w-4xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.5 }}
             className="space-y-8"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/20 rounded-full border border-primary/30">
-              <Rocket className="h-4 w-4 text-primary" />
-              <span className="text-sm font-semibold text-primary">Lancez-vous maintenant</span>
-            </div>
-            <h2 className="text-4xl md:text-6xl font-bold text-white leading-tight">
-              Prêt à créer votre premier partenariat ?
+            <h2 className="text-4xl md:text-6xl font-bold text-background leading-tight">
+              Prêt à lancer votre première campagne ?
             </h2>
-            <p className="text-xl text-white/60 max-w-2xl mx-auto">
-              Inscription gratuite. Pas d'abonnement. Seulement 5% quand vous réussissez.
+            <p className="text-lg md:text-xl text-background/70">
+              Inscription gratuite. 5% seulement sur les collabs réussies.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/auth">
-                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-12 py-7 font-bold">
-                  Commencer gratuitement
-                  <ArrowRight className="ml-2 h-6 w-6" />
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+              <Link to="/auth?type=brand">
+                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-8 py-6 w-full sm:w-auto font-semibold">
+                  Je suis une marque
+                  <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <a href="#fonctionnalites">
-                <Button size="lg" variant="outline" className="border-2 border-white/20 text-white hover:bg-white/10 text-lg px-8 py-7">
-                  Voir les fonctionnalités
+              <Link to="/auth?type=creator">
+                <Button size="lg" className="bg-secondary text-secondary-foreground hover:bg-secondary/90 text-lg px-8 py-6 w-full sm:w-auto font-semibold">
+                  Je suis un créateur
+                  <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-              </a>
+              </Link>
             </div>
-            <p className="text-sm text-white/30">Rejoignez les premières marques et créateurs sur Partnery</p>
           </motion.div>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section id="faq" className="py-24 px-4 bg-card">
+      {/* FAQ */}
+      <section id="faq" className="py-24 px-4 bg-background">
         <div className="container mx-auto max-w-3xl">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="text-center mb-16"
+            className="text-center mb-12"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4">
-              <HelpCircle className="h-5 w-5 text-primary" />
-              <span className="text-sm font-semibold text-foreground">FAQ</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
               Questions fréquentes
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Tout ce que vous devez savoir avant de commencer sur Partnery.
-            </p>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <Accordion type="multiple" className="space-y-4">
-              <AccordionItem value="gratuit" className="bg-background rounded-2xl border-2 border-primary/10 px-6 hover:border-primary/30 transition-colors">
-                <AccordionTrigger className="text-lg font-semibold hover:no-underline">
-                  Partnery est-il gratuit ?
+          <Accordion type="single" collapsible className="space-y-4">
+            {[
+              {
+                q: "Comment fonctionne le matching ?",
+                a: "Lorsqu'une marque lance une campagne, notre algorithme filtre les créateurs par niche, taille d'audience et tarif, puis propose à la marque les meilleurs profils. La marque valide, le créateur accepte, la collab démarre.",
+              },
+              {
+                q: "Combien ça coûte ?",
+                a: "L'inscription est 100% gratuite pour les marques comme pour les créateurs. Partnery prélève uniquement 5% de commission sur chaque collab réussie — contre 20 à 30% en agence.",
+              },
+              {
+                q: "Comment sont sécurisés les paiements ?",
+                a: "Tous les paiements passent par Stripe. Les fonds sont séquestrés à la commande et libérés au créateur après validation de la livraison. Aucune donnée bancaire n'est stockée chez nous.",
+              },
+              {
+                q: "Que se passe-t-il si une collab ne se passe pas bien ?",
+                a: "Un système de litige intégré permet à chaque partie de déposer des preuves. Notre équipe médiation tranche sous 72h : libération des fonds, remboursement partiel ou total selon les cas.",
+              },
+              {
+                q: "C'est gratuit pour les créateurs ?",
+                a: "Oui, totalement. Les créateurs ne paient jamais rien : ni inscription, ni abonnement, ni frais cachés. Ils reçoivent 95% du montant payé par la marque (5% de commission côté marque).",
+              },
+            ].map((item, i) => (
+              <AccordionItem
+                key={i}
+                value={`item-${i}`}
+                className="bg-card border-2 border-border rounded-2xl px-6"
+              >
+                <AccordionTrigger className="text-left font-semibold text-foreground hover:text-primary py-5">
+                  {item.q}
                 </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground leading-relaxed">
-                  Oui, l'inscription et l'utilisation de Partnery sont <strong className="text-foreground">100% gratuites</strong>. Il n'y a aucun abonnement ni frais d'inscription. Partnery ne prélève qu'une commission de 5% sur les collaborations réussies, uniquement lorsqu'un paiement est effectué.
+                <AccordionContent className="text-muted-foreground leading-relaxed pb-5">
+                  {item.a}
                 </AccordionContent>
               </AccordionItem>
-
-              <AccordionItem value="commission" className="bg-background rounded-2xl border-2 border-primary/10 px-6 hover:border-primary/30 transition-colors">
-                <AccordionTrigger className="text-lg font-semibold hover:no-underline">
-                  Comment fonctionne la commission de 5% ?
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground leading-relaxed">
-                  Partnery prélève <strong className="text-foreground">5% du montant total</strong> de chaque transaction réussie. Par exemple, pour un contrat de 1 000 €, le créateur reçoit 950 €. En plus de cette commission, des frais bancaires Stripe s'appliquent (~1,5% + 0,25 € pour les cartes européennes). Ces frais sont indiqués de manière transparente lors de chaque transaction.
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="paiements" className="bg-background rounded-2xl border-2 border-primary/10 px-6 hover:border-primary/30 transition-colors">
-                <AccordionTrigger className="text-lg font-semibold hover:no-underline">
-                  Comment sont sécurisés les paiements ?
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground leading-relaxed">
-                  Tous les paiements sont traités de manière sécurisée via <strong className="text-foreground">Stripe</strong>, leader mondial du paiement en ligne. Les fonds sont libérés au créateur uniquement après validation du livrable par la marque, garantissant une protection pour les deux parties.
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="agence" className="bg-background rounded-2xl border-2 border-primary/10 px-6 hover:border-primary/30 transition-colors">
-                <AccordionTrigger className="text-lg font-semibold hover:no-underline">
-                  Partnery remplace-t-il une agence ?
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground leading-relaxed">
-                  Partnery vous permet de vous connecter <strong className="text-foreground">directement</strong> avec des marques ou des créateurs, sans intermédiaire. Là où une agence traditionnelle prélève entre 15% et 30% de commission, Partnery ne prend que 5%. Vous gardez le contrôle total de vos collaborations.
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="contrats" className="bg-background rounded-2xl border-2 border-primary/10 px-6 hover:border-primary/30 transition-colors">
-                <AccordionTrigger className="text-lg font-semibold hover:no-underline">
-                  Les contrats sont-ils juridiquement valides ?
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground leading-relaxed">
-                  Partnery met à disposition un <strong className="text-foreground">outil de création de contrats</strong> pour simplifier vos collaborations. Cependant, Partnery n'est pas responsable du contenu, de l'exécution ou du respect des contrats générés. Ce service ne constitue pas un conseil juridique. Pour toute question légale, consultez un professionnel du droit.
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="litige" className="bg-background rounded-2xl border-2 border-primary/10 px-6 hover:border-primary/30 transition-colors">
-                <AccordionTrigger className="text-lg font-semibold hover:no-underline">
-                  Comment résoudre un litige ?
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground leading-relaxed">
-                  En cas de désaccord, les deux parties peuvent ouvrir un <strong className="text-foreground">ticket de support</strong> directement depuis la plateforme. Partnery met à disposition un espace de communication pour faciliter le dialogue entre marque et créateur. Partnery n'est pas responsable de l'issue des litiges et ne constitue pas une instance juridique.
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="inscription" className="bg-background rounded-2xl border-2 border-primary/10 px-6 hover:border-primary/30 transition-colors">
-                <AccordionTrigger className="text-lg font-semibold hover:no-underline">
-                  Qui peut s'inscrire sur Partnery ?
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground leading-relaxed">
-                  Partnery est ouvert à <strong className="text-foreground">tous les créateurs de contenu et toutes les marques</strong>, quelle que soit leur taille ou leur audience. Que vous soyez un micro-influenceur ou une grande marque, vous pouvez rejoindre la plateforme et commencer à collaborer.
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </motion.div>
+            ))}
+          </Accordion>
         </div>
       </section>
 
       {/* Footer */}
-      <footer id="contact" className="py-12 px-4 bg-foreground text-white">
+      <footer className="py-12 px-4 bg-background border-t border-border">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div className="space-y-4">
-              <div className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Partnery</div>
-              <p className="text-white/70 text-sm leading-relaxed">
-                La plateforme qui connecte marques et créateurs directement, sans intermédiaires.
-              </p>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Partnery
             </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Plateforme</h4>
-              <ul className="space-y-2 text-sm text-white/70">
-                <li><a href="#tarifs" className="hover:text-primary transition-colors">Tarifs</a></li>
-                <li><a href="#fonctionnalites" className="hover:text-primary transition-colors">Fonctionnalités</a></li>
-                <li><a href="#fonctionnement" className="hover:text-primary transition-colors">Comment ça marche</a></li>
-                <li><a href="#benefices" className="hover:text-primary transition-colors">Bénéfices</a></li>
-              </ul>
+            <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
+              <Link to="/cgu" className="hover:text-primary transition-colors">CGU</Link>
+              <Link to="/mentions-legales" className="hover:text-primary transition-colors">Mentions légales</Link>
+              <Link to="/politique-confidentialite" className="hover:text-primary transition-colors">Confidentialité</Link>
             </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Ressources</h4>
-              <ul className="space-y-2 text-sm text-white/70">
-                <li><Link to="/discover" className="hover:text-primary transition-colors">Découvrir</Link></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Aide</a></li>
-                <li><a href="#faq" className="hover:text-primary transition-colors">FAQ</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Contact</h4>
-              <p className="text-sm text-white/70 mb-4">contact@partnery.app</p>
-              <Link to="/auth">
-                <Button className="bg-primary text-primary-foreground hover:bg-primary/90 w-full font-semibold">
-                  Commencer gratuitement
-                </Button>
-              </Link>
-            </div>
-          </div>
-
-          <div className="pt-8 border-t border-white/10">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-sm text-white/60">© 2025 Partnery. Tous droits réservés.</p>
-              <div className="flex gap-6 text-sm text-white/60">
-                <Link to="/mentions-legales" className="hover:text-primary transition-colors">Mentions légales</Link>
-                <Link to="/cgu" className="hover:text-primary transition-colors">CGU</Link>
-                <Link to="/politique-confidentialite" className="hover:text-primary transition-colors">Confidentialité</Link>
-              </div>
+            <div className="text-sm text-muted-foreground">
+              © {new Date().getFullYear()} Partnery
             </div>
           </div>
         </div>
