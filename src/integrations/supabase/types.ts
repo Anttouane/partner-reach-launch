@@ -909,6 +909,45 @@ export type Database = {
           },
         ]
       }
+      pricing_config: {
+        Row: {
+          audience_tier: string
+          created_at: string
+          format: string
+          id: string
+          network: string
+          price_min: number
+          price_recommended: number
+          reach_ratio_max: number
+          reach_ratio_min: number
+          updated_at: string
+        }
+        Insert: {
+          audience_tier: string
+          created_at?: string
+          format: string
+          id?: string
+          network: string
+          price_min: number
+          price_recommended: number
+          reach_ratio_max: number
+          reach_ratio_min: number
+          updated_at?: string
+        }
+        Update: {
+          audience_tier?: string
+          created_at?: string
+          format?: string
+          id?: string
+          network?: string
+          price_min?: number
+          price_recommended?: number
+          reach_ratio_max?: number
+          reach_ratio_min?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
