@@ -151,44 +151,65 @@ export type Database = {
       }
       campaigns: {
         Row: {
+          audience_tier: string | null
+          brand_brief: string | null
           brand_id: string
           budget_total: number
+          commission_amount: number | null
+          commission_rate: number | null
           created_at: string
           creators_wanted: number
           deadline: string | null
           description: string | null
+          format: string | null
           id: string
           min_audience: number
           name: string
+          network: string | null
           niche_category_id: string | null
+          price_per_creator: number | null
           status: Database["public"]["Enums"]["campaign_status"]
           updated_at: string
         }
         Insert: {
+          audience_tier?: string | null
+          brand_brief?: string | null
           brand_id: string
           budget_total: number
+          commission_amount?: number | null
+          commission_rate?: number | null
           created_at?: string
           creators_wanted?: number
           deadline?: string | null
           description?: string | null
+          format?: string | null
           id?: string
           min_audience?: number
           name: string
+          network?: string | null
           niche_category_id?: string | null
+          price_per_creator?: number | null
           status?: Database["public"]["Enums"]["campaign_status"]
           updated_at?: string
         }
         Update: {
+          audience_tier?: string | null
+          brand_brief?: string | null
           brand_id?: string
           budget_total?: number
+          commission_amount?: number | null
+          commission_rate?: number | null
           created_at?: string
           creators_wanted?: number
           deadline?: string | null
           description?: string | null
+          format?: string | null
           id?: string
           min_audience?: number
           name?: string
+          network?: string | null
           niche_category_id?: string | null
+          price_per_creator?: number | null
           status?: Database["public"]["Enums"]["campaign_status"]
           updated_at?: string
         }
