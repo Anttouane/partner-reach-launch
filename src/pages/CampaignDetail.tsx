@@ -74,7 +74,12 @@ const CampaignDetail = () => {
           </CardContent>
         </Card>
 
-        <h2 className="text-xl font-bold mb-4">Créateurs matchés ({matches.length})</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold">Créateurs matchés ({matches.length})</h2>
+          {matches.some(m => m.brand_status === "pending") && (
+            <Button onClick={() => navigate(`/campaigns/${id}/swipe`)}>Valider en mode swipe</Button>
+          )}
+        </div>
         {matches.length === 0 ? (
           <Card><CardContent className="py-8 text-center text-muted-foreground">Aucun créateur ne correspond pour l'instant.</CardContent></Card>
         ) : (

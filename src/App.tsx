@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import Messages from "./pages/Messages";
 import CampaignNew from "./pages/CampaignNew";
 import CampaignDetail from "./pages/CampaignDetail";
+import CampaignSwipe from "./pages/CampaignSwipe";
 import CollabActive from "./pages/CollabActive";
 import Admin from "./pages/Admin";
 import Verify from "./pages/Verify";
@@ -41,6 +42,7 @@ const App = () => (
           <Route path="/messages" element={<Messages />} />
           <Route path="/campaigns/new" element={<CampaignNew />} />
           <Route path="/campaigns/:id" element={<CampaignDetail />} />
+          <Route path="/campaigns/:id/swipe" element={<CampaignSwipe />} />
           <Route path="/collab/:id" element={<CollabActive />} />
           <Route path="/verify" element={<Verify />} />
           <Route path="/admin" element={<Admin />} />
