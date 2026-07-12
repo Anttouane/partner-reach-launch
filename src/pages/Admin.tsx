@@ -10,7 +10,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Loader2, Shield, Save, Users, Briefcase, HandCoins, TrendingUp, Wallet } from "lucide-react";
+import { Loader2, Shield, Save, Users, Briefcase, HandCoins, TrendingUp, Wallet, CheckCircle2, XCircle, ExternalLink } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { useSuperadmin } from "@/hooks/useSuperadmin";
 
@@ -158,6 +160,7 @@ const Admin = () => {
         <Tabs defaultValue="dashboard">
           <TabsList>
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+            <TabsTrigger value="verifications">Vérifications</TabsTrigger>
             <TabsTrigger value="pricing">Grille tarifaire</TabsTrigger>
             <TabsTrigger value="settings">Réglages</TabsTrigger>
           </TabsList>
@@ -172,6 +175,11 @@ const Admin = () => {
               <StatCard icon={<Wallet className="h-5 w-5" />} label="Revenus Partnery" value={`${stats.revenue.toFixed(0)} €`} />
             </div>
           </TabsContent>
+
+          <TabsContent value="verifications" className="mt-6">
+            <VerificationsTab />
+          </TabsContent>
+
 
           <TabsContent value="pricing" className="space-y-6 mt-6">
             {Object.entries(grouped).map(([key, rows]) => {
