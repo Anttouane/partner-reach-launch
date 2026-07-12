@@ -10,7 +10,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Loader2, Shield, Save, Users, Briefcase, HandCoins, TrendingUp, Wallet } from "lucide-react";
+import { Loader2, Shield, Save, Users, Briefcase, HandCoins, TrendingUp, Wallet, CheckCircle2, XCircle, ExternalLink } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { useSuperadmin } from "@/hooks/useSuperadmin";
 
@@ -158,6 +160,7 @@ const Admin = () => {
         <Tabs defaultValue="dashboard">
           <TabsList>
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+            <TabsTrigger value="verifications">Vérifications</TabsTrigger>
             <TabsTrigger value="pricing">Grille tarifaire</TabsTrigger>
             <TabsTrigger value="settings">Réglages</TabsTrigger>
           </TabsList>
@@ -172,6 +175,11 @@ const Admin = () => {
               <StatCard icon={<Wallet className="h-5 w-5" />} label="Revenus Partnery" value={`${stats.revenue.toFixed(0)} €`} />
             </div>
           </TabsContent>
+
+          <TabsContent value="verifications" className="mt-6">
+            <VerificationsTab />
+          </TabsContent>
+
 
           <TabsContent value="pricing" className="space-y-6 mt-6">
             {Object.entries(grouped).map(([key, rows]) => {
@@ -260,4 +268,157 @@ const SettingField = ({ label, k, settings, setSettings }: { label: string; k: s
   </div>
 );
 
+type PendingVerif = {
+  id: string;
+  creator_id: string;
+  network: "instagram" | "tiktok" | "youtube";
+  handle: string;
+  profile_url: string;
+  declared_followers: number;
+  declared_avg_views: number | null;
+  declared_engagement: number | null;
+  screenshot_url: string | null;
+  status: "pending" | "verified" | "rejected";
+  submitted_at: string;
+  profile?: { full_name: string | null };
+};
+
+const VerificationsTab = () => {
+  const [rows, setRows] = useState<PendingVerif[]>([]);
+  const [filter, setFilter] = useState<"pending" | "verified" | "rejected">("pending");
+  const [drafts, setDrafts] = useState<Record<string, { followers: string; avgViews: string; engagement: string; reason: string }>>({});
+  const [saving, setSaving] = useState<string | null>(null);
+
+  const load = async () => {
+    const { data } = await (supabase as any)
+      .from("social_verifications")
+      .select("*, profile:profiles!social_verifications_creator_id_fkey(full_name)")
+      .eq("status", filter)
+      .order("submitted_at", { ascending: false });
+    // fallback if FK join fails
+    if (!data) {
+      const { data: raw } = await (supabase as any).from("social_verifications").select("*").eq("status", filter).order("submitted_at", { ascending: false });
+      setRows((raw as PendingVerif[]) || []);
+    } else {
+      setRows(data as PendingVerif[]);
+    }
+  };
+
+  useEffect(() => { load(); /* eslint-disable-next-line */ }, [filter]);
+
+  const setDraft = (id: string, patch: Partial<{ followers: string; avgViews: string; engagement: string; reason: string }>) =>
+    setDrafts(d => ({ ...d, [id]: { followers: "", avgViews: "", engagement: "", reason: "", ...d[id], ...patch } }));
+
+  const approve = async (row: PendingVerif) => {
+    const d = drafts[row.id] || { followers: "", avgViews: "", engagement: "", reason: "" };
+    setSaving(row.id);
+    const { error } = await (supabase as any).from("social_verifications").update({
+      status: "verified",
+      verified_followers: d.followers ? Number(d.followers) : row.declared_followers,
+      verified_avg_views: d.avgViews ? Number(d.avgViews) : row.declared_avg_views,
+      verified_engagement: d.engagement ? Number(d.engagement) : row.declared_engagement,
+      verified_at: new Date().toISOString(),
+      rejection_reason: null,
+    }).eq("id", row.id);
+    setSaving(null);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Vérifié");
+    load();
+  };
+
+  const reject = async (row: PendingVerif) => {
+    const d = drafts[row.id];
+    if (!d?.reason?.trim()) { toast.error("Ajoute une raison"); return; }
+    setSaving(row.id);
+    const { error } = await (supabase as any).from("social_verifications").update({
+      status: "rejected",
+      rejection_reason: d.reason.trim(),
+    }).eq("id", row.id);
+    setSaving(null);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Refusé");
+    load();
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex gap-2">
+        {(["pending", "verified", "rejected"] as const).map(s => (
+          <Button key={s} variant={filter === s ? "default" : "outline"} size="sm" onClick={() => setFilter(s)}>
+            {s === "pending" ? "En attente" : s === "verified" ? "Vérifiés" : "Refusés"}
+          </Button>
+        ))}
+      </div>
+
+      {rows.length === 0 && <p className="text-muted-foreground text-sm">Aucune demande.</p>}
+
+      {rows.map(row => {
+        const d = drafts[row.id] || { followers: "", avgViews: "", engagement: "", reason: "" };
+        return (
+          <Card key={row.id}>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-base">
+                    {row.profile?.full_name || "Créateur"} — <Badge variant="secondary" className="ml-1">{row.network}</Badge>
+                  </CardTitle>
+                  <CardDescription>
+                    <a href={row.profile_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:underline">
+                      @{row.handle} <ExternalLink className="h-3 w-3" />
+                    </a>
+                    {" · "}Envoyé le {new Date(row.submitted_at).toLocaleDateString("fr-FR")}
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-3 gap-3 text-sm">
+                <div><span className="text-muted-foreground">Followers déclarés</span><div className="font-semibold">{row.declared_followers.toLocaleString("fr-FR")}</div></div>
+                <div><span className="text-muted-foreground">Vues moy.</span><div className="font-semibold">{row.declared_avg_views?.toLocaleString("fr-FR") || "—"}</div></div>
+                <div><span className="text-muted-foreground">Engagement</span><div className="font-semibold">{row.declared_engagement != null ? `${row.declared_engagement}%` : "—"}</div></div>
+              </div>
+              {row.screenshot_url && (
+                <a href={row.screenshot_url} target="_blank" rel="noreferrer">
+                  <img src={row.screenshot_url} alt="Capture" className="max-h-40 rounded-md border" />
+                </a>
+              )}
+              {filter === "pending" && (
+                <>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <Label className="text-xs">Followers vérifiés</Label>
+                      <Input type="number" placeholder={String(row.declared_followers)} value={d.followers} onChange={e => setDraft(row.id, { followers: e.target.value })} />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Vues moy. vérifiées</Label>
+                      <Input type="number" placeholder={row.declared_avg_views?.toString() || ""} value={d.avgViews} onChange={e => setDraft(row.id, { avgViews: e.target.value })} />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Engagement vérifié</Label>
+                      <Input type="number" step="0.1" placeholder={row.declared_engagement?.toString() || ""} value={d.engagement} onChange={e => setDraft(row.id, { engagement: e.target.value })} />
+                    </div>
+                  </div>
+                  <div>
+                    <Label className="text-xs">Raison (si refus)</Label>
+                    <Textarea rows={2} value={d.reason} onChange={e => setDraft(row.id, { reason: e.target.value })} placeholder="Le compte déclaré ne correspond pas..." />
+                  </div>
+                  <div className="flex gap-2">
+                    <Button size="sm" onClick={() => approve(row)} disabled={saving === row.id}>
+                      <CheckCircle2 className="h-4 w-4 mr-2" />Valider
+                    </Button>
+                    <Button size="sm" variant="destructive" onClick={() => reject(row)} disabled={saving === row.id}>
+                      <XCircle className="h-4 w-4 mr-2" />Refuser
+                    </Button>
+                  </div>
+                </>
+              )}
+            </CardContent>
+          </Card>
+        );
+      })}
+    </div>
+  );
+};
+
 export default Admin;
+
