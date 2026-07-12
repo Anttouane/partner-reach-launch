@@ -42,6 +42,7 @@ const App = () => (
           <Route path="/messages" element={<Messages />} />
           <Route path="/campaigns/new" element={<CampaignNew />} />
           <Route path="/campaigns/:id" element={<CampaignDetail />} />
+          <Route path="/campaigns/:id/swipe" element={<CampaignSwipe />} />
           <Route path="/collab/:id" element={<CollabActive />} />
           <Route path="/verify" element={<Verify />} />
           <Route path="/admin" element={<Admin />} />
