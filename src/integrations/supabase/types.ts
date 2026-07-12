@@ -1180,6 +1180,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      generate_campaign_matches: {
+        Args: { _campaign_id: string }
+        Returns: number
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
