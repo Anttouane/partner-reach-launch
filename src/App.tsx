@@ -14,6 +14,7 @@ import CampaignNew from "./pages/CampaignNew";
 import CampaignDetail from "./pages/CampaignDetail";
 import CollabActive from "./pages/CollabActive";
 import Admin from "./pages/Admin";
+import Verify from "./pages/Verify";
 import AdminPayments from "./pages/AdminPayments";
 import AdminCategories from "./pages/AdminCategories";
 import AdminDisputes from "./pages/AdminDisputes";
@@ -41,6 +42,7 @@ const App = () => (
           <Route path="/campaigns/new" element={<CampaignNew />} />
           <Route path="/campaigns/:id" element={<CampaignDetail />} />
           <Route path="/collab/:id" element={<CollabActive />} />
+          <Route path="/verify" element={<Verify />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/payments" element={<AdminPayments />} />
           <Route path="/admin/categories" element={<AdminCategories />} />
