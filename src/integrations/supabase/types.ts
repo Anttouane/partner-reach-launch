@@ -1028,6 +1028,72 @@ export type Database = {
           },
         ]
       }
+      social_verifications: {
+        Row: {
+          created_at: string
+          creator_id: string
+          declared_avg_views: number | null
+          declared_engagement: number | null
+          declared_followers: number
+          handle: string
+          id: string
+          network: Database["public"]["Enums"]["social_network"]
+          profile_url: string
+          rejection_reason: string | null
+          screenshot_url: string | null
+          status: Database["public"]["Enums"]["verification_status"]
+          submitted_at: string
+          updated_at: string
+          verified_at: string | null
+          verified_avg_views: number | null
+          verified_by: string | null
+          verified_engagement: number | null
+          verified_followers: number | null
+        }
+        Insert: {
+          created_at?: string
+          creator_id: string
+          declared_avg_views?: number | null
+          declared_engagement?: number | null
+          declared_followers: number
+          handle: string
+          id?: string
+          network: Database["public"]["Enums"]["social_network"]
+          profile_url: string
+          rejection_reason?: string | null
+          screenshot_url?: string | null
+          status?: Database["public"]["Enums"]["verification_status"]
+          submitted_at?: string
+          updated_at?: string
+          verified_at?: string | null
+          verified_avg_views?: number | null
+          verified_by?: string | null
+          verified_engagement?: number | null
+          verified_followers?: number | null
+        }
+        Update: {
+          created_at?: string
+          creator_id?: string
+          declared_avg_views?: number | null
+          declared_engagement?: number | null
+          declared_followers?: number
+          handle?: string
+          id?: string
+          network?: Database["public"]["Enums"]["social_network"]
+          profile_url?: string
+          rejection_reason?: string | null
+          screenshot_url?: string | null
+          status?: Database["public"]["Enums"]["verification_status"]
+          submitted_at?: string
+          updated_at?: string
+          verified_at?: string | null
+          verified_avg_views?: number | null
+          verified_by?: string | null
+          verified_engagement?: number | null
+          verified_followers?: number | null
+        }
+        Relationships: []
+      }
       user_commissions: {
         Row: {
           commission_rate: number
@@ -1121,6 +1187,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_creator_verified: { Args: { _creator_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "user" | "superadmin"
@@ -1148,7 +1215,9 @@ export type Database = {
         | "cancelled"
       match_brand_status: "pending" | "approved" | "rejected"
       match_creator_status: "pending" | "accepted" | "refused"
+      social_network: "instagram" | "tiktok" | "youtube"
       user_type: "creator" | "brand"
+      verification_status: "pending" | "verified" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1304,7 +1373,9 @@ export const Constants = {
       ],
       match_brand_status: ["pending", "approved", "rejected"],
       match_creator_status: ["pending", "accepted", "refused"],
+      social_network: ["instagram", "tiktok", "youtube"],
       user_type: ["creator", "brand"],
+      verification_status: ["pending", "verified", "rejected"],
     },
   },
 } as const
