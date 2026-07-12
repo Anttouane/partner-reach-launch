@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import Messages from "./pages/Messages";
 import CampaignNew from "./pages/CampaignNew";
 import CampaignDetail from "./pages/CampaignDetail";
+import CampaignSwipe from "./pages/CampaignSwipe";
 import CollabActive from "./pages/CollabActive";
 import Admin from "./pages/Admin";
 import Verify from "./pages/Verify";
