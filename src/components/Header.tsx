@@ -13,6 +13,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { User as UserIcon, LogOut, Home, MessageSquare, Settings, AlertTriangle, Menu } from "lucide-react";
 import { useAdmin } from "@/hooks/useAdmin";
+import NotificationsBell from "@/components/NotificationsBell";
 
 interface HeaderProps {
   user: User | null;
