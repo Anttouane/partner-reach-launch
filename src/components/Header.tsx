@@ -13,6 +13,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { User as UserIcon, LogOut, Home, MessageSquare, Settings, AlertTriangle, Menu } from "lucide-react";
 import { useAdmin } from "@/hooks/useAdmin";
+import NotificationsBell from "@/components/NotificationsBell";
 
 interface HeaderProps {
   user: User | null;
@@ -53,6 +54,7 @@ const Header = ({ user }: HeaderProps) => {
         <nav className="hidden md:flex items-center gap-2">{navLinks}</nav>
 
         <div className="flex items-center gap-2">
+          {user && <NotificationsBell userId={user.id} />}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm" className="hidden md:flex">
