@@ -70,10 +70,17 @@ const CollabActive = () => {
 
   const release = async () => {
     setActing(true);
-    const { error } = await supabase.from("collabs").update({ status: "released" }).eq("id", collab.id);
-    if (error) toast.error(error.message);
-    else { toast.success("Paiement libéré au créateur"); load(); }
-    setActing(false);
+    try {
+      const { data, error } = await supabase.functions.invoke("release-collab-payment", {
+        body: { collab_id: collab.id },
+      });
+      if (error) throw error;
+      if ((data as any)?.error) throw new Error((data as any).error);
+      toast.success("Paiement libéré au créateur");
+      load();
+    } catch (e: any) {
+      toast.error(e.message || "Erreur lors de la libération");
+    } finally { setActing(false); }
   };
 
   if (loading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;

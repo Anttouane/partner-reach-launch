@@ -247,37 +247,49 @@ export type Database = {
       collabs: {
         Row: {
           amount: number
+          auto_release_at: string | null
           campaign_id: string
           commission: number
           created_at: string
           creator_id: string
+          delivered_at: string | null
           id: string
           match_id: string | null
+          released_at: string | null
           status: Database["public"]["Enums"]["collab_status"]
+          stripe_charge_id: string | null
           stripe_payment_intent: string | null
           updated_at: string
         }
         Insert: {
           amount: number
+          auto_release_at?: string | null
           campaign_id: string
           commission?: number
           created_at?: string
           creator_id: string
+          delivered_at?: string | null
           id?: string
           match_id?: string | null
+          released_at?: string | null
           status?: Database["public"]["Enums"]["collab_status"]
+          stripe_charge_id?: string | null
           stripe_payment_intent?: string | null
           updated_at?: string
         }
         Update: {
           amount?: number
+          auto_release_at?: string | null
           campaign_id?: string
           commission?: number
           created_at?: string
           creator_id?: string
+          delivered_at?: string | null
           id?: string
           match_id?: string | null
+          released_at?: string | null
           status?: Database["public"]["Enums"]["collab_status"]
+          stripe_charge_id?: string | null
           stripe_payment_intent?: string | null
           updated_at?: string
         }
