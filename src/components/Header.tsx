@@ -54,6 +54,7 @@ const Header = ({ user }: HeaderProps) => {
         <nav className="hidden md:flex items-center gap-2">{navLinks}</nav>
 
         <div className="flex items-center gap-2">
+          {user && <NotificationsBell userId={user.id} />}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm" className="hidden md:flex">
