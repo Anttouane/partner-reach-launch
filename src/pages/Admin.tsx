@@ -15,6 +15,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { useSuperadmin } from "@/hooks/useSuperadmin";
+import AdminAnalyticsTab from "@/components/dashboard/AdminAnalyticsTab";
+
 
 type PricingRow = {
   id: string;
@@ -160,10 +162,12 @@ const Admin = () => {
         <Tabs defaultValue="dashboard">
           <TabsList>
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="verifications">Vérifications</TabsTrigger>
             <TabsTrigger value="pricing">Grille tarifaire</TabsTrigger>
             <TabsTrigger value="settings">Réglages</TabsTrigger>
           </TabsList>
+
 
           <TabsContent value="dashboard" className="space-y-4 mt-6">
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -176,9 +180,14 @@ const Admin = () => {
             </div>
           </TabsContent>
 
+          <TabsContent value="analytics" className="mt-6">
+            <AdminAnalyticsTab />
+          </TabsContent>
+
           <TabsContent value="verifications" className="mt-6">
             <VerificationsTab />
           </TabsContent>
+
 
 
           <TabsContent value="pricing" className="space-y-6 mt-6">
