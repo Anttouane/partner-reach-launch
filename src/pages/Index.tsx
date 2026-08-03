@@ -333,45 +333,9 @@ const Index = () => {
         </div>
       </section>
 
-      {/* 8 — TÉMOIGNAGES */}
-      <section className="py-24 px-4 bg-secondary/10">
-        <div className="container mx-auto max-w-6xl">
-          <motion.h2 {...fadeUp} className="text-3xl md:text-5xl font-bold text-foreground text-center mb-14">
-            Ils ont lancé leurs premières campagnes
-          </motion.h2>
+      {/* 8 — Témoignages retirés tant qu'il n'y a pas de vrais avis clients */}
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { initials: "SM", name: "Sophie M.", role: "Créatrice lifestyle — 8k abonnés", quote: "Pour la première fois une marque est venue à moi. J'ai accepté en un clic, le contrat était déjà prêt. J'aurais pas cru que c'était possible." },
-              { initials: "LD", name: "Lucas D.", role: "Fondateur marque e-commerce", quote: "On a touché 80 000 personnes avec 12 créateurs pour moins de 2 000€. Notre dernière pub Meta nous avait coûté 3x plus pour moitié moins d'engagement." },
-              { initials: "IR", name: "Inès R.", role: "Créatrice food — 5k abonnés", quote: "Je pensais qu'il fallait avoir 100 000 abonnés pour être contacté. Partnery m'a prouvé le contraire." },
-            ].map((t, i) => (
-              <motion.div
-                key={i}
-                {...fadeUp}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="bg-background rounded-3xl p-8 border-2 border-border"
-              >
-                <div className="flex items-center gap-4 mb-5">
-                  <div className="w-12 h-12 rounded-full bg-secondary/25 text-foreground font-bold flex items-center justify-center">
-                    {t.initials}
-                  </div>
-                  <div>
-                    <div className="font-bold text-foreground">{t.name}</div>
-                    <div className="text-sm text-muted-foreground">{t.role}</div>
-                  </div>
-                </div>
-                <div className="flex gap-1 mb-4" aria-label="5 étoiles sur 5">
-                  {Array.from({ length: 5 }).map((_, s) => (
-                    <Star key={s} className="h-4 w-4 fill-secondary text-secondary" />
-                  ))}
-                </div>
-                <p className="text-foreground/80 leading-relaxed italic">« {t.quote} »</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+
 
       {/* 9 — CTA FINAL */}
       <section className="py-28 px-4 bg-foreground">
