@@ -12,7 +12,6 @@ import {
   Check,
   X,
   Sliders,
-  Sliders,
   Heart,
   PackageCheck,
   UserPlus,
