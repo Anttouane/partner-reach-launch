@@ -11,7 +11,7 @@ import {
   ArrowRight,
   Check,
   X,
-  Star,
+  Sliders,
   Sliders,
   Heart,
   PackageCheck,
@@ -177,7 +177,7 @@ const Index = () => {
             {[
               { n: "1", icon: Sliders, title: "Vous configurez", desc: "Choisissez votre budget, le type de créateurs, le réseau social. Notre outil calcule en temps réel la portée estimée et le prix conseillé. Pas de surprise." },
               { n: "2", icon: Heart, title: "Vous validez", desc: "On vous propose les créateurs qui correspondent. Vous les validez ou les refusez en un coup d'œil, comme sur une application de rencontre mais pour vos campagnes." },
-              { n: "3", icon: PackageCheck, title: "On s'occupe du reste", desc: "Contrat automatique, paiement sécurisé, suivi de campagne. Vous recevez un rapport de performance à la fin." },
+              { n: "3", icon: PackageCheck, title: "On s'occupe du reste", desc: "Contrat automatique, paiement séquestré et libéré à la livraison, suivi de campagne et statistiques dans votre tableau de bord." },
             ].map((s, i) => (
               <motion.div
                 key={i}
@@ -220,7 +220,7 @@ const Index = () => {
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {[
-              { n: "1", icon: UserPlus, title: "Vous créez votre profil", desc: "Connectez votre compte Instagram ou TikTok. Vos stats sont vérifiées automatiquement. Ça prend 2 minutes." },
+              { n: "1", icon: UserPlus, title: "Vous créez votre profil", desc: "Renseignez votre compte Instagram, TikTok ou YouTube et vos statistiques. Notre équipe les vérifie avant publication. Ça prend 2 minutes." },
               { n: "2", icon: Inbox, title: "Les opportunités viennent à vous", desc: "Les marques qui correspondent à votre univers vous envoient des propositions directement. Vous choisissez ce qui vous intéresse." },
               { n: "3", icon: Wallet, title: "Vous êtes payé, c'est tout", desc: "Acceptez, publiez, soyez payé via Stripe. Pas d'intermédiaire, pas de relance, pas d'impayé." },
             ].map((s, i) => (
@@ -263,9 +263,9 @@ const Index = () => {
           <div className="space-y-5">
             {[
               { icon: Gift, key: "Gratuit pour les créateurs", desc: "Toujours. Pas d'abonnement, pas de commission prélevée sur votre rémunération. Ce que la marque vous propose, vous le touchez en entier." },
-              { icon: BadgePercent, key: "3x moins cher qu'une agence", desc: "Les agences prennent 20 à 30%. Partnery prend une commission fixe sur le budget campagne, invisible pour les créateurs, bien inférieure au marché pour les marques." },
+              { icon: BadgePercent, key: "Moins cher qu'une agence", desc: "Les agences prennent 20 à 30%. Partnery prend une commission fixe sur le budget campagne, invisible pour les créateurs, bien inférieure au marché pour les marques." },
               { icon: ShieldCheck, key: "Paiement garanti", desc: "Le budget est mis en séquestre dès le lancement. Vous publiez, vous êtes payé. Aucun risque d'impayé." },
-              { icon: BadgeCheck, key: "Vérification automatique", desc: "Tous les créateurs connectent leur compte. Les stats sont réelles et vérifiées. Les marques ne paient que pour une vraie audience." },
+              { icon: BadgeCheck, key: "Profils vérifiés", desc: "Chaque créateur soumet ses comptes et ses statistiques, contrôlés par notre équipe avant d'être proposés. Les marques ne paient que pour une vraie audience." },
             ].map((c, i) => (
               <motion.div
                 key={i}
@@ -387,15 +387,15 @@ const Index = () => {
               },
               {
                 q: "Comment Partnery vérifie les créateurs ?",
-                a: "Chaque créateur connecte son compte Instagram ou TikTok à l'inscription. On récupère ses vraies statistiques directement depuis les plateformes. Pas de chiffres déclarés, pas de triche possible.",
+                a: "Chaque créateur déclare ses comptes Instagram, TikTok ou YouTube et ses statistiques, avec justificatifs à l'appui. Notre équipe contrôle chaque profil avant qu'il puisse être proposé aux marques.",
               },
               {
                 q: "Que se passe-t-il si un créateur ne publie pas ?",
-                a: "Le budget est en séquestre chez Stripe. Si le créateur ne respecte pas la deadline, le paiement ne lui est pas versé et vous pouvez sélectionner un remplaçant. Vous êtes protégé dans tous les cas.",
+                a: "Le budget est en séquestre chez Stripe. Si le créateur ne respecte pas la deadline, les fonds ne lui sont pas versés et vous êtes remboursé. Vous êtes protégé dans tous les cas.",
               },
               {
                 q: "En cas de problème, qui contacte-t-on ?",
-                a: "Un bouton « Signaler un problème » est disponible sur chaque collab active. L'équipe Partnery intervient manuellement pour trouver une solution amiable.",
+                a: "Chaque collab active permet d'ouvrir un litige. L'équipe Partnery examine les preuves des deux parties et tranche : libération des fonds, remboursement ou annulation.",
               },
             ].map((item, i) => (
               <AccordionItem
