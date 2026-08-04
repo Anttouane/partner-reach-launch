@@ -171,39 +171,21 @@ const CampaignNew = () => {
         .single();
       if (cErr) throw cErr;
 
-      // Matching côté client (basique). Amélioré à l'étape 3+.
-      let query = supabase
-        .from("creator_profiles")
-        .select("id, audience_size, rate_per_collab, profiles!inner(id, category_id, full_name)")
-        .gte("audience_size", minAudience)
-        .lte("rate_per_collab", pricePerCreator);
-      const { data: creatorProfs } = await query;
-      const candidates = (creatorProfs || []).filter(
-        (c: any) => !nicheId || c.profiles?.category_id === nicheId
-      );
+      // Matching officiel : créateurs vérifiés uniquement (fonction en base)
+      const { data: inserted, error: mErr } = await supabase.rpc("generate_campaign_matches", {
+        _campaign_id: campaign.id,
+        _limit: nb * 3,
+      });
+      if (mErr) throw mErr;
 
-      const scored = candidates
-        .map((c: any) => ({
-          creator_id: c.id,
-          score:
-            Number(c.audience_size || 0) / Math.max(minAudience, 1) -
-            Math.abs(pricePerCreator - Number(c.rate_per_collab || 0)) /
-              Math.max(pricePerCreator, 1),
-        }))
-        .sort((a, b) => b.score - a.score)
-        .slice(0, nb * 3);
-
-      if (scored.length > 0) {
-        await supabase.from("campaign_matches").insert(
-          scored.map((s) => ({
-            campaign_id: campaign.id,
-            creator_id: s.creator_id,
-            match_score: Math.max(0, s.score),
-          }))
+      const count = Number(inserted || 0);
+      if (count > 0) {
+        toast.success(`Campagne créée — ${count} créateur(s) proposé(s) à valider`);
+      } else {
+        toast.success(
+          "Campagne créée — aucun créateur vérifié ne correspond pour le moment, vous serez prévenu dès qu'un profil correspond"
         );
       }
-
-      toast.success(`Campagne créée — ${scored.length} créateur(s) présélectionné(s)`);
       navigate(`/campaigns/${campaign.id}`);
     } catch (e: any) {
       toast.error(e.message || "Erreur");
