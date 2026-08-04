@@ -11,7 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import KpiTiles from "@/components/dashboard/KpiTiles";
 import MonthlyAreaChart from "@/components/dashboard/MonthlyAreaChart";
 import { monthlySeries, euros } from "@/hooks/useDashboardAnalytics";
-import { PlusCircle, Users, CheckCircle2, Loader2, Megaphone, Wallet, Percent } from "lucide-react";
+import { PlusCircle, Users, CheckCircle2, Loader2, Megaphone, Wallet, Percent, BellRing } from "lucide-react";
 
 interface CampaignRow {
   id: string;
@@ -20,6 +20,7 @@ interface CampaignRow {
   budget_total: number;
   creators_wanted: number;
   matched: number;
+  pending: number;
   approved: number;
   accepted: number;
   paid: number;
@@ -69,6 +70,7 @@ const BrandDashboard = ({ user }: { user: User }) => {
           ...c,
           budget_total: Number(c.budget_total),
           matched: m.length,
+          pending: m.filter(x => x.brand_status === "pending").length,
           approved: m.filter(x => x.brand_status === "approved").length,
           accepted: m.filter(x => x.creator_status === "accepted").length,
           paid: cc.filter(x => PAID_STATUSES.includes(x.status)).length,
@@ -115,6 +117,29 @@ const BrandDashboard = ({ user }: { user: User }) => {
           <div className="flex justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
         ) : (
           <>
+            {campaigns.some(c => c.pending > 0) && (
+              <Card className="border-primary/40">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base font-medium flex items-center gap-2">
+                    <BellRing className="h-4 w-4 text-primary" /> Créateurs en attente de votre validation
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {campaigns.filter(c => c.pending > 0).map(c => (
+                    <div key={c.id} className="flex flex-wrap items-center justify-between gap-2 rounded-lg border p-3">
+                      <div>
+                        <p className="font-medium">{c.name}</p>
+                        <p className="text-sm text-muted-foreground">{c.pending} créateur(s) à valider · {c.approved}/{c.creators_wanted} déjà validés</p>
+                      </div>
+                      <Link to={`/campaigns/${c.id}`}>
+                        <Button size="sm">Voir les créateurs</Button>
+                      </Link>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
+
             <KpiTiles items={[
               { icon: Megaphone, label: "Campagnes actives", value: activeCampaigns, hint: `${campaigns.length} au total` },
               { icon: Users, label: "Créateurs en collab", value: creatorsInCollab, hint: "Paiement séquestré ou livré" },
@@ -178,7 +203,10 @@ const BrandDashboard = ({ user }: { user: User }) => {
                       <CardHeader>
                         <div className="flex justify-between items-start gap-2">
                           <CardTitle className="text-lg">{c.name}</CardTitle>
-                          <Badge variant="secondary">{statusLabel[c.status]}</Badge>
+                          <div className="flex gap-2 shrink-0">
+                            {c.pending > 0 && <Badge>{c.pending} à valider</Badge>}
+                            <Badge variant="secondary">{statusLabel[c.status]}</Badge>
+                          </div>
                         </div>
                       </CardHeader>
                       <CardContent className="space-y-2 text-sm">
