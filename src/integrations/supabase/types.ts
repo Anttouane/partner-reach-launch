@@ -1226,7 +1226,7 @@ export type Database = {
     }
     Functions: {
       generate_campaign_matches: {
-        Args: { _campaign_id: string }
+        Args: { _campaign_id: string; _limit?: number }
         Returns: number
       }
       has_role: {
