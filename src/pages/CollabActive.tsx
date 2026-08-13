@@ -22,10 +22,13 @@ const statusLabels: Record<string, string> = {
 const CollabActive = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [user, setUser] = useState<User | null>(null);
   const [collab, setCollab] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [acting, setActing] = useState(false);
+  const [confirming, setConfirming] = useState(searchParams.get("paid") === "1");
+  const pollRef = useRef<number | null>(null);
 
   const load = async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -38,9 +41,32 @@ const CollabActive = () => {
       .maybeSingle();
     setCollab(data);
     setLoading(false);
+    return data;
   };
 
   useEffect(() => { load(); }, [id]);
+
+  // After returning from Stripe Checkout, wait for the webhook confirmation.
+  useEffect(() => {
+    if (!confirming) return;
+    let tries = 0;
+    const tick = async () => {
+      tries += 1;
+      const data = await load();
+      if (data && data.status !== "awaiting_payment") {
+        setConfirming(false);
+        toast.success("Paiement confirmé, fonds séquestrés");
+        return;
+      }
+      if (tries >= 12) {
+        setConfirming(false);
+        return;
+      }
+      pollRef.current = window.setTimeout(tick, 3000);
+    };
+    pollRef.current = window.setTimeout(tick, 2000);
+    return () => { if (pollRef.current) window.clearTimeout(pollRef.current); };
+  }, [confirming]);
 
   const pay = async () => {
     if (!collab) return;
