@@ -158,7 +158,13 @@ const CollabActive = () => {
         <Card>
           <CardHeader><CardTitle className="text-lg">Actions</CardTitle></CardHeader>
           <CardContent className="space-y-2">
-            {isBrand && collab.status === "awaiting_payment" && (
+            {confirming && collab.status === "awaiting_payment" && (
+              <div className="flex items-center justify-center gap-2 rounded-lg bg-muted p-3 text-sm text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Paiement en cours de confirmation…
+              </div>
+            )}
+            {isBrand && collab.status === "awaiting_payment" && !confirming && (
               <Button onClick={pay} disabled={acting} className="w-full">
                 <CreditCard className="h-4 w-4 mr-2" /> Payer {Number(collab.amount).toFixed(2)} € (séquestre)
               </Button>
