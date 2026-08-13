@@ -182,57 +182,55 @@ const Wallet = () => {
 
     // Calculate balances
     const completedPayments = (paymentsData || []).filter(p => p.status === "completed");
-    const totalEarned = completedPayments.reduce((sum, p) => sum + p.net_amount, 0);
-    
-    const completedWithdrawals = (withdrawalsData || []).filter(w => w.status === "completed");
-    const pendingWithdrawals = (withdrawalsData || []).filter(w => w.status === "pending");
-    
-    const totalWithdrawn = completedWithdrawals.reduce((sum, w) => sum + w.amount, 0);
-    const totalPending = pendingWithdrawals.reduce((sum, w) => sum + w.amount, 0);
-    
-    setAvailableBalance(totalEarned - totalWithdrawn - totalPending);
+    const totalEarned = completedPayments.reduce((sum, p) => sum + p.net_amount, 0) + collabsEarned;
+
+    const outWithdrawals = (withdrawalsData || []).filter(w =>
+      ["completed", "processing", "pending"].includes(w.status)
+    );
+    const inFlight = (withdrawalsData || []).filter(w =>
+      ["pending", "processing"].includes(w.status)
+    );
+
+    const totalOut = outWithdrawals.reduce((sum, w) => sum + w.amount, 0);
+    const totalPending = inFlight.reduce((sum, w) => sum + w.amount, 0);
+
+    setAvailableBalance(totalEarned - totalOut);
     setPendingBalance(totalPending);
   };
 
   const handleWithdraw = async () => {
     const amount = parseFloat(withdrawAmount);
-    
+
     if (isNaN(amount) || amount <= 0) {
       toast.error("Veuillez entrer un montant valide");
       return;
     }
-    
+
     if (amount > availableBalance / 100) {
       toast.error("Montant supérieur au solde disponible");
       return;
     }
-    
-    if (!withdrawIban || withdrawIban.length < 15) {
-      toast.error("Veuillez entrer un IBAN valide");
+
+    if (!connectAccount?.payouts_enabled) {
+      toast.error("Configurez d'abord votre compte de paiement");
       return;
     }
-    
+
     setWithdrawing(true);
-    
+
     try {
-      const { error } = await supabase
-        .from("withdrawals")
-        .insert({
-          user_id: user?.id,
-          amount: Math.round(amount * 100), // Convert to cents
-          iban: withdrawIban,
-          status: "pending"
-        });
-      
+      const { data, error } = await supabase.functions.invoke("request-payout", {
+        body: { amount: Math.round(amount * 100) },
+      });
       if (error) throw error;
-      
-      toast.success("Demande de retrait envoyée");
+      if ((data as any)?.error) throw new Error((data as any).error);
+
+      toast.success("Retrait en cours de traitement");
       setDialogOpen(false);
       setWithdrawAmount("");
-      setWithdrawIban("");
       await loadWalletData(user!.id);
     } catch (error: any) {
-      toast.error("Erreur lors de la demande de retrait");
+      toast.error(error.message || "Erreur lors de la demande de retrait");
       console.error(error);
     } finally {
       setWithdrawing(false);
