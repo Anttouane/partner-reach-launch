@@ -90,7 +90,51 @@ const Wallet = () => {
     checkUser();
   }, [navigate]);
 
+  const loadConnect = async () => {
+    setConnectLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("connect-onboarding", {
+        body: { action: "refresh" },
+      });
+      if (error) throw error;
+      setConnectAccount((data as any)?.account ?? null);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setConnectLoading(false);
+    }
+  };
+
+  const startConnect = async () => {
+    setConnectStarting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("connect-onboarding", {
+        body: { action: "start" },
+      });
+      if (error) throw error;
+      if ((data as any)?.error) throw new Error((data as any).error);
+      if ((data as any)?.url) window.location.href = (data as any).url;
+    } catch (e: any) {
+      toast.error(e.message || "Impossible d'ouvrir la configuration des paiements");
+    } finally {
+      setConnectStarting(false);
+    }
+  };
+
   const loadWalletData = async (userId: string) => {
+    // Collabs released to this creator (escrow payouts)
+    const { data: collabsData } = await supabase
+      .from("collabs")
+      .select("amount, commission, status")
+      .eq("creator_id", userId)
+      .eq("status", "released");
+
+    const collabsEarned = (collabsData || []).reduce(
+      (sum, c) => sum + Math.round((Number(c.amount) - Number(c.commission)) * 100),
+      0
+    );
+    setCollabsNet(collabsEarned);
+
     // Load payments received (where user is payee)
     const { data: paymentsData } = await supabase
       .from("payments")
