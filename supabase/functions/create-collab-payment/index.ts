@@ -65,10 +65,10 @@ serve(async (req) => {
       metadata: { collab_id: collab.id },
     });
 
-    // Mark escrowed optimistically once session is created; final confirmation via webhook (existing).
+    // Do NOT mark the collab as escrowed here: the status only changes once
+    // Stripe confirms the authorization via the webhook.
     await admin.from("collabs").update({
-      stripe_payment_intent: session.payment_intent as string | null,
-      status: "escrowed",
+      stripe_payment_intent: (session.payment_intent as string | null) ?? null,
     }).eq("id", collab.id);
 
     return new Response(JSON.stringify({ url: session.url }), { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 });

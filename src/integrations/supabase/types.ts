@@ -310,6 +310,42 @@ export type Database = {
           },
         ]
       }
+      connect_accounts: {
+        Row: {
+          charges_enabled: boolean
+          created_at: string
+          details_submitted: boolean
+          id: string
+          payouts_enabled: boolean
+          requirements_due: string | null
+          stripe_account_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          charges_enabled?: boolean
+          created_at?: string
+          details_submitted?: boolean
+          id?: string
+          payouts_enabled?: boolean
+          requirements_due?: string | null
+          stripe_account_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          charges_enabled?: boolean
+          created_at?: string
+          details_submitted?: boolean
+          id?: string
+          payouts_enabled?: boolean
+          requirements_due?: string | null
+          stripe_account_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contract_changes: {
         Row: {
           change_type: string
@@ -1189,33 +1225,42 @@ export type Database = {
           amount: number
           created_at: string
           currency: string
+          failure_reason: string | null
           iban: string | null
           id: string
           notes: string | null
           processed_at: string | null
           status: string
+          stripe_payout_id: string | null
+          stripe_transfer_id: string | null
           user_id: string
         }
         Insert: {
           amount: number
           created_at?: string
           currency?: string
+          failure_reason?: string | null
           iban?: string | null
           id?: string
           notes?: string | null
           processed_at?: string | null
           status?: string
+          stripe_payout_id?: string | null
+          stripe_transfer_id?: string | null
           user_id: string
         }
         Update: {
           amount?: number
           created_at?: string
           currency?: string
+          failure_reason?: string | null
           iban?: string | null
           id?: string
           notes?: string | null
           processed_at?: string | null
           status?: string
+          stripe_payout_id?: string | null
+          stripe_transfer_id?: string | null
           user_id?: string
         }
         Relationships: []

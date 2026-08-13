@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
 import Header from "@/components/Header";
@@ -22,10 +22,13 @@ const statusLabels: Record<string, string> = {
 const CollabActive = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [user, setUser] = useState<User | null>(null);
   const [collab, setCollab] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [acting, setActing] = useState(false);
+  const [confirming, setConfirming] = useState(searchParams.get("paid") === "1");
+  const pollRef = useRef<number | null>(null);
 
   const load = async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -38,9 +41,32 @@ const CollabActive = () => {
       .maybeSingle();
     setCollab(data);
     setLoading(false);
+    return data;
   };
 
   useEffect(() => { load(); }, [id]);
+
+  // After returning from Stripe Checkout, wait for the webhook confirmation.
+  useEffect(() => {
+    if (!confirming) return;
+    let tries = 0;
+    const tick = async () => {
+      tries += 1;
+      const data = await load();
+      if (data && data.status !== "awaiting_payment") {
+        setConfirming(false);
+        toast.success("Paiement confirmé, fonds séquestrés");
+        return;
+      }
+      if (tries >= 12) {
+        setConfirming(false);
+        return;
+      }
+      pollRef.current = window.setTimeout(tick, 3000);
+    };
+    pollRef.current = window.setTimeout(tick, 2000);
+    return () => { if (pollRef.current) window.clearTimeout(pollRef.current); };
+  }, [confirming]);
 
   const pay = async () => {
     if (!collab) return;
@@ -132,7 +158,13 @@ const CollabActive = () => {
         <Card>
           <CardHeader><CardTitle className="text-lg">Actions</CardTitle></CardHeader>
           <CardContent className="space-y-2">
-            {isBrand && collab.status === "awaiting_payment" && (
+            {confirming && collab.status === "awaiting_payment" && (
+              <div className="flex items-center justify-center gap-2 rounded-lg bg-muted p-3 text-sm text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Paiement en cours de confirmation…
+              </div>
+            )}
+            {isBrand && collab.status === "awaiting_payment" && !confirming && (
               <Button onClick={pay} disabled={acting} className="w-full">
                 <CreditCard className="h-4 w-4 mr-2" /> Payer {Number(collab.amount).toFixed(2)} € (séquestre)
               </Button>

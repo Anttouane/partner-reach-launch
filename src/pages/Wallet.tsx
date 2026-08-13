@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Wallet as WalletIcon, ArrowDownToLine, History, Euro, AlertCircle } from "lucide-react";
+import { Loader2, Wallet as WalletIcon, ArrowDownToLine, History, Euro, AlertCircle, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -62,9 +62,19 @@ const Wallet = () => {
   const [availableBalance, setAvailableBalance] = useState(0);
   const [pendingBalance, setPendingBalance] = useState(0);
   const [withdrawAmount, setWithdrawAmount] = useState("");
-  const [withdrawIban, setWithdrawIban] = useState("");
+  
   const [withdrawing, setWithdrawing] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [collabsNet, setCollabsNet] = useState(0);
+  const [connectAccount, setConnectAccount] = useState<{
+    stripe_account_id: string;
+    charges_enabled: boolean;
+    payouts_enabled: boolean;
+    details_submitted: boolean;
+    requirements_due: string | null;
+  } | null>(null);
+  const [connectLoading, setConnectLoading] = useState(true);
+  const [connectStarting, setConnectStarting] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -85,12 +95,57 @@ const Wallet = () => {
       setUser(session.user);
       await loadWalletData(session.user.id);
       setLoading(false);
+      loadConnect();
     };
 
     checkUser();
   }, [navigate]);
 
+  const loadConnect = async () => {
+    setConnectLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("connect-onboarding", {
+        body: { action: "refresh" },
+      });
+      if (error) throw error;
+      setConnectAccount((data as any)?.account ?? null);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setConnectLoading(false);
+    }
+  };
+
+  const startConnect = async () => {
+    setConnectStarting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("connect-onboarding", {
+        body: { action: "start" },
+      });
+      if (error) throw error;
+      if ((data as any)?.error) throw new Error((data as any).error);
+      if ((data as any)?.url) window.location.href = (data as any).url;
+    } catch (e: any) {
+      toast.error(e.message || "Impossible d'ouvrir la configuration des paiements");
+    } finally {
+      setConnectStarting(false);
+    }
+  };
+
   const loadWalletData = async (userId: string) => {
+    // Collabs released to this creator (escrow payouts)
+    const { data: collabsData } = await supabase
+      .from("collabs")
+      .select("amount, commission, status")
+      .eq("creator_id", userId)
+      .eq("status", "released");
+
+    const collabsEarned = (collabsData || []).reduce(
+      (sum, c) => sum + Math.round((Number(c.amount) - Number(c.commission)) * 100),
+      0
+    );
+    setCollabsNet(collabsEarned);
+
     // Load payments received (where user is payee)
     const { data: paymentsData } = await supabase
       .from("payments")
@@ -127,57 +182,55 @@ const Wallet = () => {
 
     // Calculate balances
     const completedPayments = (paymentsData || []).filter(p => p.status === "completed");
-    const totalEarned = completedPayments.reduce((sum, p) => sum + p.net_amount, 0);
-    
-    const completedWithdrawals = (withdrawalsData || []).filter(w => w.status === "completed");
-    const pendingWithdrawals = (withdrawalsData || []).filter(w => w.status === "pending");
-    
-    const totalWithdrawn = completedWithdrawals.reduce((sum, w) => sum + w.amount, 0);
-    const totalPending = pendingWithdrawals.reduce((sum, w) => sum + w.amount, 0);
-    
-    setAvailableBalance(totalEarned - totalWithdrawn - totalPending);
+    const totalEarned = completedPayments.reduce((sum, p) => sum + p.net_amount, 0) + collabsEarned;
+
+    const outWithdrawals = (withdrawalsData || []).filter(w =>
+      ["completed", "processing", "pending"].includes(w.status)
+    );
+    const inFlight = (withdrawalsData || []).filter(w =>
+      ["pending", "processing"].includes(w.status)
+    );
+
+    const totalOut = outWithdrawals.reduce((sum, w) => sum + w.amount, 0);
+    const totalPending = inFlight.reduce((sum, w) => sum + w.amount, 0);
+
+    setAvailableBalance(totalEarned - totalOut);
     setPendingBalance(totalPending);
   };
 
   const handleWithdraw = async () => {
     const amount = parseFloat(withdrawAmount);
-    
+
     if (isNaN(amount) || amount <= 0) {
       toast.error("Veuillez entrer un montant valide");
       return;
     }
-    
+
     if (amount > availableBalance / 100) {
       toast.error("Montant supérieur au solde disponible");
       return;
     }
-    
-    if (!withdrawIban || withdrawIban.length < 15) {
-      toast.error("Veuillez entrer un IBAN valide");
+
+    if (!connectAccount?.payouts_enabled) {
+      toast.error("Configurez d'abord votre compte de paiement");
       return;
     }
-    
+
     setWithdrawing(true);
-    
+
     try {
-      const { error } = await supabase
-        .from("withdrawals")
-        .insert({
-          user_id: user?.id,
-          amount: Math.round(amount * 100), // Convert to cents
-          iban: withdrawIban,
-          status: "pending"
-        });
-      
+      const { data, error } = await supabase.functions.invoke("request-payout", {
+        body: { amount: Math.round(amount * 100) },
+      });
       if (error) throw error;
-      
-      toast.success("Demande de retrait envoyée");
+      if ((data as any)?.error) throw new Error((data as any).error);
+
+      toast.success("Retrait en cours de traitement");
       setDialogOpen(false);
       setWithdrawAmount("");
-      setWithdrawIban("");
       await loadWalletData(user!.id);
     } catch (error: any) {
-      toast.error("Erreur lors de la demande de retrait");
+      toast.error(error.message || "Erreur lors de la demande de retrait");
       console.error(error);
     } finally {
       setWithdrawing(false);
@@ -190,6 +243,8 @@ const Wallet = () => {
         return <Badge className="bg-green-500/10 text-green-500 hover:bg-green-500/20">Complété</Badge>;
       case "pending":
         return <Badge className="bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20">En attente</Badge>;
+      case "processing":
+        return <Badge className="bg-blue-500/10 text-blue-500 hover:bg-blue-500/20">En cours</Badge>;
       case "failed":
         return <Badge className="bg-red-500/10 text-red-500 hover:bg-red-500/20">Échoué</Badge>;
       default:
@@ -228,7 +283,10 @@ const Wallet = () => {
             <CardContent>
               <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button className="w-full" disabled={availableBalance <= 0}>
+                  <Button
+                    className="w-full"
+                    disabled={availableBalance <= 0 || !connectAccount?.payouts_enabled}
+                  >
                     <ArrowDownToLine className="h-4 w-4 mr-2" />
                     Retirer
                   </Button>
@@ -237,7 +295,7 @@ const Wallet = () => {
                   <DialogHeader>
                     <DialogTitle>Demander un retrait</DialogTitle>
                     <DialogDescription>
-                      Entrez le montant à retirer et votre IBAN
+                      Le montant est viré sur le compte bancaire vérifié auprès de Stripe.
                     </DialogDescription>
                   </DialogHeader>
                   <div className="space-y-4 py-4">
@@ -258,14 +316,6 @@ const Wallet = () => {
                       <p className="text-sm text-muted-foreground">
                         Maximum: {(availableBalance / 100).toFixed(2)} €
                       </p>
-                    </div>
-                    <div className="space-y-2">
-                      <Label>IBAN</Label>
-                      <Input
-                        placeholder="FR76 XXXX XXXX XXXX XXXX XXXX XXX"
-                        value={withdrawIban}
-                        onChange={(e) => setWithdrawIban(e.target.value.toUpperCase())}
-                      />
                     </div>
                     {withdrawAmount && parseFloat(withdrawAmount) > 0 && (
                       <div className="rounded-lg bg-muted p-4 space-y-2 text-sm">
@@ -326,16 +376,64 @@ const Wallet = () => {
             <CardHeader className="pb-2">
               <CardDescription>Total gagné</CardDescription>
               <CardTitle className="text-3xl">
-                {(payments.filter(p => p.status === "completed").reduce((sum, p) => sum + p.net_amount, 0) / 100).toFixed(2)} €
+                {((payments.filter(p => p.status === "completed").reduce((sum, p) => sum + p.net_amount, 0) + collabsNet) / 100).toFixed(2)} €
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Depuis le début
+                Paiements + collaborations libérées
               </p>
             </CardContent>
           </Card>
         </div>
+
+        {/* Stripe Connect status */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <ShieldCheck className="h-5 w-5" />
+              Compte de paiement
+            </CardTitle>
+            <CardDescription>
+              Vérifiez votre identité et votre compte bancaire pour recevoir vos virements automatiquement.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {connectLoading ? (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin" /> Vérification du statut…
+              </div>
+            ) : connectAccount?.payouts_enabled ? (
+              <div className="flex flex-wrap items-center gap-3">
+                <Badge className="bg-green-500/10 text-green-500 hover:bg-green-500/20">
+                  Compte vérifié — virements activés
+                </Badge>
+                <Button variant="outline" size="sm" onClick={startConnect} disabled={connectStarting}>
+                  {connectStarting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                  Modifier mes informations
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div className="flex items-start gap-2 p-3 bg-muted rounded-lg">
+                  <AlertCircle className="h-4 w-4 text-muted-foreground mt-0.5" />
+                  <p className="text-sm text-muted-foreground">
+                    {connectAccount
+                      ? connectAccount.requirements_due
+                        ? `Informations manquantes : ${connectAccount.requirements_due}`
+                        : "Vérification en cours côté Stripe."
+                      : "Configurez votre compte de paiement pour pouvoir retirer vos gains."}
+                  </p>
+                </div>
+                <Button onClick={startConnect} disabled={connectStarting}>
+                  {connectStarting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                  {connectAccount ? "Compléter ma vérification" : "Configurer mes paiements"}
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
 
         {/* Payments History */}
         <Card className="mb-8">
