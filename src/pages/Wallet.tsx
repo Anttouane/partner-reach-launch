@@ -283,7 +283,10 @@ const Wallet = () => {
             <CardContent>
               <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button className="w-full" disabled={availableBalance <= 0}>
+                  <Button
+                    className="w-full"
+                    disabled={availableBalance <= 0 || !connectAccount?.payouts_enabled}
+                  >
                     <ArrowDownToLine className="h-4 w-4 mr-2" />
                     Retirer
                   </Button>
@@ -292,7 +295,7 @@ const Wallet = () => {
                   <DialogHeader>
                     <DialogTitle>Demander un retrait</DialogTitle>
                     <DialogDescription>
-                      Entrez le montant à retirer et votre IBAN
+                      Le montant est viré sur le compte bancaire vérifié auprès de Stripe.
                     </DialogDescription>
                   </DialogHeader>
                   <div className="space-y-4 py-4">
