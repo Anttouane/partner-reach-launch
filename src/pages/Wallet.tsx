@@ -376,16 +376,64 @@ const Wallet = () => {
             <CardHeader className="pb-2">
               <CardDescription>Total gagné</CardDescription>
               <CardTitle className="text-3xl">
-                {(payments.filter(p => p.status === "completed").reduce((sum, p) => sum + p.net_amount, 0) / 100).toFixed(2)} €
+                {((payments.filter(p => p.status === "completed").reduce((sum, p) => sum + p.net_amount, 0) + collabsNet) / 100).toFixed(2)} €
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Depuis le début
+                Paiements + collaborations libérées
               </p>
             </CardContent>
           </Card>
         </div>
+
+        {/* Stripe Connect status */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <ShieldCheck className="h-5 w-5" />
+              Compte de paiement
+            </CardTitle>
+            <CardDescription>
+              Vérifiez votre identité et votre compte bancaire pour recevoir vos virements automatiquement.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {connectLoading ? (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin" /> Vérification du statut…
+              </div>
+            ) : connectAccount?.payouts_enabled ? (
+              <div className="flex flex-wrap items-center gap-3">
+                <Badge className="bg-green-500/10 text-green-500 hover:bg-green-500/20">
+                  Compte vérifié — virements activés
+                </Badge>
+                <Button variant="outline" size="sm" onClick={startConnect} disabled={connectStarting}>
+                  {connectStarting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                  Modifier mes informations
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div className="flex items-start gap-2 p-3 bg-muted rounded-lg">
+                  <AlertCircle className="h-4 w-4 text-muted-foreground mt-0.5" />
+                  <p className="text-sm text-muted-foreground">
+                    {connectAccount
+                      ? connectAccount.requirements_due
+                        ? `Informations manquantes : ${connectAccount.requirements_due}`
+                        : "Vérification en cours côté Stripe."
+                      : "Configurez votre compte de paiement pour pouvoir retirer vos gains."}
+                  </p>
+                </div>
+                <Button onClick={startConnect} disabled={connectStarting}>
+                  {connectStarting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                  {connectAccount ? "Compléter ma vérification" : "Configurer mes paiements"}
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
 
         {/* Payments History */}
         <Card className="mb-8">
