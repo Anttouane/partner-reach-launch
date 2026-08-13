@@ -317,14 +317,6 @@ const Wallet = () => {
                         Maximum: {(availableBalance / 100).toFixed(2)} €
                       </p>
                     </div>
-                    <div className="space-y-2">
-                      <Label>IBAN</Label>
-                      <Input
-                        placeholder="FR76 XXXX XXXX XXXX XXXX XXXX XXX"
-                        value={withdrawIban}
-                        onChange={(e) => setWithdrawIban(e.target.value.toUpperCase())}
-                      />
-                    </div>
                     {withdrawAmount && parseFloat(withdrawAmount) > 0 && (
                       <div className="rounded-lg bg-muted p-4 space-y-2 text-sm">
                         <div className="flex justify-between">
