@@ -62,7 +62,7 @@ const Wallet = () => {
   const [availableBalance, setAvailableBalance] = useState(0);
   const [pendingBalance, setPendingBalance] = useState(0);
   const [withdrawAmount, setWithdrawAmount] = useState("");
-  const [withdrawIban, setWithdrawIban] = useState("");
+  
   const [withdrawing, setWithdrawing] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [collabsNet, setCollabsNet] = useState(0);
