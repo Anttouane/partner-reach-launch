@@ -95,6 +95,7 @@ const Wallet = () => {
       setUser(session.user);
       await loadWalletData(session.user.id);
       setLoading(false);
+      loadConnect();
     };
 
     checkUser();
