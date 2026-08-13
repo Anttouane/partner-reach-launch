@@ -65,6 +65,16 @@ const Wallet = () => {
   const [withdrawIban, setWithdrawIban] = useState("");
   const [withdrawing, setWithdrawing] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [collabsNet, setCollabsNet] = useState(0);
+  const [connectAccount, setConnectAccount] = useState<{
+    stripe_account_id: string;
+    charges_enabled: boolean;
+    payouts_enabled: boolean;
+    details_submitted: boolean;
+    requirements_due: string | null;
+  } | null>(null);
+  const [connectLoading, setConnectLoading] = useState(true);
+  const [connectStarting, setConnectStarting] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
