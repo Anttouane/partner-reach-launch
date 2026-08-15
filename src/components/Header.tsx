@@ -104,6 +104,11 @@ const Header = ({ user }: HeaderProps) => {
                     <UserIcon className="h-4 w-4 mr-2" /> Mon Profil
                   </Button>
                 </Link>
+                <Link to="/wallet" onClick={() => setMobileOpen(false)}>
+                  <Button variant="ghost" size="sm" className="w-full justify-start">
+                    <WalletIcon className="h-4 w-4 mr-2" /> Portefeuille
+                  </Button>
+                </Link>
                 <div className="border-t my-2" />
                 <Button variant="ghost" size="sm" className="w-full justify-start text-destructive" onClick={() => { setMobileOpen(false); handleSignOut(); }}>
                   <LogOut className="h-4 w-4 mr-2" /> Déconnexion
