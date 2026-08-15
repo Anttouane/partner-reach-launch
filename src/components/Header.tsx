@@ -66,6 +66,9 @@ const Header = ({ user }: HeaderProps) => {
               <DropdownMenuItem onClick={() => navigate("/profile")}>
                 <UserIcon className="h-4 w-4 mr-2" /> Mon Profil
               </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/wallet")}>
+                <WalletIcon className="h-4 w-4 mr-2" /> Portefeuille
+              </DropdownMenuItem>
               {isAdmin && (
                 <>
                   <DropdownMenuSeparator />
