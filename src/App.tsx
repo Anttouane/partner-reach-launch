@@ -45,6 +45,12 @@ const App = () => (
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/:id" element={<PublicProfile />} />
+          <Route path="/wallet" element={<Wallet />} />
+          <Route path="/contract/:id" element={<ContractDetail />} />
+          <Route path="/discover" element={<Discover />} />
+          <Route path="/opportunity/:id" element={<OpportunityDetail />} />
+          <Route path="/pitch/:id" element={<PitchDetail />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/campaigns/new" element={<CampaignNew />} />
           <Route path="/campaigns/:id" element={<CampaignDetail />} />
