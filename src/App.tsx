@@ -17,6 +17,12 @@ import CollabActive from "./pages/CollabActive";
 import Admin from "./pages/Admin";
 import Verify from "./pages/Verify";
 import AdminPayments from "./pages/AdminPayments";
+import Wallet from "./pages/Wallet";
+import ContractDetail from "./pages/ContractDetail";
+import Discover from "./pages/Discover";
+import PublicProfile from "./pages/PublicProfile";
+import OpportunityDetail from "./pages/OpportunityDetail";
+import PitchDetail from "./pages/PitchDetail";
 import AdminCategories from "./pages/AdminCategories";
 import AdminDisputes from "./pages/AdminDisputes";
 import MentionsLegales from "./pages/MentionsLegales";
@@ -39,6 +45,12 @@ const App = () => (
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/:id" element={<PublicProfile />} />
+          <Route path="/wallet" element={<Wallet />} />
+          <Route path="/contract/:id" element={<ContractDetail />} />
+          <Route path="/discover" element={<Discover />} />
+          <Route path="/opportunity/:id" element={<OpportunityDetail />} />
+          <Route path="/pitch/:id" element={<PitchDetail />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/campaigns/new" element={<CampaignNew />} />
           <Route path="/campaigns/:id" element={<CampaignDetail />} />

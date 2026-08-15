@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { User as UserIcon, LogOut, Home, MessageSquare, Settings, AlertTriangle, Menu } from "lucide-react";
+import { User as UserIcon, LogOut, Home, MessageSquare, Settings, AlertTriangle, Menu, Wallet as WalletIcon } from "lucide-react";
 import { useAdmin } from "@/hooks/useAdmin";
 import NotificationsBell from "@/components/NotificationsBell";
 
@@ -66,6 +66,9 @@ const Header = ({ user }: HeaderProps) => {
               <DropdownMenuItem onClick={() => navigate("/profile")}>
                 <UserIcon className="h-4 w-4 mr-2" /> Mon Profil
               </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/wallet")}>
+                <WalletIcon className="h-4 w-4 mr-2" /> Portefeuille
+              </DropdownMenuItem>
               {isAdmin && (
                 <>
                   <DropdownMenuSeparator />
@@ -99,6 +102,11 @@ const Header = ({ user }: HeaderProps) => {
                 <Link to="/profile" onClick={() => setMobileOpen(false)}>
                   <Button variant="ghost" size="sm" className="w-full justify-start">
                     <UserIcon className="h-4 w-4 mr-2" /> Mon Profil
+                  </Button>
+                </Link>
+                <Link to="/wallet" onClick={() => setMobileOpen(false)}>
+                  <Button variant="ghost" size="sm" className="w-full justify-start">
+                    <WalletIcon className="h-4 w-4 mr-2" /> Portefeuille
                   </Button>
                 </Link>
                 <div className="border-t my-2" />
