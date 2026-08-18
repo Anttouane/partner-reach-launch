@@ -516,9 +516,6 @@ const Wallet = () => {
                       <TableCell className="font-medium">
                         {(withdrawal.amount / 100).toFixed(2)} €
                       </TableCell>
-                      <TableCell className="font-mono text-sm">
-                        {withdrawal.iban ? `${withdrawal.iban.slice(0, 4)}...${withdrawal.iban.slice(-4)}` : "-"}
-                      </TableCell>
                       <TableCell>{getStatusBadge(withdrawal.status)}</TableCell>
                       <TableCell>
                         {withdrawal.processed_at 
