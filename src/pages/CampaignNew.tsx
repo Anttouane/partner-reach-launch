@@ -58,6 +58,14 @@ const TIER_MIN_AUDIENCE: Record<string, number> = {
   "1m_plus": 1000000,
 };
 
+const CREATOR_RANGES: { value: string; label: string; min: number; max: number }[] = [
+  { value: "1_3", label: "Environ 1 à 3 créateurs", min: 1, max: 3 },
+  { value: "3_5", label: "Environ 3 à 5 créateurs", min: 3, max: 5 },
+  { value: "5_10", label: "Environ 5 à 10 créateurs", min: 5, max: 10 },
+  { value: "10_20", label: "Environ 10 à 20 créateurs", min: 10, max: 20 },
+  { value: "20_50", label: "Plus de 20 créateurs", min: 20, max: 50 },
+];
+
 const CampaignNew = () => {
   const [user, setUser] = useState<User | null>(null);
   const [pricing, setPricing] = useState<PricingRow[]>([]);
@@ -70,7 +78,8 @@ const CampaignNew = () => {
   const [network, setNetwork] = useState<string>("");
   const [format, setFormat] = useState<string>("");
   const [audienceTier, setAudienceTier] = useState<string>("");
-  const [creatorsWanted, setCreatorsWanted] = useState("3");
+  const [creatorsRange, setCreatorsRange] = useState("3_5");
+  const [customPrice, setCustomPrice] = useState("");
   const [nicheId, setNicheId] = useState<string>("");
   const [deadline, setDeadline] = useState("");
 
@@ -124,19 +133,27 @@ const CampaignNew = () => {
     [pricing, network, format, audienceTier]
   );
 
-  const nb = Math.max(parseInt(creatorsWanted || "0") || 0, 0);
-  const pricePerCreator = selectedRow ? Number(selectedRow.price_recommended) : 0;
-  const subtotal = pricePerCreator * nb;
+  const range = CREATOR_RANGES.find((r) => r.value === creatorsRange) || CREATOR_RANGES[1];
+  const nb = range.max;
+  const recommendedPrice = selectedRow ? Number(selectedRow.price_recommended) : 0;
+  const minPrice = selectedRow ? Number(selectedRow.price_min) : 0;
+  const parsedCustom = parseFloat(customPrice.replace(",", "."));
+  const pricePerCreator =
+    customPrice !== "" && !isNaN(parsedCustom) && parsedCustom > 0 ? parsedCustom : recommendedPrice;
+  const belowMin = selectedRow && pricePerCreator > 0 && pricePerCreator < minPrice;
+  const subtotalMin = pricePerCreator * range.min;
+  const subtotal = pricePerCreator * range.max;
   const commission = +(subtotal * (commissionPct / 100)).toFixed(2);
+  const totalMin = +(subtotalMin * (1 + commissionPct / 100)).toFixed(2);
   const total = +(subtotal + commission).toFixed(2);
   const reachEst = selectedRow
     ? {
-        min: Math.round(TIER_MIN_AUDIENCE[audienceTier] * (Number(selectedRow.reach_ratio_min) / 100)) * nb,
-        max: Math.round(TIER_MIN_AUDIENCE[audienceTier] * (Number(selectedRow.reach_ratio_max) / 100)) * nb,
+        min: Math.round(TIER_MIN_AUDIENCE[audienceTier] * (Number(selectedRow.reach_ratio_min) / 100)) * range.min,
+        max: Math.round(TIER_MIN_AUDIENCE[audienceTier] * (Number(selectedRow.reach_ratio_max) / 100)) * range.max,
       }
     : null;
 
-  const canLaunch = name && network && format && audienceTier && nb > 0 && selectedRow;
+  const canLaunch = name && network && format && audienceTier && nb > 0 && selectedRow && pricePerCreator > 0;
 
   const launch = async () => {
     if (!user || !canLaunch || !selectedRow) {
@@ -218,7 +235,7 @@ const CampaignNew = () => {
                 value={brief}
                 onChange={(e) => setBrief(e.target.value)}
                 rows={4}
-                placeholder="Ce que la marque attend : ton, message clé, do & don't, deadline de publication…"
+                placeholder="Ce que vous attendez : ton, message clé, do & don't, deadline de publication…"
               />
             </div>
 
@@ -260,8 +277,13 @@ const CampaignNew = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <Label>Nb créateurs *</Label>
-                <Input type="number" min={1} value={creatorsWanted} onChange={(e) => setCreatorsWanted(e.target.value)} />
+                <Label>Nombre de créateurs souhaité *</Label>
+                <Select value={creatorsRange} onValueChange={setCreatorsRange}>
+                  <SelectTrigger><SelectValue placeholder="Estimation" /></SelectTrigger>
+                  <SelectContent>
+                    {CREATOR_RANGES.map((r) => <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>)}
+                  </SelectContent>
+                </Select>
               </div>
               <div>
                 <Label>Thématique (option)</Label>
@@ -279,27 +301,53 @@ const CampaignNew = () => {
             </div>
 
             {selectedRow && (
-              <div className="rounded-lg border bg-muted/30 p-4 space-y-2">
+              <div>
+                <Label>Combien souhaitez-vous payer par créateur ? *</Label>
+                <Input
+                  type="number"
+                  min={0}
+                  step="10"
+                  value={customPrice}
+                  onChange={(e) => setCustomPrice(e.target.value)}
+                  placeholder={`${recommendedPrice.toFixed(0)} € recommandé`}
+                />
+                <p className={`text-xs mt-1 ${belowMin ? "text-destructive" : "text-muted-foreground"}`}>
+                  {belowMin
+                    ? `En dessous du marché (${minPrice.toFixed(0)} € minimum) — vous risquez peu de réponses.`
+                    : `Prix du marché : ${minPrice.toFixed(0)} € minimum · ${recommendedPrice.toFixed(0)} € recommandé`}
+                </p>
+              </div>
+            )}
+
+            {selectedRow && (
+              <div className="rounded-lg border bg-muted/30 p-4 space-y-3">
                 <div className="flex items-center gap-2 text-sm font-medium">
-                  <Info className="h-4 w-4 text-primary" /> Estimation budget
-                </div>
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <span className="text-muted-foreground">Tarif recommandé / créateur</span>
-                  <span className="text-right font-medium">{pricePerCreator.toFixed(0)} €</span>
-                  <span className="text-muted-foreground">Sous-total ({nb} créateur{nb > 1 ? "s" : ""})</span>
-                  <span className="text-right font-medium">{subtotal.toFixed(0)} €</span>
-                  <span className="text-muted-foreground">Commission Partnery ({commissionPct}%)</span>
-                  <span className="text-right font-medium">{commission.toFixed(2)} €</span>
-                  <span className="text-base font-semibold pt-2 border-t">Total à provisionner</span>
-                  <span className="text-right text-base font-semibold pt-2 border-t">{total.toFixed(2)} €</span>
+                  <Info className="h-4 w-4 text-primary" /> Estimation de votre campagne
                 </div>
                 {reachEst && (
-                  <p className="text-xs text-muted-foreground pt-2">
-                    Reach estimé cumulé : {reachEst.min.toLocaleString("fr-FR")} – {reachEst.max.toLocaleString("fr-FR")} vues
-                    <br />
-                    Fourchette marché : {Number(selectedRow.price_min).toFixed(0)} € min · {pricePerCreator.toFixed(0)} € recommandé
-                  </p>
+                  <div className="rounded-md bg-primary/10 p-3">
+                    <p className="text-xs text-muted-foreground">Audience potentiellement touchée</p>
+                    <p className="text-2xl font-semibold">
+                      {reachEst.min.toLocaleString("fr-FR")} – {reachEst.max.toLocaleString("fr-FR")} vues
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      soit environ {Math.round(reachEst.max / Math.max(1, total || 1)).toLocaleString("fr-FR")} vues par euro investi
+                    </p>
+                  </div>
                 )}
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <span className="text-muted-foreground">Tarif / créateur</span>
+                  <span className="text-right font-medium">{pricePerCreator.toFixed(0)} €</span>
+                  <span className="text-muted-foreground">Créateurs estimés</span>
+                  <span className="text-right font-medium">{range.min} à {range.max}</span>
+                  <span className="text-base font-semibold pt-2 border-t">Budget estimé</span>
+                  <span className="text-right text-base font-semibold pt-2 border-t">
+                    {totalMin.toFixed(0)} € – {total.toFixed(0)} €
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Vous ne payez que les créateurs que vous validez. Frais de service inclus.
+                </p>
               </div>
             )}
 
