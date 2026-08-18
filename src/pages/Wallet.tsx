@@ -502,7 +502,7 @@ const Wallet = () => {
                   <TableRow>
                     <TableHead>Date</TableHead>
                     <TableHead>Montant</TableHead>
-                    <TableHead>IBAN</TableHead>
+                    
                     <TableHead>Statut</TableHead>
                     <TableHead>Traité le</TableHead>
                   </TableRow>
