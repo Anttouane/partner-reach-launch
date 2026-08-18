@@ -78,7 +78,8 @@ const CampaignNew = () => {
   const [network, setNetwork] = useState<string>("");
   const [format, setFormat] = useState<string>("");
   const [audienceTier, setAudienceTier] = useState<string>("");
-  const [creatorsWanted, setCreatorsWanted] = useState("3");
+  const [creatorsRange, setCreatorsRange] = useState("3_5");
+  const [customPrice, setCustomPrice] = useState("");
   const [nicheId, setNicheId] = useState<string>("");
   const [deadline, setDeadline] = useState("");
 
