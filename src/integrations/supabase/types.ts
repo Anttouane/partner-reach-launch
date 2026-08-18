@@ -1271,11 +1271,19 @@ export type Database = {
         Args: { _campaign_id: string; _limit?: number }
         Returns: number
       }
+      has_approved_match: {
+        Args: { _campaign_id: string; _user_id: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      is_campaign_owner: {
+        Args: { _campaign_id: string; _user_id: string }
         Returns: boolean
       }
       is_creator_verified: { Args: { _creator_id: string }; Returns: boolean }
