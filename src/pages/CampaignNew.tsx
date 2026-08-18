@@ -301,27 +301,53 @@ const CampaignNew = () => {
             </div>
 
             {selectedRow && (
-              <div className="rounded-lg border bg-muted/30 p-4 space-y-2">
+              <div>
+                <Label>Combien souhaitez-vous payer par créateur ? *</Label>
+                <Input
+                  type="number"
+                  min={0}
+                  step="10"
+                  value={customPrice}
+                  onChange={(e) => setCustomPrice(e.target.value)}
+                  placeholder={`${recommendedPrice.toFixed(0)} € recommandé`}
+                />
+                <p className={`text-xs mt-1 ${belowMin ? "text-destructive" : "text-muted-foreground"}`}>
+                  {belowMin
+                    ? `En dessous du marché (${minPrice.toFixed(0)} € minimum) — vous risquez peu de réponses.`
+                    : `Prix du marché : ${minPrice.toFixed(0)} € minimum · ${recommendedPrice.toFixed(0)} € recommandé`}
+                </p>
+              </div>
+            )}
+
+            {selectedRow && (
+              <div className="rounded-lg border bg-muted/30 p-4 space-y-3">
                 <div className="flex items-center gap-2 text-sm font-medium">
-                  <Info className="h-4 w-4 text-primary" /> Estimation budget
-                </div>
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <span className="text-muted-foreground">Tarif recommandé / créateur</span>
-                  <span className="text-right font-medium">{pricePerCreator.toFixed(0)} €</span>
-                  <span className="text-muted-foreground">Sous-total ({nb} créateur{nb > 1 ? "s" : ""})</span>
-                  <span className="text-right font-medium">{subtotal.toFixed(0)} €</span>
-                  <span className="text-muted-foreground">Commission Partnery ({commissionPct}%)</span>
-                  <span className="text-right font-medium">{commission.toFixed(2)} €</span>
-                  <span className="text-base font-semibold pt-2 border-t">Total à provisionner</span>
-                  <span className="text-right text-base font-semibold pt-2 border-t">{total.toFixed(2)} €</span>
+                  <Info className="h-4 w-4 text-primary" /> Estimation de votre campagne
                 </div>
                 {reachEst && (
-                  <p className="text-xs text-muted-foreground pt-2">
-                    Reach estimé cumulé : {reachEst.min.toLocaleString("fr-FR")} – {reachEst.max.toLocaleString("fr-FR")} vues
-                    <br />
-                    Fourchette marché : {Number(selectedRow.price_min).toFixed(0)} € min · {pricePerCreator.toFixed(0)} € recommandé
-                  </p>
+                  <div className="rounded-md bg-primary/10 p-3">
+                    <p className="text-xs text-muted-foreground">Audience potentiellement touchée</p>
+                    <p className="text-2xl font-semibold">
+                      {reachEst.min.toLocaleString("fr-FR")} – {reachEst.max.toLocaleString("fr-FR")} vues
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      soit environ {Math.round(reachEst.max / Math.max(1, total || 1)).toLocaleString("fr-FR")} vues par euro investi
+                    </p>
+                  </div>
                 )}
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <span className="text-muted-foreground">Tarif / créateur</span>
+                  <span className="text-right font-medium">{pricePerCreator.toFixed(0)} €</span>
+                  <span className="text-muted-foreground">Créateurs estimés</span>
+                  <span className="text-right font-medium">{range.min} à {range.max}</span>
+                  <span className="text-base font-semibold pt-2 border-t">Budget estimé</span>
+                  <span className="text-right text-base font-semibold pt-2 border-t">
+                    {totalMin.toFixed(0)} € – {total.toFixed(0)} €
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Vous ne payez que les créateurs que vous validez. Frais de service inclus.
+                </p>
               </div>
             )}
 
