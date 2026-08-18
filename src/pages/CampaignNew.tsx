@@ -277,8 +277,13 @@ const CampaignNew = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <Label>Nb créateurs *</Label>
-                <Input type="number" min={1} value={creatorsWanted} onChange={(e) => setCreatorsWanted(e.target.value)} />
+                <Label>Nombre de créateurs souhaité *</Label>
+                <Select value={creatorsRange} onValueChange={setCreatorsRange}>
+                  <SelectTrigger><SelectValue placeholder="Estimation" /></SelectTrigger>
+                  <SelectContent>
+                    {CREATOR_RANGES.map((r) => <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>)}
+                  </SelectContent>
+                </Select>
               </div>
               <div>
                 <Label>Thématique (option)</Label>
