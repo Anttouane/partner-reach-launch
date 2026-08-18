@@ -1226,7 +1226,6 @@ export type Database = {
           created_at: string
           currency: string
           failure_reason: string | null
-          iban: string | null
           id: string
           notes: string | null
           processed_at: string | null
@@ -1240,7 +1239,6 @@ export type Database = {
           created_at?: string
           currency?: string
           failure_reason?: string | null
-          iban?: string | null
           id?: string
           notes?: string | null
           processed_at?: string | null
@@ -1254,7 +1252,6 @@ export type Database = {
           created_at?: string
           currency?: string
           failure_reason?: string | null
-          iban?: string | null
           id?: string
           notes?: string | null
           processed_at?: string | null

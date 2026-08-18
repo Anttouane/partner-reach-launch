@@ -51,7 +51,7 @@ interface Withdrawal {
   status: string;
   created_at: string;
   processed_at: string | null;
-  iban: string | null;
+  
 }
 
 const Wallet = () => {
@@ -502,7 +502,7 @@ const Wallet = () => {
                   <TableRow>
                     <TableHead>Date</TableHead>
                     <TableHead>Montant</TableHead>
-                    <TableHead>IBAN</TableHead>
+                    
                     <TableHead>Statut</TableHead>
                     <TableHead>Traité le</TableHead>
                   </TableRow>
@@ -515,9 +515,6 @@ const Wallet = () => {
                       </TableCell>
                       <TableCell className="font-medium">
                         {(withdrawal.amount / 100).toFixed(2)} €
-                      </TableCell>
-                      <TableCell className="font-mono text-sm">
-                        {withdrawal.iban ? `${withdrawal.iban.slice(0, 4)}...${withdrawal.iban.slice(-4)}` : "-"}
                       </TableCell>
                       <TableCell>{getStatusBadge(withdrawal.status)}</TableCell>
                       <TableCell>
