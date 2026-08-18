@@ -59,11 +59,16 @@ const TIER_MIN_AUDIENCE: Record<string, number> = {
 };
 
 const CREATOR_RANGES: { value: string; label: string; min: number; max: number }[] = [
-  { value: "1_3", label: "Environ 1 à 3 créateurs", min: 1, max: 3 },
-  { value: "3_5", label: "Environ 3 à 5 créateurs", min: 3, max: 5 },
-  { value: "5_10", label: "Environ 5 à 10 créateurs", min: 5, max: 10 },
-  { value: "10_20", label: "Environ 10 à 20 créateurs", min: 10, max: 20 },
-  { value: "20_50", label: "Plus de 20 créateurs", min: 20, max: 50 },
+  { value: "1_3", label: "1 à 3 créateurs", min: 1, max: 3 },
+  { value: "3_5", label: "3 à 5 créateurs", min: 3, max: 5 },
+  { value: "5_10", label: "5 à 10 créateurs", min: 5, max: 10 },
+  { value: "10_20", label: "10 à 20 créateurs", min: 10, max: 20 },
+  { value: "20_30", label: "20 à 30 créateurs", min: 20, max: 30 },
+  { value: "30_50", label: "30 à 50 créateurs", min: 30, max: 50 },
+  { value: "50_75", label: "50 à 75 créateurs", min: 50, max: 75 },
+  { value: "75_100", label: "75 à 100 créateurs", min: 75, max: 100 },
+  { value: "100_200", label: "100 à 200 créateurs", min: 100, max: 200 },
+  { value: "200_500", label: "Plus de 200 créateurs", min: 200, max: 500 },
 ];
 
 const CampaignNew = () => {
