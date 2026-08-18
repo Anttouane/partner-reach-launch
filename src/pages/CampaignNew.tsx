@@ -142,15 +142,18 @@ const CampaignNew = () => {
   const nb = range.max;
   const recommendedPrice = selectedRow ? Number(selectedRow.price_recommended) : 0;
   const minPrice = selectedRow ? Number(selectedRow.price_min) : 0;
-  const parsedCustom = parseFloat(customPrice.replace(",", "."));
-  const pricePerCreator =
-    customPrice !== "" && !isNaN(parsedCustom) && parsedCustom > 0 ? parsedCustom : recommendedPrice;
+  // Repères marché pour la fourchette de créateurs choisie (TTC, frais de service inclus)
+  const feeMult = 1 + commissionPct / 100;
+  const marketMinTotal = +(minPrice * range.max * feeMult).toFixed(0);
+  const marketRecoTotal = +(recommendedPrice * range.max * feeMult).toFixed(0);
+
+  const parsedTotal = parseFloat(totalBudget.replace(",", "."));
+  const total = totalBudget !== "" && !isNaN(parsedTotal) && parsedTotal > 0 ? parsedTotal : marketRecoTotal;
+  const netTotal = total / feeMult;
+  const pricePerCreator = netTotal / range.max; // cas le plus large
+  const pricePerCreatorHigh = netTotal / range.min; // si moins de créateurs répondent
   const belowMin = selectedRow && pricePerCreator > 0 && pricePerCreator < minPrice;
-  const subtotalMin = pricePerCreator * range.min;
-  const subtotal = pricePerCreator * range.max;
-  const commission = +(subtotal * (commissionPct / 100)).toFixed(2);
-  const totalMin = +(subtotalMin * (1 + commissionPct / 100)).toFixed(2);
-  const total = +(subtotal + commission).toFixed(2);
+  const commission = +(netTotal * (commissionPct / 100)).toFixed(2);
   const reachEst = selectedRow
     ? {
         min: Math.round(TIER_MIN_AUDIENCE[audienceTier] * (Number(selectedRow.reach_ratio_min) / 100)) * range.min,
@@ -158,7 +161,7 @@ const CampaignNew = () => {
       }
     : null;
 
-  const canLaunch = name && network && format && audienceTier && nb > 0 && selectedRow && pricePerCreator > 0;
+  const canLaunch = name && network && format && audienceTier && nb > 0 && selectedRow && total > 0;
 
   const launch = async () => {
     if (!user || !canLaunch || !selectedRow) {
