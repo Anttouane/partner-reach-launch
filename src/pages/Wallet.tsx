@@ -51,7 +51,7 @@ interface Withdrawal {
   status: string;
   created_at: string;
   processed_at: string | null;
-  iban: string | null;
+  
 }
 
 const Wallet = () => {
