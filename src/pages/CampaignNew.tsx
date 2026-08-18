@@ -84,7 +84,7 @@ const CampaignNew = () => {
   const [format, setFormat] = useState<string>("");
   const [audienceTier, setAudienceTier] = useState<string>("");
   const [creatorsRange, setCreatorsRange] = useState("3_5");
-  const [customPrice, setCustomPrice] = useState("");
+  const [totalBudget, setTotalBudget] = useState("");
   const [nicheId, setNicheId] = useState<string>("");
   const [deadline, setDeadline] = useState("");
 
