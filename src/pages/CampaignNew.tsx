@@ -235,7 +235,7 @@ const CampaignNew = () => {
                 value={brief}
                 onChange={(e) => setBrief(e.target.value)}
                 rows={4}
-                placeholder="Ce que la marque attend : ton, message clé, do & don't, deadline de publication…"
+                placeholder="Ce que vous attendez : ton, message clé, do & don't, deadline de publication…"
               />
             </div>
 
