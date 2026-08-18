@@ -310,19 +310,19 @@ const CampaignNew = () => {
 
             {selectedRow && (
               <div>
-                <Label>Combien souhaitez-vous payer par créateur ? *</Label>
+                <Label>Budget total que vous souhaitez investir *</Label>
                 <Input
                   type="number"
                   min={0}
-                  step="10"
-                  value={customPrice}
-                  onChange={(e) => setCustomPrice(e.target.value)}
-                  placeholder={`${recommendedPrice.toFixed(0)} € recommandé`}
+                  step="50"
+                  value={totalBudget}
+                  onChange={(e) => setTotalBudget(e.target.value)}
+                  placeholder={`${marketRecoTotal.toLocaleString("fr-FR")} € recommandé pour ${range.min} à ${range.max} créateurs`}
                 />
                 <p className={`text-xs mt-1 ${belowMin ? "text-destructive" : "text-muted-foreground"}`}>
                   {belowMin
-                    ? `En dessous du marché (${minPrice.toFixed(0)} € minimum) — vous risquez peu de réponses.`
-                    : `Prix du marché : ${minPrice.toFixed(0)} € minimum · ${recommendedPrice.toFixed(0)} € recommandé`}
+                    ? `Budget serré pour ${range.max} créateurs (${marketMinTotal.toLocaleString("fr-FR")} € minimum au prix du marché) — vous risquez peu de réponses.`
+                    : `Pour ${range.min} à ${range.max} créateurs : ${marketMinTotal.toLocaleString("fr-FR")} € minimum · ${marketRecoTotal.toLocaleString("fr-FR")} € recommandé (frais de service inclus)`}
                 </p>
               </div>
             )}
