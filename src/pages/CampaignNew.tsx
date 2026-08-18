@@ -58,6 +58,14 @@ const TIER_MIN_AUDIENCE: Record<string, number> = {
   "1m_plus": 1000000,
 };
 
+const CREATOR_RANGES: { value: string; label: string; min: number; max: number }[] = [
+  { value: "1_3", label: "Environ 1 à 3 créateurs", min: 1, max: 3 },
+  { value: "3_5", label: "Environ 3 à 5 créateurs", min: 3, max: 5 },
+  { value: "5_10", label: "Environ 5 à 10 créateurs", min: 5, max: 10 },
+  { value: "10_20", label: "Environ 10 à 20 créateurs", min: 10, max: 20 },
+  { value: "20_50", label: "Plus de 20 créateurs", min: 20, max: 50 },
+];
+
 const CampaignNew = () => {
   const [user, setUser] = useState<User | null>(null);
   const [pricing, setPricing] = useState<PricingRow[]>([]);
