@@ -133,19 +133,27 @@ const CampaignNew = () => {
     [pricing, network, format, audienceTier]
   );
 
-  const nb = Math.max(parseInt(creatorsWanted || "0") || 0, 0);
-  const pricePerCreator = selectedRow ? Number(selectedRow.price_recommended) : 0;
-  const subtotal = pricePerCreator * nb;
+  const range = CREATOR_RANGES.find((r) => r.value === creatorsRange) || CREATOR_RANGES[1];
+  const nb = range.max;
+  const recommendedPrice = selectedRow ? Number(selectedRow.price_recommended) : 0;
+  const minPrice = selectedRow ? Number(selectedRow.price_min) : 0;
+  const parsedCustom = parseFloat(customPrice.replace(",", "."));
+  const pricePerCreator =
+    customPrice !== "" && !isNaN(parsedCustom) && parsedCustom > 0 ? parsedCustom : recommendedPrice;
+  const belowMin = selectedRow && pricePerCreator > 0 && pricePerCreator < minPrice;
+  const subtotalMin = pricePerCreator * range.min;
+  const subtotal = pricePerCreator * range.max;
   const commission = +(subtotal * (commissionPct / 100)).toFixed(2);
+  const totalMin = +(subtotalMin * (1 + commissionPct / 100)).toFixed(2);
   const total = +(subtotal + commission).toFixed(2);
   const reachEst = selectedRow
     ? {
-        min: Math.round(TIER_MIN_AUDIENCE[audienceTier] * (Number(selectedRow.reach_ratio_min) / 100)) * nb,
-        max: Math.round(TIER_MIN_AUDIENCE[audienceTier] * (Number(selectedRow.reach_ratio_max) / 100)) * nb,
+        min: Math.round(TIER_MIN_AUDIENCE[audienceTier] * (Number(selectedRow.reach_ratio_min) / 100)) * range.min,
+        max: Math.round(TIER_MIN_AUDIENCE[audienceTier] * (Number(selectedRow.reach_ratio_max) / 100)) * range.max,
       }
     : null;
 
-  const canLaunch = name && network && format && audienceTier && nb > 0 && selectedRow;
+  const canLaunch = name && network && format && audienceTier && nb > 0 && selectedRow && pricePerCreator > 0;
 
   const launch = async () => {
     if (!user || !canLaunch || !selectedRow) {
